@@ -147,9 +147,9 @@ else
   fi
 fi
 
-OLD_PROJECT_NAME="python-ai-friendly-template"
-OLD_PROJECT_TITLE="Python AI-Friendly Template"
-OLD_PROJECT_NAME_ALT="my-python-project"
+OLD_PROJECT_NAME="DEVELOPMENT in Oracle using AI Lab"
+OLD_PROJECT_TITLE="DEVELOPMENT in Oracle using AI Lab"
+OLD_PROJECT_NAME_ALT="DEVELOPMENT in Oracle using AI Lab"
 
 echo "Initializing project from template"
 echo "  Project name:     $PROJECT_NAME"
@@ -227,7 +227,7 @@ for file in "${TEXT_FILES[@]}"; do
   replace_in_file "$file" "$OLD_PROJECT_NAME" "$PROJECT_NAME"
   replace_in_file "$file" "$OLD_PROJECT_TITLE" "$PROJECT_NAME"
   replace_in_file "$file" "$OLD_PROJECT_NAME_ALT" "$PROJECT_NAME"
-  replace_in_file "$file" "python_template" "$PACKAGE_NAME"
+  replace_in_file "$file" "oracle_ai_lab" "$PACKAGE_NAME"
 done
 
 if [[ -f ".env.example" ]]; then

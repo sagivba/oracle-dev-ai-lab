@@ -10,15 +10,15 @@ routes -> services -> model
             utils
 ```
 
-## src/my_python_project_template/app.py
+## src/oracle_ai_lab/app.py
 
 Creates and configures the Flask application.
 
-## src/my_python_project_template/config.py
+## src/oracle_ai_lab/config.py
 
 Loads configuration from environment variables.
 
-## src/my_python_project_template/routes
+## src/oracle_ai_lab/routes
 
 HTTP boundary.
 
@@ -30,17 +30,17 @@ Route handlers should:
 
 Route handlers should not contain business logic.
 
-## src/my_python_project_template/services
+## src/oracle_ai_lab/services
 
 Business logic.
 
 Services should be easy to test with unittest.
 
-## src/my_python_project_template/model
+## src/oracle_ai_lab/model
 
 Domain models, data structures, and model-facing code.
 
-## src/my_python_project_template/utils
+## src/oracle_ai_lab/utils
 
 Small generic utilities.
 

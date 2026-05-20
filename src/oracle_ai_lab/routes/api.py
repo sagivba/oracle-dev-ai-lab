@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 
-from my_python_project_template.services.example_service import get_health_status
+from oracle_ai_lab.services.example_service import get_health_status
 
 api_bp = Blueprint("api", __name__)
 

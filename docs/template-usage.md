@@ -24,7 +24,7 @@ git init
 git add .
 git commit -m "Initial Python AI-friendly template"
 git branch -M main
-gh repo create sagivba/python-ai-friendly-template --private --source=. --remote=origin --push
+gh repo create sagivba/DEVELOPMENT in Oracle using AI Lab --private --source=. --remote=origin --push
 ```
 
 If the repository already exists on GitHub and the latest files are committed locally, push the changes:
@@ -43,7 +43,7 @@ In GitHub:
 1. Open the template repository:
 
    ```text
-   sagivba/python-ai-friendly-template
+   sagivba/DEVELOPMENT in Oracle using AI Lab
    ```
 
 2. Go to:
@@ -77,7 +77,7 @@ This phase is done every time you want to start a new project.
 1. Open the template repository:
 
    ```text
-   sagivba/python-ai-friendly-template
+   sagivba/DEVELOPMENT in Oracle using AI Lab
    ```
 
 2. Click:
@@ -139,7 +139,7 @@ Run this from the parent folder where you keep your projects, not from inside an
 
 ```bash
 cd ~/projects
-gh repo create sagivba/chemistry-mock-site --template sagivba/python-ai-friendly-template --private --clone
+gh repo create sagivba/chemistry-mock-site --template sagivba/DEVELOPMENT in Oracle using AI Lab --private --clone
 cd chemistry-mock-site
 scripts/init_from_template.sh chemistry-mock-site
 ```
@@ -215,7 +215,7 @@ cd chemistry-mock-site
 Then import the template files:
 
 ```bash
-git clone --depth 1 git@github.com:sagivba/python-ai-friendly-template.git .template-tmp
+git clone --depth 1 git@github.com:sagivba/DEVELOPMENT in Oracle using AI Lab.git .template-tmp
 cp -a .template-tmp/. .
 rm -rf .template-tmp
 rm -rf .git

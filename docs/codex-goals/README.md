@@ -10,7 +10,7 @@ docs/codex-goals/
 
 Recommended flow:
 
-1. Create the new repository from `sagivba/python-ai-friendly-template`.
+1. Create the new repository from `sagivba/DEVELOPMENT in Oracle using AI Lab`.
 2. Clone it locally.
 3. Copy this folder into `docs/codex-goals/`.
 4. Run the goals in order.

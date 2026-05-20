@@ -4,7 +4,7 @@ set -euo pipefail
 MODE="${1:-quick}"
 TARGET="${2:-local}"
 
-PROJECT_NAME="${PROJECT_NAME:-python_template}"
+PROJECT_NAME="${PROJECT_NAME:-oracle_ai_lab}"
 DEV_COMPOSE_PROJECT="${DEV_COMPOSE_PROJECT:-${PROJECT_NAME}_dev}"
 QA_COMPOSE_PROJECT="${QA_COMPOSE_PROJECT:-${PROJECT_NAME}_qa}"
 

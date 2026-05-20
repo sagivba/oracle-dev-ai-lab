@@ -2,7 +2,7 @@
 
 ## Goal
 
-Adapt the repository created from `sagivba/python-ai-friendly-template` so its identity matches `oracle-dev-ai-lab` without adding Oracle implementation yet.
+Adapt the repository created from `sagivba/DEVELOPMENT in Oracle using AI Lab` so its identity matches `oracle-dev-ai-lab` without adding Oracle implementation yet.
 
 ## Prompt to use with Codex
 

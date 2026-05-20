@@ -1,7 +1,7 @@
 import unittest
 
-from my_python_project_template.app import create_app
-from my_python_project_template.config import AppConfig
+from oracle_ai_lab.app import create_app
+from oracle_ai_lab.config import AppConfig
 
 
 class TestApp(unittest.TestCase):

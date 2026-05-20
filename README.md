@@ -1,4 +1,4 @@
-# my-python-project-template
+# DEVELOPMENT in Oracle using AI Lab
 
 AI-friendly Python project template.
 
@@ -45,7 +45,7 @@ Full instructions: [docs/template-usage.md](docs/template-usage.md)
 Minimal flow:
 
 ```bash
-gh repo create sagivba/my-new-project --template sagivba/python-ai-friendly-template --private --clone
+gh repo create sagivba/my-new-project --template sagivba/DEVELOPMENT in Oracle using AI Lab --private --clone
 cd my-new-project
 scripts/init_from_template.sh my-new-project
 ```
@@ -111,7 +111,7 @@ scripts/init_from_template.sh my-new-project --force
 ## Project structure
 
 ```text
-my-python-project-template/
+DEVELOPMENT in Oracle using AI Lab-template/
 ├── .github/
 │   ├── workflows/
 │   │   └── ci.yml
@@ -130,7 +130,7 @@ my-python-project-template/
 │   ├── lint.sh
 │   └── clean.sh
 ├── src/
-│   └── my_python_project_template/
+│   └── oracle_ai_lab/
 │       ├── __init__.py
 │       ├── app.py
 │       ├── config.py
@@ -196,8 +196,8 @@ source .venv/bin/activate
 For Conda:
 
 ```bash
-conda create -n my-python-project-template python=3.12 -y
-conda activate my-python-project-template
+conda create -n DEVELOPMENT in Oracle using AI Lab-template python=3.12 -y
+conda activate DEVELOPMENT in Oracle using AI Lab-template
 ```
 
 ### 2. Install dependencies
@@ -234,7 +234,7 @@ scripts/test.sh full
 ### 5. Run the app
 
 ```bash
-PYTHONPATH=src flask --app my_python_project_template.app:create_app run --debug
+PYTHONPATH=src flask --app oracle_ai_lab.app:create_app run --debug
 ```
 
 Open:
@@ -319,9 +319,9 @@ The Docker test targets use project-name based Compose names.
 You can override them with environment variables:
 
 ```bash
-PROJECT_NAME=my_python_project_template scripts/test.sh full docker-dev
-DEV_COMPOSE_PROJECT=my_python_project_template_dev scripts/test.sh full docker-dev
-QA_COMPOSE_PROJECT=my_python_project_template_qa scripts/test.sh full docker-qa
+PROJECT_NAME=oracle_ai_lab scripts/test.sh full docker-dev
+DEV_COMPOSE_PROJECT=oracle_ai_lab_dev scripts/test.sh full docker-dev
+QA_COMPOSE_PROJECT=oracle_ai_lab_qa scripts/test.sh full docker-qa
 ```
 
 ## Docker
@@ -331,31 +331,31 @@ Docker support is optional. The primary local development flow is WSL + VS Code 
 ### Start Dev environment
 
 ```bash
-docker compose -p my_python_project_template_dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
 ### Start QA environment
 
 ```bash
-docker compose -p my_python_project_template_qa -f docker-compose.yml -f docker-compose.qa.yml up -d --build
+docker compose -p oracle_ai_lab_qa -f docker-compose.yml -f docker-compose.qa.yml up -d --build
 ```
 
 ### Stop Dev environment
 
 ```bash
-docker compose -p my_python_project_template_dev -f docker-compose.yml -f docker-compose.dev.yml down
+docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml down
 ```
 
 ### Stop QA environment
 
 ```bash
-docker compose -p my_python_project_template_qa -f docker-compose.yml -f docker-compose.qa.yml down
+docker compose -p oracle_ai_lab_qa -f docker-compose.yml -f docker-compose.qa.yml down
 ```
 
 ### View logs
 
 ```bash
-docker compose -p my_python_project_template_dev -f docker-compose.yml -f docker-compose.dev.yml logs -f app
+docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml logs -f app
 ```
 
 ## Lint and formatting
