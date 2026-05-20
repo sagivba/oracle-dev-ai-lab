@@ -1,0 +1,9 @@
+Template initialized: yes
+Project name: DEVELOPMENT in Oracle using AI Lab
+Package name: oracle_ai_lab
+Original package: my_python_project_template
+Initialized at: 2026-05-20T11:41:42Z
+Script: scripts/init_from_template.sh
+
+This file prevents accidental repeated template initialization.
+Do not delete it unless you intentionally want to re-run template initialization.
