@@ -61,6 +61,11 @@
     SQLPlus עם <code>exit</code>. בנוסף, <code>PROJECT_NAME</code> ב-<code>.env.example</code>
     לא היה בטוח ל-<code>source</code> ב-Bash בגלל רווחים ללא מרכאות.
   </p>
+  <p>
+    בעדכון הנוכחי נוספה יציאה דטרמיניסטית גם לכל קובצי ה-smoke SQL תחת
+    <code>db/tests/sql/*.sql</code>, כדי ש-<code>scripts/run-db-tests.sh</code>
+    לא יישאר חסום אחרי הצלחת השאילתה האחרונה.
+  </p>
 
   <h2>קבצים שנוצרו</h2>
   <ul>
@@ -71,6 +76,9 @@
   <ul>
     <li><code>.env.example</code></li>
     <li><code>db/install/install.sql</code></li>
+    <li><code>db/tests/sql/001_db_connectivity.sql</code></li>
+    <li><code>db/tests/sql/002_object_inventory.sql</code></li>
+    <li><code>db/tests/sql/003_no_invalid_objects.sql</code></li>
     <li><code>tests/test_runtime_install_path_fix.py</code></li>
     <li><code>docs/install-workflow.md</code></li>
     <li><code>docs/stages/stage-010-runtime-install-path-fix.html</code></li>
@@ -106,6 +114,10 @@
       כדי לסיים את SQLPlus באופן דטרמיניסטי בתוך <code>docker exec</code>.
     </li>
     <li>
+      כל קובצי ה-smoke SQL ב-<code>db/tests/sql/</code> מסתיימים כעת עם
+      <code>exit success</code>.
+    </li>
+    <li>
       <code>PROJECT_NAME</code> ב-<code>.env.example</code> מוקף במרכאות כדי לאפשר
       <code>source .env.example</code> ב-Bash ללא ניסיון להריץ את המילה <code>in</code> כפקודה.
     </li>
@@ -135,8 +147,8 @@
 
   <h2>בדיקות שהורצו</h2>
   <ul>
-    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר: 37 בדיקות.</li>
-    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר: 37 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר: 38 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר: 38 בדיקות.</li>
     <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
     <li>בדיקות <code>unittest</code> כוללות כעת בדיקה ל-<code>exit success</code> בסוף <code>install.sql</code>.</li>
     <li>בדיקות <code>unittest</code> כוללות כעת בדיקת Bash source ל-<code>.env.example</code>.</li>

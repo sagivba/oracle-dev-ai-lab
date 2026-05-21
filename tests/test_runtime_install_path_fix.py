@@ -85,6 +85,19 @@ class TestRuntimeInstallPathFix(unittest.TestCase):
         self.assertIn('"$REMOTE_DB_DIR" 2>&1)', install_script)
         self.assertNotIn("@@../src/tables/lab_smoke_test.sql", install_sql)
 
+    def test_all_managed_sql_smoke_tests_terminate_sqlplus(self) -> None:
+        smoke_test_dir = ROOT / "db/tests/sql"
+
+        for sql_file in sorted(smoke_test_dir.glob("*.sql")):
+            with self.subTest(path=sql_file.name):
+                sql_lines = [
+                    line.strip().lower()
+                    for line in sql_file.read_text(encoding="utf-8").splitlines()
+                    if line.strip()
+                ]
+
+                self.assertEqual("exit success", sql_lines[-1])
+
 
 if __name__ == "__main__":
     unittest.main()

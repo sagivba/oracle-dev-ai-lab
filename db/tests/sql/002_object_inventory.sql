@@ -40,3 +40,5 @@ begin
   end if;
 end;
 /
+
+exit success

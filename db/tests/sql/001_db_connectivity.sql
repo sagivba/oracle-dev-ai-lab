@@ -14,3 +14,5 @@ select
   sys_context('USERENV', 'CON_NAME') as CON_NAME,
   sys_context('USERENV', 'CURRENT_SCHEMA') as CURRENT_SCHEMA
 from dual;
+
+exit success
