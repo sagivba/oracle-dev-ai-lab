@@ -1,5 +1,6 @@
 # Purpose: unittest coverage for the pre-Goal-011 runtime install path fix.
 
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -23,6 +24,34 @@ class TestRuntimeInstallPathFix(unittest.TestCase):
                     f"{variable_name}=change_me_in_local_env",
                     env_example,
                 )
+
+    def test_env_example_project_name_is_bash_source_safe(self) -> None:
+        env_example = (ROOT / ".env.example").read_text(encoding="utf-8")
+
+        self.assertIn('PROJECT_NAME="DEVELOPMENT in Oracle using AI Lab"', env_example)
+
+        completed = subprocess.run(
+            [
+                "bash",
+                "-c",
+                "set -euo pipefail; source .env.example; printf '%s' \"$PROJECT_NAME\"",
+            ],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+
+        self.assertEqual("DEVELOPMENT in Oracle using AI Lab", completed.stdout)
+
+    def test_install_sql_terminates_sqlplus(self) -> None:
+        install_sql_lines = [
+            line.strip().lower()
+            for line in (ROOT / "db/install/install.sql").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+
+        self.assertEqual("exit success", install_sql_lines[-1])
 
     def test_install_script_fails_after_sqlplus_error_markers(self) -> None:
         install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
