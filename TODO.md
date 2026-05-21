@@ -132,12 +132,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/review-db-code.sh`, `db/review/review-report.md`, `docs/review-workflow.md`, and `tests/test_review_contract.py`
   - Notes: Goal 010 adds a safe-by-default static review skeleton, required report sections, severity levels, BLOCKER approval rule, and repository-only contract tests. Runtime Oracle diagnostics were not run or claimed.
   - Recommended next action: Run Goal 011 after the review workflow skeleton exists.
-- [TODO] Goal 011 - Add Release Packaging Workflow Skeleton
-  - Goal file: `docs/codex-goals/goal-011-packaging-workflow.md`
+- [DONE] Goal 011 - Add Release Packaging Workflow Skeleton
+  - Goal file: `docs/codex-goals/goal-011-release-packaging-workflow.md`
   - Purpose: Add deterministic release packaging workflow and manifest structure.
-  - Evidence: `scripts/package-release.sh`, `tools/package_release.py`, `db/dist/README.md`, `docs/packaging-workflow.md`, and `tests/test_packaging_contract.py` are missing.
-  - Notes: Packaging workflow is not present.
-  - Recommended next action: Run Goal 011 after review workflow exists.
+  - Evidence: `scripts/package-release.sh`, `tools/package_release.py`, `db/dist/README.md`, `db/dist/release_001/`, `docs/packaging-workflow.md`, and `tests/test_packaging_contract.py`
+  - Notes: Goal 011 remains skeleton-only. It packages managed, versioned repository DB source files into a deterministic `db/dist/release_001/` contract, copies the review report, keeps the package explicitly not approved, and does not add functional release-management DB objects.
+  - Recommended next action: Keep Goal 012 blocked until the Infrastructure MVP skeleton is reviewed and accepted.
 - [NOT_APPLICABLE_YET] Goal 012 - Add Release Management Functional Spec Placeholder
   - Goal file: `docs/codex-goals/goal-012-functional-spec-placeholder.md`
   - Purpose: Add only a placeholder spec for the future release-management use case.
