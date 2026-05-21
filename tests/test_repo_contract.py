@@ -1,5 +1,6 @@
-# Purpose: Repository contract tests for Goal 005 of oracle-dev-ai-lab.
+# Purpose: Repository contract tests for Goal 005 and Goal 007 of oracle-dev-ai-lab.
 
+import re
 import unittest
 from pathlib import Path
 
@@ -19,10 +20,16 @@ class TestRepositoryContract(unittest.TestCase):
             "docs/repository-structure.md",
             "docs/codex-workflow.md",
             "docs/testing-strategy.md",
+            "docs/install-workflow.md",
             "scripts/test.sh",
             "scripts/lint.sh",
+            "scripts/install-db.sh",
             "docker-compose.yml",
             "docs/docker-lab-design.md",
+            "db/install/install.sql",
+            "db/install/00_create_lab_users.sql",
+            "db/install/01_create_schema.sql",
+            "db/rollback/rollback.sql",
         ]
 
         for relative_path in required_files:
@@ -77,10 +84,40 @@ class TestRepositoryContract(unittest.TestCase):
         self.assertIn("unittest", strategy_doc)
         self.assertIn("Do not require `pytest`.", strategy_doc)
 
+    def test_goal_007_install_sql_references_managed_files(self) -> None:
+        install_sql = (ROOT / "db/install/install.sql").read_text(encoding="utf-8")
+
+        self.assertIn("@@00_create_lab_users.sql", install_sql)
+        self.assertIn("@@01_create_schema.sql", install_sql)
+        self.assertNotIn("LAB_SMOKE_TEST", install_sql)
+
+    def test_goal_007_install_script_targets_local_lab_only(self) -> None:
+        install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
+
+        self.assertIn("db/install", install_script)
+        self.assertIn("install.sql", install_script)
+        self.assertIn("oracle-dev-ai-lab-db", install_script)
+        self.assertIn("FREEPDB1", install_script)
+        self.assertNotIn("LAB_SMOKE_TEST", install_script)
+
+    def test_goal_007_files_do_not_contain_obvious_example_secrets(self) -> None:
+        checked_files = [
+            "db/install/install.sql",
+            "db/install/00_create_lab_users.sql",
+            "db/install/01_create_schema.sql",
+            "db/rollback/rollback.sql",
+            "scripts/install-db.sh",
+            "docs/install-workflow.md",
+        ]
+        obvious_secret_pattern = re.compile(r"(?i)(oracle|welcome|passw(?:or)?d)[0-9]+")
+
+        for relative_path in checked_files:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            with self.subTest(path=relative_path):
+                self.assertIsNone(obvious_secret_pattern.search(content))
+
     def test_goal_005_does_not_require_later_goal_artifacts(self) -> None:
         optional_paths = [
-            "db/install/install.sql",
-            "scripts/install-db.sh",
             "scripts/run-db-tests.sh",
             "scripts/review-db-code.sh",
             "scripts/package-release.sh",

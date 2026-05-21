@@ -108,12 +108,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `docker-compose.yml`; `.env.example`; `scripts/lab-up.sh`; `scripts/lab-down.sh`; `scripts/lab-reset.sh`; `scripts/lab-backup.sh`; `scripts/lab-restore.sh`; `docs/docker-lab-design.md`
   - Notes: Skeleton is aligned to Sagiv Barhoom's Oracle 26ai Docker setup post using project names and placeholder-only secrets. Docker was not started, so runtime compatibility is not claimed.
   - Recommended next action: Continue with the first earlier incomplete goal in the sequence, Goal 004.
-- [TODO] Goal 007 - Add Database Install Workflow Skeleton
+- [DONE] Goal 007 - Add Database Install Workflow Skeleton
   - Goal file: `docs/codex-goals/goal-007-install-workflow.md`
   - Purpose: Create controlled DB installation workflow and lab user SQL skeletons.
-  - Evidence: `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `db/rollback/rollback.sql`, `scripts/install-db.sh`, and `docs/install-workflow.md` are missing.
-  - Notes: No install workflow has been implemented.
-  - Recommended next action: Run Goal 007 after the Oracle Docker skeleton exists.
+  - Evidence: `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `db/rollback/rollback.sql`, `scripts/install-db.sh`, `docs/install-workflow.md`, and `tests/test_repo_contract.py`
+  - Notes: Goal 007 adds a managed install workflow skeleton, local-container-only shell entry point, conservative user/schema SQL placeholders, and repository-only contract checks. Runtime Oracle validation was not run or claimed.
+  - Recommended next action: Run Goal 008 after Goal 007 creates the controlled install workflow.
 - [TODO] Goal 008 - Add DB Smoke Object and SQL Smoke Tests
   - Goal file: `docs/codex-goals/goal-008-db-smoke-tests.md`
   - Purpose: Add minimal `LAB_SMOKE_TEST` object and SQL smoke tests for the Infrastructure MVP.
@@ -238,14 +238,14 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Stage 3 - Lab Schemas
 
-- [TODO] Create managed lab user SQL files.
-  - Evidence: `db/install/00_create_lab_users.sql` is missing.
+- [DONE] Create managed lab user SQL files.
+  - Evidence: `db/install/00_create_lab_users.sql`
   - Source: Planning document sections 7 and 8.
-  - Notes: Required users are `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER`.
-- [TODO] Create managed schema SQL files.
-  - Evidence: `db/install/01_create_schema.sql` and `db/install/install.sql` are missing.
+  - Notes: Goal 007 documents required users `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER` with password placeholders and deferred runtime validation.
+- [DONE] Create managed schema SQL files.
+  - Evidence: `db/install/01_create_schema.sql` and `db/install/install.sql`
   - Source: Planning document section 7; golden rule.
-  - Notes: All schema changes must be versioned SQL files.
+  - Notes: Goal 007 creates the controlled install entry point and schema setup skeleton. No business objects, `LAB_SMOKE_TEST`, or functional release-management SQL was added.
 - [TODO] Create database source directories.
   - Evidence: `db/src/` does not exist.
   - Source: Planning document section 7.
@@ -288,10 +288,10 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/test.sh`
   - Source: Repository observation; project rules standard tests.
   - Notes: It runs unittest locally or inside generic app Docker targets; it does not install or test Oracle DB artifacts.
-- [TODO] Create database install workflow script.
-  - Evidence: `scripts/install-db.sh` is missing.
+- [DONE] Create database install workflow script.
+  - Evidence: `scripts/install-db.sh`; `docs/install-workflow.md`
   - Source: Planning document sections 5, 7, 12, and 16.
-  - Notes: Must install from managed SQL files only.
+  - Notes: Script targets only `oracle-dev-ai-lab-db`, loads local environment placeholders, and runs only `db/install/install.sql`.
 - [TODO] Create database test workflow script.
   - Evidence: `scripts/run-db-tests.sh` is missing.
   - Source: Planning document sections 5, 7, 12, and 13.
