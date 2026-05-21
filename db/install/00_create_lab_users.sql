@@ -1,47 +1,94 @@
--- Purpose: Goal 007 skeleton for controlled Oracle AI Lab user/schema creation.
--- This file documents the required local lab users and reserves the managed SQL
--- location for later runtime-validated DDL. It does not store real passwords.
+-- Purpose: Goal 007/008 controlled local Oracle AI Lab user/schema setup.
+-- This managed SQL file creates or updates only the local lab users required by
+-- the install workflow. It stores no secrets and receives passwords from
+-- db/install/install.sql substitution variables.
 
 set echo off
 set feedback on
 set heading on
 set verify off
+whenever sqlerror exit sql.sqlcode
 
-prompt Preparing Oracle AI Lab user/schema creation skeleton.
+prompt Creating or updating Oracle AI Lab local users.
 
--- Intended local lab users/schemas:
--- AI_APP_OWNER    - future owner of lab tables, views, packages, and related objects.
--- AI_APP_RUNTIME  - future runtime account with the minimum execution privileges.
--- AI_APP_READONLY - future read-only account for tests and reports.
--- AI_REVIEWER     - future metadata/review account with narrow dictionary access.
+-- The install path must work on a clean disposable lab PDB. This helper keeps
+-- CREATE USER idempotent enough for repeated local installs by creating missing
+-- users and resetting expected attributes for users that already exist.
+create or replace procedure ORACLE_AI_LAB_ENSURE_USER (
+  p_username in varchar2,
+  p_password in varchar2,
+  p_owner_schema in varchar2
+) authid current_user
+as
+  l_username varchar2(128);
+  l_password varchar2(4000);
+  l_create_sql varchar2(32767);
+begin
+  l_username := upper(p_username);
 
--- Password substitution variables are defined by install.sql and populated by
--- scripts/install-db.sh from local environment variables:
--- &&AI_APP_OWNER_PWD
--- &&AI_APP_RUNTIME_PWD
--- &&AI_APP_READONLY_PWD
--- &&AI_REVIEWER_PWD
+  if l_username not in (
+    'AI_APP_OWNER',
+    'AI_APP_RUNTIME',
+    'AI_APP_READONLY',
+    'AI_REVIEWER'
+  ) then
+    raise_application_error(-20010, 'Unexpected Oracle AI Lab user: ' || p_username);
+  end if;
 
--- Goal 007 intentionally avoids executable CREATE USER and GRANT statements until
--- runtime validation is authorized against the disposable local lab container.
--- The later implementation must keep all DDL in this managed file and run it only
--- through db/install/install.sql and scripts/install-db.sh.
+  if p_password is null then
+    raise_application_error(-20011, 'Password value is required for ' || l_username);
+  end if;
 
--- TODO(G007/G008+): Add validated CREATE USER or ALTER USER statements for:
---   AI_APP_OWNER
---   AI_APP_RUNTIME
---   AI_APP_READONLY
---   AI_REVIEWER
+  -- Passwords are local runtime values. They are quoted for SQL execution here
+  -- but are never written to Git.
+  l_password := '"' || replace(p_password, '"', '""') || '"';
 
--- TODO(G007/G008+): Add the smallest validated privilege set. Broad grants such
--- as DBA, RESOURCE, unlimited system privileges, or organizational DB access are
--- intentionally excluded from this skeleton.
+  l_create_sql :=
+    'create user ' || l_username ||
+    ' identified by ' || l_password ||
+    ' default tablespace USERS temporary tablespace TEMP account unlock';
 
--- Conservative future baseline to validate before enabling:
---   GRANT CREATE SESSION TO AI_APP_OWNER;
---   GRANT CREATE SESSION TO AI_APP_RUNTIME;
---   GRANT CREATE SESSION TO AI_APP_READONLY;
---   GRANT CREATE SESSION TO AI_REVIEWER;
--- Object privileges should be granted only after managed objects exist.
+  if p_owner_schema = 'Y' then
+    l_create_sql := l_create_sql || ' quota unlimited on USERS';
+  end if;
 
-prompt User/schema creation remains a safe skeleton in Goal 007.
+  begin
+    execute immediate l_create_sql;
+  exception
+    when others then
+      if sqlcode = -1920 then
+        execute immediate
+          'alter user ' || l_username ||
+          ' identified by ' || l_password ||
+          ' default tablespace USERS temporary tablespace TEMP account unlock';
+      else
+        raise;
+      end if;
+  end;
+
+  if p_owner_schema = 'Y' then
+    execute immediate 'alter user ' || l_username || ' quota unlimited on USERS';
+  else
+    execute immediate 'alter user ' || l_username || ' quota 0 on USERS';
+  end if;
+end;
+/
+
+begin
+  ORACLE_AI_LAB_ENSURE_USER('AI_APP_OWNER', q'[&&AI_APP_OWNER_PWD]', 'Y');
+  ORACLE_AI_LAB_ENSURE_USER('AI_APP_RUNTIME', q'[&&AI_APP_RUNTIME_PWD]', 'N');
+  ORACLE_AI_LAB_ENSURE_USER('AI_APP_READONLY', q'[&&AI_APP_READONLY_PWD]', 'N');
+  ORACLE_AI_LAB_ENSURE_USER('AI_REVIEWER', q'[&&AI_REVIEWER_PWD]', 'N');
+end;
+/
+
+grant create session to AI_APP_OWNER;
+grant create table to AI_APP_OWNER;
+
+grant create session to AI_APP_RUNTIME;
+grant create session to AI_APP_READONLY;
+grant create session to AI_REVIEWER;
+
+drop procedure ORACLE_AI_LAB_ENSURE_USER;
+
+prompt Oracle AI Lab local users are ready for Goal 008 infrastructure install.
