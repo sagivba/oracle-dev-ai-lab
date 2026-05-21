@@ -18,6 +18,7 @@ RELEASE_NAME = "release_001"
 DIST_ROOT = REPO_ROOT / "db" / "dist"
 RELEASE_ROOT = DIST_ROOT / RELEASE_NAME
 REVIEW_REPORT = REPO_ROOT / "db" / "review" / "review-report.md"
+EMPTY_FOLDER_MARKER = "README.md"
 
 OBJECT_TYPE_DIRS = (
     "tables",
@@ -122,6 +123,31 @@ def copy_managed_sources(package_files: list[tuple[str, str]]) -> None:
         destination = RELEASE_ROOT / package_rel
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO_ROOT / source_rel, destination)
+
+
+def render_empty_folder_marker(folder: str) -> str:
+    return f"""# Purpose
+
+This marker keeps the `src/{folder}/` release package folder represented in Git.
+Git does not track empty directories, and no managed SQL files exist for this
+object type in the Goal 011 skeleton package.
+
+# Package Folder Status
+
+- Object type folder: `src/{folder}/`
+- Managed SQL files: none
+- Scope: skeleton-only packaging contract metadata
+"""
+
+
+def write_empty_folder_markers(package_files: list[tuple[str, str]]) -> None:
+    populated_folders = {Path(package_rel).parts[1] for _, package_rel in package_files}
+
+    for folder in OBJECT_TYPE_DIRS:
+        if folder in populated_folders:
+            continue
+        marker_path = RELEASE_ROOT / "src" / folder / EMPTY_FOLDER_MARKER
+        write_text(marker_path, render_empty_folder_marker(folder))
 
 
 def review_report_has_blocker_finding(text: str) -> bool:
@@ -315,6 +341,7 @@ def build_release_package() -> None:
     prepare_release_tree()
     package_files = managed_source_files(tracked)
     copy_managed_sources(package_files)
+    write_empty_folder_markers(package_files)
     _, blocker_found = validate_review_report(tracked)
     write_generated_files(package_files, blocker_found)
 

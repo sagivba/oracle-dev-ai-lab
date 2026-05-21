@@ -22,6 +22,7 @@ OBJECT_TYPE_DIRS = [
     "triggers",
     "seed",
 ]
+PACKAGE_METADATA_FILES = {"README.md"}
 
 
 class TestPackagingWorkflowContract(unittest.TestCase):
@@ -89,7 +90,27 @@ class TestPackagingWorkflowContract(unittest.TestCase):
             if file_path.is_file():
                 rel_parts = file_path.relative_to(src_root).parts
                 self.assertIn(rel_parts[0], OBJECT_TYPE_DIRS)
-                self.assertEqual(".sql", file_path.suffix)
+                self.assertTrue(
+                    file_path.suffix == ".sql" or file_path.name in PACKAGE_METADATA_FILES,
+                    file_path.relative_to(RELEASE_ROOT).as_posix(),
+                )
+
+    def test_empty_package_folders_have_deterministic_git_markers(self) -> None:
+        for folder in OBJECT_TYPE_DIRS:
+            folder_path = RELEASE_ROOT / "src" / folder
+            sql_files = sorted(folder_path.glob("*.sql"))
+            marker_path = folder_path / "README.md"
+
+            if sql_files:
+                self.assertFalse(marker_path.exists())
+                continue
+
+            with self.subTest(folder=folder):
+                marker = marker_path.read_text(encoding="utf-8")
+                self.assertIn("Git does not track empty directories", marker)
+                self.assertIn("no managed SQL files exist", marker)
+                self.assertIn(f"`src/{folder}/`", marker)
+                self.assertNotIn(str(ROOT), marker)
 
     def test_local_env_files_and_obvious_secrets_are_not_packaged(self) -> None:
         package_paths = [

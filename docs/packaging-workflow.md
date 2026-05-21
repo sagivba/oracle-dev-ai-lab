@@ -54,6 +54,11 @@ db/src/seed/
 Files are processed in deterministic sorted order. Unmanaged files outside those
 folders are not packaged.
 
+When an expected package object-type folder has no managed SQL files, the helper
+generates a deterministic `README.md` marker inside that package folder. The
+marker exists only because Git does not track empty directories; it is packaging
+structure metadata, not a DB source file.
+
 ## Excluded Files
 
 The package must not include:

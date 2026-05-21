@@ -12,3 +12,8 @@ Release package output must not include local `.env` or `.env.*` files, secrets,
 tokens, private keys, certificates, or unmanaged database changes. Goal 011
 keeps the package explicitly not approved for deployment because the workflow is
 only a deterministic contract skeleton.
+
+Empty package object-type folders may contain deterministic `README.md` marker
+files so the folder contract is represented in Git. These markers document that
+no managed SQL files exist for that object type and are not database source
+files.
