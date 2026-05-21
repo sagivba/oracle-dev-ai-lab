@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 011 - Release Packaging Workflow Skeleton</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code,
+    pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background: #f0f0f0;
+    }
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 011 - שלד תהליך אריזת Release</h1>
+
+  <h2>פרטי המשימה</h2>
+  <ul>
+    <li><strong>מספר שלב:</strong> 011</li>
+    <li><strong>מזהה משימה:</strong> Goal 011</li>
+    <li><strong>כותרת:</strong> Add Release Packaging Workflow Skeleton</li>
+    <li><strong>תאריך:</strong> 2026-05-21</li>
+  </ul>
+
+  <h2>מה מומש</h2>
+  <p>
+    נוסף שלד בטוח ודטרמיניסטי ליצירת חבילת release תחת
+    <code>db/dist/release_001/</code>. השלד אוסף רק קבצי SQL מנוהלים מתוך
+    תיקיות <code>db/src/</code> המאושרות, מעתיק את דוח הסקירה, ומייצר manifest,
+    install skeleton, rollback skeleton, test report placeholder ו-deployment notes.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>scripts/package-release.sh</code></li>
+    <li><code>tools/package_release.py</code></li>
+    <li><code>docs/packaging-workflow.md</code></li>
+    <li><code>tests/test_packaging_contract.py</code></li>
+    <li><code>docs/stages/stage-011-release-packaging-workflow-skeleton.html</code></li>
+    <li><code>db/dist/release_001/manifest.md</code></li>
+    <li><code>db/dist/release_001/install.sql</code></li>
+    <li><code>db/dist/release_001/rollback.sql</code></li>
+    <li><code>db/dist/release_001/test-report.md</code></li>
+    <li><code>db/dist/release_001/review-report.md</code></li>
+    <li><code>db/dist/release_001/deployment-notes.md</code></li>
+    <li><code>db/dist/release_001/src/tables/lab_smoke_test.sql</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code></li>
+    <li><code>db/dist/README.md</code></li>
+  </ul>
+
+  <h2>החלטות שיושמו</h2>
+  <ul>
+    <li><code>DEC-003</code> - Git/repository state הוא מקור האמת.</li>
+    <li><code>DEC-010</code> - אין DDL או DML אד-הוק.</li>
+    <li><code>DEC-011</code> - בדיקות Python נשארות מבוססות <code>unittest</code>.</li>
+    <li><code>DEC-013</code> - ה-MVP הנוכחי הוא Infrastructure MVP בלבד.</li>
+    <li><code>DEC-018</code> - שינויי DB חייבים להיות מנוהלים בקבצים גרסאיים.</li>
+    <li><code>DEC-019</code> - אין טענת תאימות ללא בדיקה שרצה בפועל.</li>
+  </ul>
+
+  <h2>גבולות בטיחות</h2>
+  <ul>
+    <li>התהליך אינו מתחבר ל-Oracle.</li>
+    <li>התהליך אינו מריץ Docker.</li>
+    <li>התהליך אינו ניגש לבסיסי נתונים ארגוניים.</li>
+    <li>התהליך אינו מריץ DDL או DML.</li>
+    <li>התהליך מסנן קבצי <code>.env</code>, קבצי <code>.env.*</code> וחומר שנראה כמו סוד.</li>
+  </ul>
+
+  <h2>מה הושאר מחוץ לתכולה בכוונה</h2>
+  <ul>
+    <li>לא התחיל Goal 012.</li>
+    <li>לא נוספו אובייקטי DB פונקציונליים לניהול release.</li>
+    <li>לא נוספה לוגיקת deployment אמיתית.</li>
+    <li>לא נטענה תאימות Oracle runtime או Oracle 19c.</li>
+    <li>לא נוספו APEX, ORDS, REST או UI.</li>
+  </ul>
+
+  <h2>פקודות ולידציה</h2>
+  <pre><code>git status --short | cat
+bash -n scripts/package-release.sh
+PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+scripts/package-release.sh
+git diff --check | cat
+agw_review_output --run</code></pre>
+
+  <h2>תוצאות בדיקות</h2>
+  <ul>
+    <li><code>git status --short | cat</code> רץ בתחילת המשימה ואישר working tree נקי.</li>
+    <li><code>bash -n scripts/package-release.sh</code> עבר.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר: 50 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר: 50 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+    <li><code>scripts/package-release.sh</code> עבר ויצר מחדש את <code>db/dist/release_001/</code>.</li>
+    <li><code>git diff --check | cat</code> עבר ללא פלט.</li>
+    <li><code>agw_review_output --run</code> לא נמצא ישירות ב-PATH. לאחר טעינת הכלי המקומי עם <code>source tools/ai-git-workflow-tools/scripts/load-agw.sh</code>, הפקודה עברה והציגה diff ממוקד.</li>
+  </ul>
+  <p>Runtime Oracle validation לא נדרש ל-Goal 011 ולא הורץ.</p>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>חבילת <code>release_001</code> היא חוזה שלד ולא אישור deployment.</li>
+    <li>דוח הסקירה הקיים הוא מקור החוזה לכלל BLOCKER.</li>
+    <li>קובצי SQL תחת תיקיות <code>db/src/</code> המאושרות הם מקור ה-DB היחיד שנארז.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>אין בדיקת Oracle runtime.</li>
+    <li>אין בדיקת התקנה אמיתית מתוך החבילה.</li>
+    <li>החבילה מסומנת במפורש כ-Not approved כי זה Goal שלדי בלבד.</li>
+  </ul>
+
+  <h2>הצעד המומלץ הבא</h2>
+  <p>
+    לסקור את Goal 011 ואת תוצרי האריזה, ורק לאחר אישור Infrastructure MVP
+    לשקול את Goal 012.
+  </p>
+</main>
+</body>
+</html>
