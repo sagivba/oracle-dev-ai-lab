@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 00 - T000 - Reconcile TODO with Codex Goals</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 00 - T000 - התאמת TODO לקובצי Codex Goals</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/T000-reconcile-todo-with-codex-goals</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    המשימה ביצעה התאמה תיעודית בלבד בין <code>TODO.md</code> לבין תוכנית
+    היעדים תחת <code>docs/codex-goals/</code>. לא הורץ אף יעד בפועל, ולא
+    נוצרו תוצרי Docker, Oracle DB, סכמות, התקנה, סקירה, אריזה, pipeline או
+    מימוש פונקציונלי.
+  </p>
+
+  <h2>מה נבדק</h2>
+  <ul>
+    <li>נבדקו קובצי ההנחיה המחייבים: <code>AGENTS.md</code>, Skill, project rules, מסמך התכנון ו-<code>TODO.md</code>.</li>
+    <li>נבדק שקיימים <code>docs/codex-goals/README.md</code> ו-<code>docs/codex-goals/GOALS_INDEX.md</code>.</li>
+    <li>נקראו כל קובצי היעדים <code>goal-000</code> עד <code>goal-013</code>.</li>
+    <li>נבדקה נוכחות תוצרי היעדים הצפויים במאגר.</li>
+    <li>נבדק האם <code>AGENTS.md</code> כבר מזכיר את <code>docs/codex-goals/</code>.</li>
+  </ul>
+
+  <h2>קובצי Goal שנקראו</h2>
+  <ul>
+    <li><code>docs/codex-goals/README.md</code></li>
+    <li><code>docs/codex-goals/GOALS_INDEX.md</code></li>
+    <li><code>docs/codex-goals/goal-000-operating-rules.md</code></li>
+    <li><code>docs/codex-goals/goal-001-template-alignment.md</code></li>
+    <li><code>docs/codex-goals/goal-002-project-docs.md</code></li>
+    <li><code>docs/codex-goals/goal-003-agents-md.md</code></li>
+    <li><code>docs/codex-goals/goal-004-repository-structure.md</code></li>
+    <li><code>docs/codex-goals/goal-005-testing-strategy.md</code></li>
+    <li><code>docs/codex-goals/goal-006-docker-lab-skeleton.md</code></li>
+    <li><code>docs/codex-goals/goal-007-install-workflow.md</code></li>
+    <li><code>docs/codex-goals/goal-008-db-smoke-tests.md</code></li>
+    <li><code>docs/codex-goals/goal-009-spec-pipeline-skeleton.md</code></li>
+    <li><code>docs/codex-goals/goal-010-review-workflow.md</code></li>
+    <li><code>docs/codex-goals/goal-011-packaging-workflow.md</code></li>
+    <li><code>docs/codex-goals/goal-012-functional-spec-placeholder.md</code></li>
+    <li><code>docs/codex-goals/goal-013-functional-iteration-readiness.md</code></li>
+  </ul>
+
+  <h2>שינויים שבוצעו ב-TODO.md</h2>
+  <ul>
+    <li>נוסף סעיף <code>Codex goals execution baseline</code> לאחר בסיס מצב המאגר.</li>
+    <li>נוספה רשומה לכל יעד 000 עד 013 עם סטטוס, קובץ יעד, מטרה, ראיות, הערות ופעולה מומלצת.</li>
+    <li>עודכנה ההמלצה המיידית כך שתצביע לרצף היעדים: המשך עם <code>goal-001-template-alignment.md</code>.</li>
+  </ul>
+
+  <h2>עדכון AGENTS.md</h2>
+  <p>
+    <code>AGENTS.md</code> לא עודכן במשימה זו, משום שכבר קיים בו סעיף
+    <code>Codex goals</code> שמזכיר את <code>docs/codex-goals/</code>.
+  </p>
+
+  <h2>סטטוס היעדים</h2>
+  <ul>
+    <li><strong>DONE:</strong> Goal 000.</li>
+    <li><strong>PARTIAL:</strong> Goals 001, 002, 003, 005, 006.</li>
+    <li><strong>TODO:</strong> Goals 004, 007, 008, 009, 010, 011.</li>
+    <li><strong>BLOCKED:</strong> אין יעדים שסומנו כ-BLOCKED.</li>
+    <li><strong>NOT_APPLICABLE_YET:</strong> Goals 012, 013.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>find docs/codex-goals -maxdepth 2 -type f | sort | cat</code></li>
+    <li><code>find .agents/oracle-ai-lab-codex-planner -maxdepth 3 -type f | sort | cat</code></li>
+    <li><code>git switch -c codex-cli/T000-reconcile-todo-with-codex-goals</code></li>
+    <li><code>sed</code>, <code>grep</code> ו-<code>find</code> לצורכי קריאת קבצים ובדיקת ראיות.</li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה: 5 בדיקות unittest רצו ועברו.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה: Ruff דיווח שכל הבדיקות עברו ו-16 קבצים כבר מפורמטים.</li>
+  </ul>
+
+  <h2>מה לא הורץ ולמה</h2>
+  <ul>
+    <li>לא הורצו יעדי Codex בפועל, כי המשימה היא reconciliation בלבד.</li>
+    <li>לא הורצו בדיקות Docker משום שלא בוצעה עבודת Docker ואין עדיין Oracle Docker lab skeleton.</li>
+    <li>לא הורצו בדיקות DB משום שאין עדיין container, install workflow, סכמות או smoke tests.</li>
+    <li>לא הורצו DDL או DML, בהתאם למגבלות המשימה.</li>
+  </ul>
+
+  <h2>הנחות ומגבלות</h2>
+  <ul>
+    <li>הסטטוסים מבוססים על קבצים במערכת הקבצים בלבד, לא על מצב GitHub מרוחק או אישור אנושי.</li>
+    <li>תוכן Flask/Python הקיים נחשב תבניתי וחלקי ביחס למטרת Oracle AI Lab.</li>
+    <li>הדוח אינו מאשר תאימות Docker, Oracle DB, install, review או packaging.</li>
+  </ul>
+
+  <h2>הצעד הבא המומלץ</h2>
+  <p class="note">
+    הצעד הבא המומלץ הוא להריץ או ליישב את
+    <code>docs/codex-goals/goal-001-template-alignment.md</code>, משום ש-Goal 000
+    אינו דורש שינויי מאגר וכבר מסופק, בעוד Goal 001 עדיין חלקי עקב שאריות
+    template ב-README, metadata, defaults ותיעוד תבניתי.
+  </p>
+</main>
+</body>
+</html>
