@@ -120,12 +120,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `db/src/tables/lab_smoke_test.sql`, `db/tests/sql/001_db_connectivity.sql`, `db/tests/sql/002_object_inventory.sql`, `db/tests/sql/003_no_invalid_objects.sql`, `scripts/run-db-tests.sh`, and `tests/test_repo_contract.py`
   - Notes: Goal 008 adds `LAB_SMOKE_TEST` as an infrastructure-only object, integrates it through `db/install/install.sql`, updates local lab user setup so `AI_APP_OWNER` can own the object, and adds SQL smoke tests plus a local-container-only runner. Runtime Oracle validation was not run or claimed.
   - Recommended next action: Run Goal 009 after the DB smoke object and SQL smoke test structure exist.
-- [TODO] Goal 009 - Add Specification Pipeline Skeleton
+- [DONE] Goal 009 - Add Specification Pipeline Skeleton
   - Goal file: `docs/codex-goals/goal-009-spec-pipeline-skeleton.md`
   - Purpose: Add HTML spec to JSON/TODO/tasks pipeline skeleton and deterministic tooling.
-  - Evidence: `specs/001-release-management/spec.html`, `spec.json`, `TODO.md`, `traceability-matrix.md`, `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, `tests/test_spec_pipeline.py`, and `docs/spec-pipeline.md` are missing.
-  - Notes: No spec pipeline artifacts exist.
-  - Recommended next action: Run Goal 009 after Infrastructure MVP skeleton foundations are in place.
+  - Evidence: `specs/001-release-management/spec.html`, `spec.json`, `TODO.md`, `traceability-matrix.md`, `specs/001-release-management/tasks/T001-spec-pipeline-placeholder.md`, `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, `tests/test_spec_pipeline.py`, and `docs/spec-pipeline.md`
+  - Notes: Goal 009 adds deterministic standard-library skeleton tooling only. It does not generate functional release-management DB objects, review workflow files, or packaging workflow files.
+  - Recommended next action: Run Goal 010 after the spec pipeline skeleton exists.
 - [TODO] Goal 010 - Add Review Workflow Skeleton
   - Goal file: `docs/codex-goals/goal-010-review-workflow.md`
   - Purpose: Add DB code, repository contract, safety, and traceability review workflow.
@@ -257,30 +257,30 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Stage 4 - Spec Pipeline
 
-- [TODO] Create release-management spec directory.
-  - Evidence: `specs/001-release-management/` is missing.
+- [DONE] Create release-management spec directory.
+  - Evidence: `specs/001-release-management/`
   - Source: Planning document sections 6, 7, 9, and 10.
-  - Notes: The first functional use case is release-to-production management.
-- [TODO] Create semantic `spec.html`.
-  - Evidence: `specs/001-release-management/spec.html` is missing.
+  - Notes: Goal 004 created the directory; Goal 009 adds the skeleton specification artifacts.
+- [DONE] Create semantic `spec.html`.
+  - Evidence: `specs/001-release-management/spec.html`
   - Source: Planning document section 10.
-  - Notes: Must include required semantic sections and requirement IDs.
-- [TODO] Create generated/derived spec files.
-  - Evidence: `specs/001-release-management/spec.json`, `TODO.md`, and `traceability-matrix.md` are missing.
+  - Notes: Includes required semantic sections, stable requirement IDs, stable acceptance criteria IDs, and optional PL/SQL API section for the Infrastructure MVP.
+- [DONE] Create generated/derived spec files.
+  - Evidence: `specs/001-release-management/spec.json`, `specs/001-release-management/TODO.md`, and `specs/001-release-management/traceability-matrix.md`
   - Source: Planning document section 9.
-  - Notes: Generated artifacts should be traceable to requirements.
-- [TODO] Create task directory and task files.
-  - Evidence: `specs/001-release-management/tasks/` is missing.
+  - Notes: Generated artifacts are deterministic skeleton outputs traceable to `REQ-*` and `AC-*` IDs.
+- [DONE] Create task directory and task files.
+  - Evidence: `specs/001-release-management/tasks/` and `specs/001-release-management/tasks/T001-spec-pipeline-placeholder.md`
   - Source: Planning document sections 7 and 11.
-  - Notes: Task files should include source requirements, required behavior, and success criteria.
-- [TODO] Create spec pipeline tools.
-  - Evidence: `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, and `tools/generate_plsql_skeleton.py` are missing.
+  - Notes: The placeholder task includes source requirements, acceptance criteria, required behavior, and success criteria without starting functional implementation.
+- [DONE] Create spec pipeline tools.
+  - Evidence: `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, and `tools/generate_tasks.py`
   - Source: Planning document section 7; Stage 4 row in section 12.
-  - Notes: Do not implement tooling in this intake task.
-- [TODO] Add unittest coverage for repository/spec contracts.
-  - Evidence: Existing tests cover template Flask app, model, and service behavior only.
+  - Notes: Goal 009 implements deterministic skeleton tooling only. PL/SQL skeleton generation remains out of scope because functional generation is not allowed in this goal.
+- [DONE] Add unittest coverage for repository/spec contracts.
+  - Evidence: `tests/test_spec_pipeline.py`
   - Source: Planning document section 13.
-  - Notes: Future tests should avoid network, secrets, and external DB dependencies unless explicitly scoped.
+  - Notes: Tests use Python `unittest` and require no network, secrets, Docker, Oracle, or external services.
 
 ## Stage 5 - Install/Test Workflow
 

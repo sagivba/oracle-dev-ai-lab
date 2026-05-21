@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 009 - Goal 009 - Specification Pipeline Skeleton</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 009 - Goal 009 - שלד Specification Pipeline</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>sagivba/oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-009-spec-pipeline-skeleton</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 009 הוסיף שלד pipeline שמתחיל מ-<code>spec.html</code> סמנטי ומפיק
+    תוצרים עקיבים: <code>spec.json</code>, <code>TODO.md</code>,
+    <code>traceability-matrix.md</code> ו-task placeholder. זהו שלד בלבד:
+    אין מימוש עסקי, אין יצירת אובייקטי DB פונקציונליים ואין חיבור ל-Oracle.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>specs/001-release-management/spec.html</code></li>
+    <li><code>specs/001-release-management/spec.json</code></li>
+    <li><code>specs/001-release-management/TODO.md</code></li>
+    <li><code>specs/001-release-management/traceability-matrix.md</code></li>
+    <li><code>specs/001-release-management/tasks/T001-spec-pipeline-placeholder.md</code></li>
+    <li><code>tools/extract_spec.py</code></li>
+    <li><code>tools/validate_spec.py</code></li>
+    <li><code>tools/generate_todo.py</code></li>
+    <li><code>tools/generate_tasks.py</code></li>
+    <li><code>tests/test_spec_pipeline.py</code></li>
+    <li><code>docs/spec-pipeline.md</code></li>
+    <li><code>docs/stages/stage-009-spec-pipeline-skeleton.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - Goal 009 ופריטי Stage 4 סומנו כ-DONE עם ראיות.</li>
+  </ul>
+
+  <h2>איך הכלים עובדים</h2>
+  <ul>
+    <li><code>tools/extract_spec.py</code> קורא HTML סמנטי ומפיק JSON דטרמיניסטי.</li>
+    <li><code>tools/validate_spec.py</code> בודק sections נדרשים, מזהים יציבים וסנכרון מול JSON.</li>
+    <li><code>tools/generate_todo.py</code> מפיק TODO placeholder מתוך <code>spec.json</code>.</li>
+    <li><code>tools/generate_tasks.py</code> מפיק task placeholder ו-traceability matrix.</li>
+    <li>כל הכלים משתמשים ב-Python standard library בלבד ותומכים ב-<code>--help</code>.</li>
+  </ul>
+
+  <h2>החלטות וכללי בטיחות שנשמרו</h2>
+  <ul>
+    <li>Git נשאר מקור האמת.</li>
+    <li>ה-pipeline הוא מקומי בלבד ודטרמיניסטי.</li>
+    <li>לא נוספה תלות ב-<code>pytest</code>; הבדיקות הן <code>unittest</code>.</li>
+    <li>לא בוצע חיבור לבסיס נתונים ארגוני או מקומי.</li>
+    <li>לא הופעל Docker.</li>
+    <li>לא בוצעו DDL או DML.</li>
+    <li>לא נוספו secrets או connection strings.</li>
+  </ul>
+
+  <h2>מה לא נעשה בכוונה</h2>
+  <ul>
+    <li>לא נוצרו אובייקטי DB עסקיים עבור release-management.</li>
+    <li>לא נוצרו טבלאות כגון <code>RELEASE_REQUESTS</code> או <code>RELEASE_ITEMS</code>.</li>
+    <li>לא נוצר PL/SQL עסקי או generator ל-PL/SQL פונקציונלי.</li>
+    <li>לא נוסף review workflow של Goal 010.</li>
+    <li>לא נוסף packaging workflow של Goal 011.</li>
+    <li>לא התחילה איטרציה פונקציונלית של Goal 012.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh</code></li>
+    <li><code>agw_inspect_git_state --run</code></li>
+    <li><code>agw_start_codex_task --branch codex-cli/goal-009-spec-pipeline-skeleton</code></li>
+    <li><code>agw_start_codex_task --branch codex-cli/goal-009-spec-pipeline-skeleton --run</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/extract_spec.py</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/validate_spec.py</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_todo.py</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_tasks.py</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/extract_spec.py --help</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/validate_spec.py --help</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_todo.py --help</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_tasks.py --help</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/extract_spec.py --check</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_todo.py --check</code></li>
+    <li><code>PATH=.venv/bin:$PATH python tools/generate_tasks.py --check</code></li>
+    <li><code>python -m unittest discover</code></li>
+    <li><code>PATH=.venv/bin:$PATH python -m unittest discover</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code></li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH python -m py_compile tools/extract_spec.py tools/validate_spec.py tools/generate_todo.py tools/generate_tasks.py</code></li>
+    <li><code>rm -rf tools/__pycache__</code> להסרת bytecode מקומי שנוצר בבדיקת compile.</li>
+    <li><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh</code></li>
+    <li><code>agw_review_output --run</code></li>
+  </ul>
+
+  <h2>תוצאות בדיקות</h2>
+  <ul>
+    <li>כל פקודות ה-<code>--help</code> של הכלים עברו.</li>
+    <li>פקודות ה-check של הכלים עברו.</li>
+    <li><code>python -m unittest discover</code> נכשל כי <code>python</code> אינו נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH python -m unittest discover</code> נכשל כי חסר <code>PYTHONPATH=src</code> עבור בדיקות ה-starter app.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר עם 24 בדיקות.</li>
+    <li><code>scripts/test.sh quick</code> נכשל כי <code>python</code> אינו נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר עם 24 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר לאחר תיקון style נקודתי בבדיקות.</li>
+    <li><code>py_compile</code> לכלי Goal 009 עבר ללא פלט.</li>
+    <li><code>agw_review_output --run</code> עבר והציג את מצב הענף וה-diff ללא שגיאות.</li>
+  </ul>
+
+  <h2>מגבלות וסיכונים</h2>
+  <ul>
+    <li>ה-parser הוא מינימלי ומיועד ל-HTML הסמנטי המוגבל של Goal 009.</li>
+    <li>התוצרים הם placeholders בלבד ואינם מוכיחים review או packaging.</li>
+    <li>לא נטענת תאימות Oracle, Docker, install, review או packaging runtime.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 010 - Add Review Workflow Skeleton</code>.
+  </p>
+</main>
+</body>
+</html>
