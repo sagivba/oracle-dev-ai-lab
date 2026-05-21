@@ -27,3 +27,5 @@ prompt Running managed install file: 01_create_schema.sql
 
 prompt Running managed source file: &&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql
 @@&&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql
+
+exit success

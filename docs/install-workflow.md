@@ -107,6 +107,10 @@ and fails non-zero if SQLPlus exits non-zero or if the output contains `SP2-`,
 `ORA-`, or `PLS-` error markers. The success message is printed by the shell
 script only after those checks pass.
 
+The SQL entry point ends with a managed SQLPlus `exit success` so the
+`docker exec` install session terminates deterministically after the managed
+install order completes.
+
 ## Relationship to Goal 008
 
 Goal 008 adds the `LAB_SMOKE_TEST` infrastructure object and SQL smoke tests.

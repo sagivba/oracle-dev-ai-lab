@@ -55,20 +55,25 @@
     לאחר שגיאת <code>SP2-0310</code>. התיקון ממוקד לפני Goal 011 ואינו מוסיף
     packaging או אובייקטים פונקציונליים.
   </p>
+  <p>
+    עדכון QA נוסף לאחר PR #14 מצא שהנתיב המתוקן קיים ו-SQLPlus מתחבר, אך
+    ההתקנה עדיין עלולה להיתקע כי <code>db/install/install.sql</code> לא סיים את
+    SQLPlus עם <code>exit</code>. בנוסף, <code>PROJECT_NAME</code> ב-<code>.env.example</code>
+    לא היה בטוח ל-<code>source</code> ב-Bash בגלל רווחים ללא מרכאות.
+  </p>
 
   <h2>קבצים שנוצרו</h2>
   <ul>
-    <li><code>tests/test_runtime_install_path_fix.py</code></li>
-    <li><code>docs/stages/stage-010-runtime-install-path-fix.html</code></li>
+    <li>אין קבצים חדשים בעדכון QA זה.</li>
   </ul>
 
-  <h2>קבצים שעודכנו</h2>
+  <h2>קבצים שעודכנו בעדכון QA זה</h2>
   <ul>
     <li><code>.env.example</code></li>
     <li><code>db/install/install.sql</code></li>
-    <li><code>scripts/install-db.sh</code></li>
-    <li><code>tests/test_repo_contract.py</code></li>
+    <li><code>tests/test_runtime_install_path_fix.py</code></li>
     <li><code>docs/install-workflow.md</code></li>
+    <li><code>docs/stages/stage-010-runtime-install-path-fix.html</code></li>
   </ul>
 
   <h2>החלטות שיושמו</h2>
@@ -96,6 +101,14 @@
       פלט SQLPlus נבדק עבור <code>SP2-</code>, <code>ORA-</code>, ו-<code>PLS-</code>.
       הודעת ההצלחה מודפסת רק אחרי שהסטטוס והפלט עברו בדיקה.
     </li>
+    <li>
+      <code>db/install/install.sql</code> מסתיים כעת עם <code>exit success</code>
+      כדי לסיים את SQLPlus באופן דטרמיניסטי בתוך <code>docker exec</code>.
+    </li>
+    <li>
+      <code>PROJECT_NAME</code> ב-<code>.env.example</code> מוקף במרכאות כדי לאפשר
+      <code>source .env.example</code> ב-Bash ללא ניסיון להריץ את המילה <code>in</code> כפקודה.
+    </li>
   </ul>
 
   <h2>הנחות חשובות</h2>
@@ -108,15 +121,13 @@
   <h2>פקודות שהורצו</h2>
   <ul>
     <li><code>git fetch</code></li>
-    <li><code>git switch -c manual/fix-runtime-install-path</code></li>
+    <li><code>git switch -c codex-cli/fix-sqlplus-exit-env-example</code></li>
     <li><code>rg</code>, <code>sed</code>, ו-<code>find</code> לקריאת מצב הקבצים והבדיקות</li>
     <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code></li>
     <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
     <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
     <li><code>scripts/review-db-code.sh</code></li>
     <li><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh &amp;&amp; agw_review_output --run</code></li>
-    <li><code>docker inspect -f '{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}' oracle-dev-ai-lab-db</code></li>
-    <li><code>scripts/lab-up.sh</code></li>
     <li><code>bash -n scripts/install-db.sh scripts/run-db-tests.sh scripts/lab-up.sh</code></li>
     <li><code>git diff --check | cat</code></li>
     <li><code>git status --short | cat</code></li>
@@ -124,9 +135,12 @@
 
   <h2>בדיקות שהורצו</h2>
   <ul>
-    <li>כל בדיקות <code>unittest</code> עברו: 35 בדיקות.</li>
-    <li><code>scripts/test.sh quick</code> עבר: 35 בדיקות.</li>
-    <li><code>scripts/lint.sh</code> עבר לאחר הרצת formatter על קובץ בדיקה שנגעו בו.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר: 37 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר: 37 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+    <li>בדיקות <code>unittest</code> כוללות כעת בדיקה ל-<code>exit success</code> בסוף <code>install.sql</code>.</li>
+    <li>בדיקות <code>unittest</code> כוללות כעת בדיקת Bash source ל-<code>.env.example</code>.</li>
+    <li>בדיקות <code>unittest</code> ממשיכות לבדוק את placeholders הנדרשים לסיסמאות המקומיות.</li>
     <li><code>scripts/review-db-code.sh</code> עבר.</li>
     <li><code>agw_review_output --run</code> עבר והציג את ה-diff הממוקד.</li>
     <li><code>bash -n</code> עבר עבור סקריפטי ה-runtime הרלוונטיים.</li>
@@ -144,11 +158,10 @@
 
   <h2>תוצאות בדיקה</h2>
   <p>
-    ה-validation הסטטי עבר. בדיקת <code>docker inspect</code> בהרשאה מוגברת
-    הראתה שה-container המקומי <code>oracle-dev-ai-lab-db</code> רץ ובריא:
-    <code>true healthy</code>. ניסיון להריץ <code>scripts/lab-up.sh</code> נעצר
-    על ידי guard תקין מפני שאין <code>.env</code> מקומי עם <code>ORACLE_PWD</code>.
-    לכן אין הצהרה שהתקנת Oracle runtime או בדיקות DB smoke עברו בסביבת dev זו.
+    ה-validation הסטטי עבר. ב-worktree המקומי אין <code>.env</code> ואין משתני
+    סביבה עם הסיסמאות המקומיות הנדרשות, ולכן <code>scripts/install-db.sh</code>
+    ו-<code>scripts/run-db-tests.sh</code> לא הורצו. לכן אין הצהרה שהתקנת Oracle
+    runtime או בדיקות DB smoke עברו בסביבת dev זו.
   </p>
 
   <h2>מגבלות ידועות</h2>
