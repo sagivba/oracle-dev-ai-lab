@@ -28,6 +28,7 @@ They cover:
 
 - DB connectivity;
 - install verification for the infrastructure smoke object;
+- local lab schema/user readiness through the managed install path;
 - invalid objects;
 - object inventory;
 - `LAB_SMOKE_TEST` column checks.

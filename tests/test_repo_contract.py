@@ -97,6 +97,28 @@ class TestRepositoryContract(unittest.TestCase):
         self.assertIn("@@01_create_schema.sql", install_sql)
         self.assertIn("@@../src/tables/lab_smoke_test.sql", install_sql)
 
+    def test_goal_008_install_creates_required_lab_users(self) -> None:
+        users_sql = (ROOT / "db/install/00_create_lab_users.sql").read_text(encoding="utf-8")
+
+        for user_name in [
+            "AI_APP_OWNER",
+            "AI_APP_RUNTIME",
+            "AI_APP_READONLY",
+            "AI_REVIEWER",
+        ]:
+            with self.subTest(user=user_name):
+                self.assertIn(user_name, users_sql)
+
+        self.assertIn("&&AI_APP_OWNER_PWD", users_sql)
+        self.assertIn("&&AI_APP_RUNTIME_PWD", users_sql)
+        self.assertIn("&&AI_APP_READONLY_PWD", users_sql)
+        self.assertIn("&&AI_REVIEWER_PWD", users_sql)
+        self.assertIn("grant create table to AI_APP_OWNER", users_sql)
+        self.assertIn("grant create session to AI_APP_OWNER", users_sql)
+        self.assertIn("quota unlimited on USERS", users_sql)
+        self.assertNotRegex(users_sql, r"(?i)grant\s+dba\b")
+        self.assertNotRegex(users_sql, r"(?i)grant\s+resource\b")
+
     def test_goal_007_install_script_targets_local_lab_only(self) -> None:
         install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
 

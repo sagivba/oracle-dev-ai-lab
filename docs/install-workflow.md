@@ -6,9 +6,10 @@ smoke-object integration.
 
 ## Scope
 
-The install workflow uses managed SQL files only. It does not validate Oracle
-runtime behavior unless explicitly run against the local lab, and it does not
-implement release-management functionality.
+The install workflow uses managed SQL files only. It creates or updates the
+local lab users required by the infrastructure smoke object, but it does not
+validate Oracle runtime behavior unless explicitly run against the local lab, and
+it does not implement release-management functionality.
 
 ## Safety Boundaries
 
@@ -59,6 +60,21 @@ db/install/01_create_schema.sql
 db/src/tables/lab_smoke_test.sql
 ```
 
+`db/install/00_create_lab_users.sql` creates or updates these local lab users:
+
+```text
+AI_APP_OWNER
+AI_APP_RUNTIME
+AI_APP_READONLY
+AI_REVIEWER
+```
+
+The file uses only the password substitution variables supplied by
+`db/install/install.sql` and `scripts/install-db.sh`. `AI_APP_OWNER` receives
+the minimum privileges required to own `LAB_SMOKE_TEST`: `CREATE SESSION`,
+`CREATE TABLE`, and quota on the local `USERS` tablespace. The other lab users
+receive `CREATE SESSION` only in Goal 008.
+
 Rollback is reserved in:
 
 ```text
@@ -100,6 +116,7 @@ release-management functionality.
 
 ## Validation Status
 
-Goal 007 validation is repository-only and shell syntax only. Docker was not
-started, Oracle was not started, no database connection was made, and no DDL or
-DML was executed.
+Current validation is repository-only and shell syntax only unless explicitly
+reported otherwise. Docker was not started, Oracle was not started, no database
+connection was made, and no DDL or DML was executed during the static Goal 008
+fix.

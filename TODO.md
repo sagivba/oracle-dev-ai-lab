@@ -112,13 +112,13 @@ install scripts, review scripts, package scripts, or functional database objects
   - Goal file: `docs/codex-goals/goal-007-install-workflow.md`
   - Purpose: Create controlled DB installation workflow and lab user SQL skeletons.
   - Evidence: `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `db/rollback/rollback.sql`, `scripts/install-db.sh`, `docs/install-workflow.md`, and `tests/test_repo_contract.py`
-  - Notes: Goal 007 adds a managed install workflow skeleton, local-container-only shell entry point, conservative user/schema SQL placeholders, and repository-only contract checks. Runtime Oracle validation was not run or claimed.
+  - Notes: Goal 007 added a managed install workflow skeleton and local-container-only shell entry point. Goal 008 now makes the install path internally consistent by creating or updating the local lab users needed for the smoke object. Runtime Oracle validation was not run or claimed.
   - Recommended next action: Run Goal 008 after Goal 007 creates the controlled install workflow.
 - [DONE] Goal 008 - Add DB Smoke Object and SQL Smoke Tests
   - Goal file: `docs/codex-goals/goal-008-db-smoke-tests.md`
   - Purpose: Add minimal `LAB_SMOKE_TEST` object and SQL smoke tests for the Infrastructure MVP.
   - Evidence: `db/src/tables/lab_smoke_test.sql`, `db/tests/sql/001_db_connectivity.sql`, `db/tests/sql/002_object_inventory.sql`, `db/tests/sql/003_no_invalid_objects.sql`, `scripts/run-db-tests.sh`, and `tests/test_repo_contract.py`
-  - Notes: Goal 008 adds `LAB_SMOKE_TEST` as an infrastructure-only object, integrates it through `db/install/install.sql`, and adds SQL smoke tests plus a local-container-only runner. Runtime Oracle validation was not run or claimed.
+  - Notes: Goal 008 adds `LAB_SMOKE_TEST` as an infrastructure-only object, integrates it through `db/install/install.sql`, updates local lab user setup so `AI_APP_OWNER` can own the object, and adds SQL smoke tests plus a local-container-only runner. Runtime Oracle validation was not run or claimed.
   - Recommended next action: Run Goal 009 after the DB smoke object and SQL smoke test structure exist.
 - [TODO] Goal 009 - Add Specification Pipeline Skeleton
   - Goal file: `docs/codex-goals/goal-009-spec-pipeline-skeleton.md`
@@ -241,7 +241,7 @@ install scripts, review scripts, package scripts, or functional database objects
 - [DONE] Create managed lab user SQL files.
   - Evidence: `db/install/00_create_lab_users.sql`
   - Source: Planning document sections 7 and 8.
-  - Notes: Goal 007 documents required users `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER` with password placeholders and deferred runtime validation.
+  - Notes: Goal 008 creates or updates required local users `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER` with password substitution variables supplied by the official install workflow. Runtime validation remains not run.
 - [DONE] Create managed schema SQL files.
   - Evidence: `db/install/01_create_schema.sql` and `db/install/install.sql`
   - Source: Planning document section 7; golden rule.
