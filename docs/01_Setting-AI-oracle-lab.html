@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DEVELOPMENT in Oracle using AI Lab - מסמך תכולה ותוכנית עבודה</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 32px 44px 60px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3 {
+      color: #111;
+      line-height: 1.25;
+    }
+    h1 {
+      border-bottom: 3px solid #333;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+    h2 {
+      margin-top: 42px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 6px;
+    }
+    h3 {
+      margin-top: 28px;
+    }
+    code, pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, 'Courier New', monospace;
+      background: #f0f0f0;
+      border-radius: 6px;
+    }
+    code {
+      padding: 2px 5px;
+    }
+    pre {
+      padding: 14px 18px;
+      overflow-x: auto;
+      border: 1px solid #ddd;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #efefef;
+    }
+    .meta {
+      background: #f2f4f8;
+      border: 1px solid #d7dce5;
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .decision {
+      background: #f8f8f8;
+      border-right: 5px solid #444;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+    .warning {
+      background: #fff8e6;
+      border: 1px solid #ead18a;
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+    .success {
+      background: #edf7ed;
+      border: 1px solid #afd3af;
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+    .strict {
+      background: #f5f5f5;
+      border: 1px solid #ccc;
+      border-right: 5px solid #111;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+    ul, ol {
+      padding-right: 24px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>DEVELOPMENT in Oracle using AI Lab - מסמך תכולה ותוכנית עבודה</h1>
+
+  <section class="meta">
+    <p><strong>מטרה:</strong> להקים מעבדת פיתוח Oracle מבודדת שבה Codex/AI מפתח אובייקטי Oracle לפי אפיון, מבצע בדיקות וסקירת קוד, ולבסוף אורז תוצר שניתן להעביר תאורטית לסביבת פיתוח/בדיקות ארגונית.</p>
+    <p><strong>סוג מסמך:</strong> מסמך תכולה, עקרונות מחייבים ותוכנית עבודה למעבדה. זה אינו אפיון עסקי של use case ספציפי.</p>
+    <p><strong>גרסה:</strong> 0.2</p>
+    <p><strong>תאריך:</strong> 2026-05-19</p>
+  </section>
+
+  <h2>1. שמות הפרויקט ומשאבי runtime</h2>
+
+  <div class="decision">
+    <strong>Decision 001:</strong> שם התצוגה של הפרויקט הוא <code>DEVELOPMENT in Oracle using AI Lab</code>.
+  </div>
+
+  <div class="decision">
+    <strong>Decision 002:</strong> שם ה-repository הטכני חייב להיות <code>oracle-dev-ai-lab</code>.
+  </div>
+
+  <p>משאבי Docker של המעבדה חייבים להשתמש בשמות הבאים:</p>
+  <pre><code>Repository: oracle-dev-ai-lab
+Container:  oracle-dev-ai-lab-db
+Volume:     oracle-dev-ai-lab-u01
+Network:    oracle-dev-ai-lab-net
+PDB:        FREEPDB1</code></pre>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> שמות אלה מחייבים בכל scripts, מסמכי עבודה, בדיקות והנחיות Codex. אין להשתמש בשמות חלופיים ללא החלטת תכנון מפורשת.
+  </div>
+
+  <h2>2. עקרונות יסוד</h2>
+
+  <div class="decision">
+    <strong>Decision 003:</strong> GitHub הוא מקור האמת היחיד. בסיס הנתונים הוא תוצר התקנה זמני שניתן למחיקה ושחזור.
+  </div>
+
+  <div class="decision">
+    <strong>Decision 004:</strong> המעבדה תשתמש ב-container נפרד, ב-volume נפרד וברשת Docker נפרדת. אין להשתמש ב-Oracle container קיים.
+  </div>
+
+  <div class="decision">
+    <strong>Decision 005:</strong> המעבדה חייבת לרוץ על <code>Oracle AI Database 26ai Free</code> בתוך Docker.
+  </div>
+
+  <div class="decision">
+    <strong>Decision 006:</strong> Codex אינו רשאי להריץ DDL או DML אד-הוק ישירות מול בסיס הנתונים. כל שינוי DB חייב להופיע בקובץ SQL מנוהל Git ולהיות מורץ דרך scripts רשמיים בלבד.
+  </div>
+
+  <div class="decision">
+    <strong>Decision 007:</strong> בשלב הראשון המעבדה מיועדת לאובייקטי Oracle בלבד: tables, constraints, indexes, views, packages, package bodies, triggers רק אם יש הצדקה, seed data, tests, review ו-packaging. REST, ORDS, APEX ו-UI אינם חלק מהשלב הראשון.
+  </div>
+
+  <div class="warning">
+    <strong>כלל הזהב:</strong>
+    <span dir="ltr">No database change is valid unless it exists as a versioned SQL file and can be installed on a clean lab database by the official scripts.</span>
+  </div>
+
+  <h2>3. מדיניות גרסת Oracle ותאימות</h2>
+
+  <p>המעבדה חייבת להשתמש ב-<code>Oracle AI Database 26ai Free</code> בתוך Docker.</p>
+
+  <p>למרות שבסביבות הארגוניות נעשה כיום שימוש עיקרי ב-Oracle 19c, המעבדה מכוונת במכוון לגרסה עדכנית יותר לצורכי פיתוח מבודד, למידה והתנסות קדימה.</p>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> ה-MVP אינו מבטיח תאימות ל-Oracle 19c. כל דרישת תאימות עתידית ל-Oracle 19c חייבת להיות ממומשת כשכבת בדיקות וסקירה נפרדת.
+  </div>
+
+  <h2>4. גבולות המעבדה</h2>
+
+  <ul>
+    <li>אין חיבור לסביבת Production.</li>
+    <li>אין חיבור ישיר לסביבת פיתוח/בדיקות ארגונית על ידי Codex.</li>
+    <li>אין חיבור לבסיסי נתונים ארגוניים, משותפים, פיתוח, בדיקות, staging או production.</li>
+    <li>אין סיסמאות או secrets בקוד.</li>
+    <li>Codex רשאי להריץ SELECT בלבד, ורק לצורכי diagnostics, metadata inspection, compile checks, test verification ו-review.</li>
+    <li>שינויי schema מותרים רק דרך קבצים מנוהלים ו-script התקנה רשמי.</li>
+    <li>כל תוצר חייב להיות ניתן להתקנה מחדש על בסיס נתונים נקי.</li>
+    <li>כל assumption מהותי חייב להירשם ב-task, בדוח review או במסמך החלטות. אין להמציא התנהגות שלא הוגדרה.</li>
+  </ul>
+
+  <h2>5. MVP ראשון - Infrastructure MVP</h2>
+
+  <div class="decision">
+    <strong>Decision 008:</strong> ה-MVP הראשון הוא Infrastructure MVP. הוא אינו מימוש פונקציונלי של מערכת עסקית.
+  </div>
+
+  <p>ה-Infrastructure MVP חייב להוכיח שהמעבדה מסוגלת:</p>
+  <ul>
+    <li>להקים ולאפס סביבת Oracle Docker מבודדת.</li>
+    <li>ליצור משתמשים וסכמות מעבדה.</li>
+    <li>להריץ install scripts מבוקרים.</li>
+    <li>להריץ בדיקות smoke ל-repository ול-DB.</li>
+    <li>להריץ review scripts.</li>
+    <li>לייצר release package.</li>
+  </ul>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> ה-Infrastructure MVP אינו מחייב מימוש package עסקי אמיתי ב-PL/SQL ואינו מחייב feature פונקציונלי מלא.
+  </div>
+
+  <p>פיתוח פונקציונלי של use case ניהול ההעברות לייצור יתחיל רק לאחר שה-Infrastructure MVP יציב, ניתן לשחזור ועובר בדיקות.</p>
+
+  <h3>Smoke Object מינימלי</h3>
+  <p>כדי להוכיח install, test, review ו-packaging מקצה לקצה, ה-Infrastructure MVP יכלול אובייקט smoke מינימלי בלבד.</p>
+
+  <pre><code>Suggested smoke object:
+LAB_SMOKE_TEST</code></pre>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> אובייקט smoke אינו feature עסקי. הוא קיים רק כדי להוכיח שה-pipeline התשתיתי עובד.
+  </div>
+
+  <h2>6. Use Case פונקציונלי ראשון</h2>
+
+  <p>לאחר השלמת Infrastructure MVP, ה-use case הפונקציונלי הראשון יהיה דמיוני, קטן ומנוטרל מפרטים רגישים:</p>
+  <pre><code>מערכת ניהול העברות לייצור</code></pre>
+
+  <p>ישויות מוצעות לאיטרציות הפונקציונליות:</p>
+  <ul>
+    <li>RELEASE_REQUESTS</li>
+    <li>RELEASE_ITEMS</li>
+    <li>RELEASE_ENVIRONMENTS</li>
+    <li>RELEASE_STATUSES</li>
+    <li>RELEASE_APPROVALS</li>
+    <li>RELEASE_EXECUTION_LOG</li>
+  </ul>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> ישויות אלה אינן חלק מחייב מה-Infrastructure MVP. הן ייכנסו רק בשלב האיטרציות הפונקציונליות.
+  </div>
+
+  <h2>7. מבנה Repo מחייב</h2>
+
+  <pre><code>oracle-dev-ai-lab/
+  README.md
+  AGENTS.md
+  .env.example
+  .gitignore
+  docker-compose.yml
+
+  docs/
+    project-charter.md
+    safety-rules.md
+    decision-log.md
+
+  specs/
+    001-release-management/
+      spec.html
+      spec.json
+      TODO.md
+      traceability-matrix.md
+      tasks/
+        T001-create-project-charter.md
+        T002-create-repo-skeleton.md
+        T003-create-docker-lab.md
+        T004-create-lab-schemas.md
+        T005-create-install-workflow.md
+        T006-create-test-workflow.md
+        T007-create-review-workflow.md
+        T008-create-package-workflow.md
+
+  db/
+    install/
+      install.sql
+      00_create_lab_users.sql
+      01_create_schema.sql
+    src/
+      tables/
+      constraints/
+      indexes/
+      views/
+      packages/
+      triggers/
+      seed/
+    rollback/
+      rollback.sql
+    tests/
+      sql/
+      python/
+    review/
+    generated/
+    dist/
+
+  scripts/
+    lab-up.sh
+    lab-down.sh
+    lab-reset.sh
+    lab-backup.sh
+    lab-restore.sh
+    install-db.sh
+    run-db-tests.sh
+    review-db-code.sh
+    package-release.sh
+    test.sh
+
+  tools/
+    extract_spec.py
+    validate_spec.py
+    generate_todo.py
+    generate_tasks.py
+    generate_plsql_skeleton.py
+    package_release.py
+
+  code/
+    oracle_ai_lab/
+      __init__.py
+    _Tests/
+      test_repo_contract.py
+      test_spec_pipeline.py
+      test_task_contract.py</code></pre>
+
+  <h2>8. סביבת Docker</h2>
+
+  <p>המעבדה תשתמש ב-Oracle AI Database 26ai Free בתוך Docker, עם container, volume ורשת ייעודיים:</p>
+
+  <pre><code>Container: oracle-dev-ai-lab-db
+Volume:    oracle-dev-ai-lab-u01
+Network:   oracle-dev-ai-lab-net
+PDB:       FREEPDB1</code></pre>
+
+  <h3>משתמשים מוצעים</h3>
+  <table>
+    <thead>
+      <tr><th>Schema/User</th><th>תפקיד</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>AI_APP_OWNER</td><td>בעל האובייקטים: tables, packages, views, triggers.</td></tr>
+      <tr><td>AI_APP_RUNTIME</td><td>משתמש runtime עם הרשאות ביצוע ושימוש מינימליות.</td></tr>
+      <tr><td>AI_APP_READONLY</td><td>משתמש קריאה לבדיקות ודוחות.</td></tr>
+      <tr><td>AI_REVIEWER</td><td>משתמש לסקירת metadata ובדיקות dictionary מוגבלות.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>9. Specification-to-Tasks Pipeline</h2>
+
+  <p>האפיון ייכתב כמסמך HTML מובנה. ממנו ייגזרו תוצרים מכונתיים ותפעוליים:</p>
+
+  <pre><code>spec.html
+  -> spec.json
+  -> TODO.md
+  -> tasks/Txxx-*.md
+  -> db/generated/*
+  -> db/src/*
+  -> review report
+  -> release package</code></pre>
+
+  <h3>כלל עקיבות</h3>
+  <p>כל TODO, task, קובץ SQL, בדיקה והערת review חייבים להצביע ל-requirement id, task id או infrastructure decision מפורש.</p>
+
+  <h2>10. פורמט spec.html</h2>
+
+  <p>מסמך האפיון צריך להיות HTML סמנטי, עם sections ו-requirement ids קבועים.</p>
+
+  <pre><code>&lt;article id="spec" data-spec-id="001" data-version="0.1.0"&gt;
+  &lt;section id="business-goal" data-required="true"&gt;...&lt;/section&gt;
+  &lt;section id="scope" data-required="true"&gt;...&lt;/section&gt;
+  &lt;section id="out-of-scope" data-required="true"&gt;...&lt;/section&gt;
+  &lt;section id="entities" data-required="true"&gt;...&lt;/section&gt;
+  &lt;section id="plsql-api" data-required="false"&gt;...&lt;/section&gt;
+  &lt;section id="acceptance-criteria" data-required="true"&gt;...&lt;/section&gt;
+&lt;/article&gt;</code></pre>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> section של PL/SQL API אינו חובה ב-Infrastructure MVP. הוא יהפוך לרלוונטי רק באיטרציות פונקציונליות.
+  </div>
+
+  <h2>11. פורמט משימת Codex</h2>
+
+  <pre><code># Txxx - Task title
+
+## Task
+תיאור קצר וממוקד של המשימה.
+
+## Source requirements
+- REQ-...
+- AC-...
+- DEC-...
+
+## Files to create or update
+- db/src/...
+- scripts/...
+- tools/...
+
+## Required behavior
+מה בדיוק צריך להיווצר או להשתנות.
+
+## Success criteria
+1. הקובץ נוצר או עודכן.
+2. ההתקנה עוברת על DB נקי, אם המשימה נוגעת ל-DB.
+3. אין invalid objects, אם המשימה יוצרת אובייקטי DB.
+4. scripts/test.sh quick עובר.
+5. אין שינוי בקבצים לא קשורים.
+
+## Testing
+Run:
+
+scripts/test.sh quick
+
+If debugging is needed:
+
+scripts/test.sh full
+
+## Mandatory Constraints
+- Codex MUST work only inside this repository.
+- Codex MUST connect only to the local Docker container named oracle-dev-ai-lab-db.
+- Codex MUST NOT connect to organizational databases.
+- Codex MUST NOT execute ad-hoc DDL or DML.
+- Codex MAY execute SELECT statements only for diagnostics, metadata inspection, compile checks, tests, and review.
+- Every schema change MUST be represented as a versioned SQL file.
+- Every change MUST be traceable to a requirement id, task id, or explicit infrastructure decision.
+- Codex MUST NOT modify unrelated files.
+- Codex MUST stop and report if a required assumption is missing.</code></pre>
+
+  <h2>12. שלבי הפרויקט</h2>
+
+  <table>
+    <thead>
+      <tr><th>שלב</th><th>שם</th><th>מטרה</th><th>תוצרי הצלחה</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0</td><td>Project Charter</td><td>הגדרת גבולות, שמות, כללי בטיחות, MVP והחלטות מחייבות</td><td>project-charter.md, safety-rules.md, decision-log.md</td></tr>
+      <tr><td>1</td><td>Repo Skeleton</td><td>יצירת שלד פרויקט</td><td>README, AGENTS, docs, scripts, tests בסיסיים</td></tr>
+      <tr><td>2</td><td>Docker Lab DB</td><td>Oracle AI Database 26ai Free מבודד</td><td>container, volume, network, scripts up/down/reset</td></tr>
+      <tr><td>3</td><td>Lab Schemas</td><td>משתמשים והרשאות</td><td>AI_APP_OWNER, AI_APP_RUNTIME, AI_APP_READONLY, AI_REVIEWER</td></tr>
+      <tr><td>4</td><td>Spec Pipeline</td><td>HTML -> JSON -> TODO -> tasks</td><td>extract/validate/generate scripts ובדיקות unittest</td></tr>
+      <tr><td>5</td><td>Install/Test Workflow</td><td>הרצת התקנה ובדיקות בסיסיות</td><td>install-db.sh, run-db-tests.sh, test.sh, smoke tests</td></tr>
+      <tr><td>6</td><td>Review Workflow</td><td>סקירת DB code ו-repository contract</td><td>review-db-code.sh, review-report.md</td></tr>
+      <tr><td>7</td><td>Packaging Workflow</td><td>חבילת העברה תשתיתית</td><td>dist/release_001 עם manifest/install/rollback/reports</td></tr>
+      <tr><td>8</td><td>Functional Iterations</td><td>פיתוח use case ניהול העברות לייצור</td><td>tables, constraints, seed, packages, tests, review, package</td></tr>
+    </tbody>
+  </table>
+
+  <h2>13. בדיקות</h2>
+
+  <h3>בדיקות Repo</h3>
+  <ul>
+    <li>מבנה תיקיות תקין.</li>
+    <li>כל task כולל success criteria.</li>
+    <li>כל task כולל source requirements או decision id.</li>
+    <li>spec.html כולל sections נדרשים.</li>
+    <li>spec.json תקין.</li>
+    <li>TODO.md נוצר מתוך spec.json.</li>
+    <li>אין secrets או סיסמאות בקוד.</li>
+  </ul>
+
+  <h3>בדיקות DB</h3>
+  <ul>
+    <li>install נקי על DB ריק.</li>
+    <li>אין invalid objects.</li>
+    <li>משתמשי המעבדה קיימים.</li>
+    <li>grants מוגבלים.</li>
+    <li>אין אובייקטים ב-SYSTEM/SYSAUX.</li>
+    <li>אובייקט smoke מינימלי נוצר ונבדק.</li>
+    <li>כל אובייקט DB שנוצר קיים גם כקובץ versioned ב-repository.</li>
+  </ul>
+
+  <h2>14. Review Report</h2>
+
+  <p>ה-review יופק לקובץ:</p>
+
+  <pre><code>db/review/review-report.md</code></pre>
+
+  <p>מבנה הדוח:</p>
+
+  <pre><code># Review Report
+
+## Spec coverage
+## Infrastructure decisions coverage
+## Object inventory
+## Data model review
+## PL/SQL review
+## Security review
+## Deployment review
+## Risks
+## Required fixes
+## Optional improvements
+## Approval status</code></pre>
+
+  <p>חומרת הערות:</p>
+
+  <pre><code>BLOCKER
+MAJOR
+MINOR
+QUESTION</code></pre>
+
+  <div class="strict">
+    <strong>כלל מחייב:</strong> release package אינו מאושר אם קיימת הערת BLOCKER פתוחה.
+  </div>
+
+  <h2>15. Package סופי</h2>
+
+  <pre><code>db/dist/release_001/
+  manifest.md
+  install.sql
+  rollback.sql
+  test-report.md
+  review-report.md
+  deployment-notes.md
+  src/
+    tables/
+    constraints/
+    indexes/
+    views/
+    packages/
+    triggers/
+    seed/</code></pre>
+
+  <h2>16. תנאי סיום ל-Infrastructure MVP</h2>
+
+  <div class="success">
+    <ul>
+      <li>המעבדה עולה ב-Docker עם container ייעודי בשם <code>oracle-dev-ai-lab-db</code>.</li>
+      <li>המעבדה משתמשת ב-volume בשם <code>oracle-dev-ai-lab-u01</code>.</li>
+      <li>המעבדה משתמשת ברשת Docker בשם <code>oracle-dev-ai-lab-net</code>.</li>
+      <li>משתמשי המעבדה נוצרים דרך SQL scripts מנוהלים.</li>
+      <li>install נקי עובר על DB חדש.</li>
+      <li>בדיקות repository ו-DB smoke עוברות.</li>
+      <li>נוצר review report ללא BLOCKER.</li>
+      <li>נוצרת חבילת release תשתיתית.</li>
+      <li>אין מימוש פונקציונלי עסקי שמסתתר בתוך ה-MVP התשתיתי.</li>
+    </ul>
+  </div>
+
+  <h2>17. תנאי כניסה לאיטרציות פונקציונליות</h2>
+
+  <p>פיתוח מערכת ניהול ההעברות לייצור יתחיל רק לאחר שכל התנאים הבאים מתקיימים:</p>
+
+  <ul>
+    <li>Infrastructure MVP הושלם.</li>
+    <li>scripts/test.sh quick עובר.</li>
+    <li>scripts/install-db.sh עובר על DB נקי.</li>
+    <li>scripts/review-db-code.sh מפיק review report ללא BLOCKER.</li>
+    <li>scripts/package-release.sh מייצר package מלא.</li>
+    <li>AGENTS.md כולל כללי עבודה מחייבים ל-Codex.</li>
+    <li>קיים project charter מאושר.</li>
+  </ul>
+
+  <h2>18. סיכונים ובקרות</h2>
+
+  <table>
+    <thead>
+      <tr><th>סיכון</th><th>בקרה מחייבת</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Codex יוצר שינוי ידני בבסיס שלא קיים ב-Git</td><td>איסור DDL/DML חופשי; התקנה רק דרך scripts/install-db.sh</td></tr>
+      <tr><td>קוד עובד רק בגלל state מקומי</td><td>clean install על DB חדש לפני package</td></tr>
+      <tr><td>דרישות לא מכוסות</td><td>Traceability Matrix בין requirement, task, files ו-tests</td></tr>
+      <tr><td>הרשאות רחבות מדי</td><td>בדיקות grants ו-review security</td></tr>
+      <tr><td>AI ממציא התנהגות שלא באפיון</td><td>כל assumption חייב להירשם בדוח או ב-task</td></tr>
+      <tr><td>בלבול בין MVP תשתיתי לפיתוח פונקציונלי</td><td>הפרדה מחייבת בין Infrastructure MVP לבין Functional Iterations</td></tr>
+      <tr><td>תלות לא מודעת ב-Oracle 26ai שאינה קיימת ב-19c</td><td>תאימות ל-19c תיבדק רק אם תוגדר שכבת compatibility נפרדת</td></tr>
+    </tbody>
+  </table>
+
+  <h2>19. הרחבות עתידיות</h2>
+
+  <ul>
+    <li>הוספת שכבת compatibility ל-Oracle 19c.</li>
+    <li>הוספת SQLcl project או Liquibase/Flyway.</li>
+    <li>הוספת ORDS/REST.</li>
+    <li>הוספת APEX.</li>
+    <li>בניית Openu Oracle DB Coding Standard.</li>
+    <li>הפיכת הסטנדרט הפנימי ל-Skill.</li>
+    <li>GitHub Actions להרצת בדיקות static ו-packaging.</li>
+  </ul>
+
+  <h2>20. החלטות סגורות בגרסה זו</h2>
+
+  <pre><code>Decision 001:
+The project display name is DEVELOPMENT in Oracle using AI Lab.
+
+Decision 002:
+The technical repository name is oracle-dev-ai-lab.
+
+Decision 003:
+GitHub is the only source of truth.
+
+Decision 004:
+Docker resources MUST be named:
+- oracle-dev-ai-lab-db
+- oracle-dev-ai-lab-u01
+- oracle-dev-ai-lab-net
+
+Decision 005:
+The lab MUST use Oracle AI Database 26ai Free.
+
+Decision 006:
+Codex MUST NOT execute ad-hoc DDL/DML against the database.
+
+Decision 007:
+The first MVP is an Infrastructure MVP.
+
+Decision 008:
+Functional development starts only after the Infrastructure MVP is complete.
+
+Decision 009:
+Codex MAY execute SELECT statements only for diagnostics, metadata inspection, compile checks, tests, and review.
+
+Decision 010:
+Stage 0 - Project Charter is mandatory before implementation.</code></pre>
+
+  <h2>21. כלל סיום</h2>
+
+  <div class="warning">
+    <strong>כלל מחייב:</strong> אם קיימת סתירה בין database state לבין Git state, ה-Git state הוא הקובע. את בסיס הנתונים יש למחוק, להקים מחדש ולהתקין שוב מתוך ה-repository.
+  </div>
+
+</main>
+</body>
+</html>
