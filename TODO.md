@@ -31,10 +31,10 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `src/oracle_ai_lab/`, `tests/`, `templates/`, `static/`, `Dockerfile`, `docker-compose.yml`
   - Source: Repository observation.
   - Notes: Existing Flask health/welcome code is template infrastructure, not the Oracle DB lab infrastructure described in the planning document.
-- [PARTIAL] Root README exists but still describes a reusable Python project template.
+- [DONE] Root README identifies the Oracle AI Lab project.
   - Evidence: `README.md`
   - Source: Repository observation.
-  - Notes: The title matches the display name, but most content still references template usage and Flask app behavior.
+  - Notes: README now states that `oracle-dev-ai-lab` is not a generic Python/Flask template project and frames existing Flask/Docker files as retained starter infrastructure.
 - [PARTIAL] AGENTS.md exists and includes Oracle AI Lab project instructions.
   - Evidence: `AGENTS.md`
   - Source: Repository observation; task requirement.
@@ -72,12 +72,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: Goal file exists; `.agents/oracle-ai-lab-codex-planner/SKILL.md`, `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`, `AGENTS.md`, and `docs/01_Setting-AI-oracle-lab.html` contain the mandatory operating rules.
   - Notes: The goal states that no repository changes are required by Goal 000.
   - Recommended next action: Skip Goal 000 as already satisfied; continue with Goal 001.
-- [PARTIAL] Goal 001 - Align Template Identity
+- [DONE] Goal 001 - Align Template Identity
   - Goal file: `docs/codex-goals/goal-001-template-alignment.md`
   - Purpose: Align repository identity to `oracle-dev-ai-lab` without adding Oracle implementation.
-  - Evidence: `pyproject.toml` uses project name `DEVELOPMENT in Oracle using AI Lab`; package folder is `src/oracle_ai_lab/`; however `README.md`, `pyproject.toml`, `src/oracle_ai_lab/__init__.py`, `src/oracle_ai_lab/config.py`, `docs/template-usage.md`, and `.github/CONTRIBUTING.md` still contain template-oriented wording.
-  - Notes: Identity is partly aligned, but generic template remnants remain prominent.
-  - Recommended next action: Run or reconcile `docs/codex-goals/goal-001-template-alignment.md` before later goals.
+  - Evidence: `README.md` identifies `oracle-dev-ai-lab`; `pyproject.toml` uses display name `DEVELOPMENT in Oracle using AI Lab`; package folder remains `src/oracle_ai_lab/`; `src/oracle_ai_lab/__init__.py` and `src/oracle_ai_lab/config.py` no longer use `*-template` naming; `docs/template-usage.md` is reframed as legacy notes.
+  - Notes: Retained Flask/Python starter infrastructure remains intentionally; no Oracle implementation was added.
+  - Recommended next action: Continue with Goal 002.
 - [PARTIAL] Goal 002 - Create Project Documentation Baseline
   - Goal file: `docs/codex-goals/goal-002-project-docs.md`
   - Purpose: Create mandatory project charter, safety rules, decision log, repository structure, and Codex workflow documentation.
@@ -192,10 +192,10 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `README.md`, `AGENTS.md`, `.env.example`, `.gitignore`, `.github/`, `scripts/`, `src/`, `tests/`
   - Source: Planning document section 7.
   - Notes: Present skeleton is the Python template, not yet the required Oracle lab skeleton.
-- [TODO] Align README with Oracle AI Lab scope.
-  - Evidence: `README.md` still describes an AI-friendly Python project template.
+- [DONE] Align README with Oracle AI Lab scope.
+  - Evidence: `README.md`
   - Source: Planning document sections 1, 5, 7, and 12.
-  - Notes: Should be done in a focused documentation task.
+  - Notes: README now identifies the repository, display name, fixed project names, current pre-implementation status, retained starter app, and safety rules.
 - [DONE] Create required `docs/stages/` documentation area.
   - Evidence: `docs/stages/` created by this task for the T000 report.
   - Source: Project rules required repository structure.
@@ -391,7 +391,7 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Immediate next recommended task
 
-- [TODO] Run or reconcile `docs/codex-goals/goal-001-template-alignment.md`.
-  - Evidence: Goal 000 requires no repository changes and is satisfied by the existing goal files, project Skill, project rules, planning document, and `AGENTS.md`; Goal 001 remains `PARTIAL` because README, metadata, config defaults, and template documentation still contain template-era wording.
-  - Source: `docs/codex-goals/GOALS_INDEX.md`; `docs/codex-goals/goal-001-template-alignment.md`; repository observation.
-  - Notes: Continue with the first incomplete goal in the goal sequence before moving to project docs, repository structure, Docker, DB, review, packaging, or functional work.
+- [TODO] Run `docs/codex-goals/goal-002-project-docs.md`.
+  - Evidence: Goal 001 is now satisfied; `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md` are still missing.
+  - Source: `docs/codex-goals/GOALS_INDEX.md`; `docs/codex-goals/goal-002-project-docs.md`; repository observation.
+  - Notes: Continue with the next incomplete goal in the sequence before repository structure, Docker, DB, review, packaging, or functional work.

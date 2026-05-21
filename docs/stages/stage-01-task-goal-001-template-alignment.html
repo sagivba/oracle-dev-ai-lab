@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 01 - Goal 001 - Template Alignment</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 01 - Goal 001 - התאמת זהות התבנית</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-001-template-alignment</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    בוצעה התאמת זהות ממאגר תבניתי כללי אל פרויקט Oracle AI Lab. השינוי מבהיר
+    שהמאגר הוא <code>oracle-dev-ai-lab</code>, ששם התצוגה הוא
+    <code>DEVELOPMENT in Oracle using AI Lab</code>, ושקוד Flask/Python הקיים
+    הוא תשתית starter שמורה בלבד ולא מימוש Oracle Lab.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/stages/stage-01-task-goal-001-template-alignment.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>README.md</code> - נכתב מחדש כמסמך פרויקט Oracle AI Lab ולא כתיעוד תבנית כללי.</li>
+    <li><code>pyproject.toml</code> - תיאור הפרויקט עודכן לזהות Oracle AI Lab.</li>
+    <li><code>src/oracle_ai_lab/__init__.py</code> - הוסר שם package עם סיומת template.</li>
+    <li><code>src/oracle_ai_lab/config.py</code> - ברירת המחדל של שם הפרויקט עודכנה, ונוסף docstring קצר.</li>
+    <li><code>docs/template-usage.md</code> - הוסב למסמך legacy שמזהיר לא להריץ את סקריפט התבנית כחלק מעבודת Oracle AI Lab.</li>
+    <li><code>.github/CONTRIBUTING.md</code> - עודכנה זהות המאגר ויחסו לתשתית starter שמורה.</li>
+    <li><code>TODO.md</code> - Goal 001 סומן כ-DONE וההמלצה הבאה עודכנה ל-Goal 002.</li>
+  </ul>
+
+  <h2>החלטות שיושמו</h2>
+  <ul>
+    <li>שם התצוגה נשאר <code>DEVELOPMENT in Oracle using AI Lab</code>.</li>
+    <li>שם המאגר הטכני הוא <code>oracle-dev-ai-lab</code>.</li>
+    <li>שם חבילת Python נשמר כ-<code>oracle_ai_lab</code>.</li>
+    <li>לא נוספה תשתית Oracle Docker, SQL, התקנה, סקירה, אריזה או מימוש פונקציונלי.</li>
+    <li><code>unittest</code> נשאר מנגנון הבדיקות.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>קוד Flask/Docker הקיים הוא starter infrastructure שמור, לא תוצר סופי של המעבדה.</li>
+    <li><code>docs/template-usage.md</code> נשאר כדי להסביר מורשת תבניתית, אך אינו workflow פעיל לפרויקט.</li>
+    <li>לא עודכן <code>scripts/init_from_template.sh</code>, משום שהוא לא אמור לרוץ במסגרת עבודת Oracle AI Lab והמסמך מסמן זאת במפורש.</li>
+  </ul>
+
+  <h2>הערת כותרות קבצים</h2>
+  <p>
+    קבצי Markdown משתמשים בכותרת המסמך כ-purpose header. בקבצי Python שעודכנו
+    קיימים docstrings קצרים. לא נוסף header ל-<code>pyproject.toml</code> משום
+    שזה אינו מתאים נקית לפורמט הקובץ ולשינוי הזהות המצומצם.
+  </p>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch -c codex-cli/goal-001-template-alignment origin/main</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>sed</code>, <code>grep</code>, <code>find</code> ו-<code>git diff</code> לצורכי בדיקה וסקירת קבצים.</li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו ותוצאות</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה: 5 בדיקות unittest עברו.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה: Ruff דיווח שכל הבדיקות עברו ו-16 קבצים כבר מפורמטים.</li>
+    <li><code>PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> נכשל כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> עבר בהצלחה: 5 בדיקות unittest עברו.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו ולמה</h2>
+  <ul>
+    <li>לא הורצו בדיקות Docker משום ש-Goal 001 אינו מממש Docker או Oracle DB.</li>
+    <li>לא הורצו בדיקות DB משום שאין עדיין Oracle lab container, install workflow או schemas.</li>
+    <li>לא הורצו DDL או DML.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>המאגר עדיין כולל Flask starter app ותשתית Docker כללית; הם מסומנים כ-starter infrastructure בלבד.</li>
+    <li>מסמכי Stage 0 המרכזיים עדיין חסרים ויטופלו ב-Goal 002.</li>
+    <li>אין טענה לתאימות Oracle Docker, install, review, packaging או DB.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 002 - Create Project Documentation Baseline</code>,
+    כדי ליצור את <code>docs/project-charter.md</code>, <code>docs/safety-rules.md</code>,
+    <code>docs/decision-log.md</code> ו-<code>docs/repository-structure.md</code>.
+  </p>
+</main>
+</body>
+</html>
