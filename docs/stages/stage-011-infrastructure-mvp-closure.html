@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 011 - סגירת Infrastructure MVP</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code,
+    pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background: #f0f0f0;
+    }
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      vertical-align: top;
+    }
+    th {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 011 - סגירת Infrastructure MVP</h1>
+
+  <h2>פרטי המשימה</h2>
+  <ul>
+    <li><strong>מזהה משימה:</strong> T012 - Document Infrastructure MVP Closure</li>
+    <li><strong>תאריך:</strong> 2026-05-22</li>
+    <li><strong>Baseline:</strong> <code>6f0718ebe1d4259db860a4bc0911134a808fdc6b</code></li>
+    <li><strong>אופי המשימה:</strong> תיעוד בלבד</li>
+  </ul>
+
+  <h2>מה סוכם</h2>
+  <p>
+    המסמך מסכם את סגירת שלד ה-Infrastructure MVP לאחר השלמת Goals 000-011,
+    תיקוני runtime ב-PR #13-#16, קובץ המקור של Goal 011 ב-PR #17, ומימוש
+    שלד האריזה ב-PR #18.
+  </p>
+
+  <h2>מה הוכח</h2>
+  <ul>
+    <li>מעבדת Oracle מבודדת ב-Docker לפי שמות המשאבים הקבועים.</li>
+    <li>תהליך התקנה מבוקר דרך scripts רשמיים וקובצי SQL מנוהלים.</li>
+    <li>משתמשים וסכמות מקומיים למעבדה.</li>
+    <li>מקור SQL מנוהל וגרסאי תחת <code>db/src/</code>.</li>
+    <li>בדיקות smoke ל-connectivity, inventory ואובייקטים invalid.</li>
+    <li>שלד review בטוח ברמת repository.</li>
+    <li>שלד deterministic ל-release packaging.</li>
+    <li>QA סטטי ו-QA runtime לאחר Goal 011.</li>
+  </ul>
+
+  <h2>עדויות QA</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>בדיקה</th>
+        <th>תוצאה</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Oracle readiness</td><td>PASS</td></tr>
+      <tr><td><code>scripts/install-db.sh</code></td><td>PASS</td></tr>
+      <tr><td><code>scripts/run-db-tests.sh</code></td><td>PASS</td></tr>
+      <tr><td><code>001_db_connectivity.sql</code></td><td>PASS</td></tr>
+      <tr><td><code>002_object_inventory.sql</code></td><td>PASS</td></tr>
+      <tr><td><code>003_no_invalid_objects.sql</code></td><td>PASS</td></tr>
+      <tr><td><code>scripts/review-db-code.sh</code></td><td>PASS</td></tr>
+      <tr><td><code>scripts/package-release.sh</code></td><td>PASS</td></tr>
+      <tr><td><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></td><td>PASS, 51 tests</td></tr>
+      <tr><td><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></td><td>PASS</td></tr>
+      <tr><td><code>agw_review_output --run</code></td><td>PASS</td></tr>
+      <tr><td>QA worktree clean</td><td>PASS</td></tr>
+    </tbody>
+  </table>
+
+  <h2>בעיות סביבתיות שנפתרו</h2>
+  <ul>
+    <li>
+      בהרצה הראשונה <code>scripts/lab-reset.sh</code> הופעל ללא <code>--yes</code>,
+      ולכן מצב DB ישן נשאר ו-<code>LAB_SMOKE_TEST</code> כבר היה קיים.
+    </li>
+    <li>
+      לאחר מכן בקובץ <code>.env</code> של QA היה <code>ORACLE_PWD</code> כפול או
+      placeholder.
+    </li>
+  </ul>
+  <p>
+    לאחר תיקון סביבת QA, ההתקנה ובדיקות ה-SQL smoke עברו. הנקודות האלה
+    מתועדות כבעיות סביבה בלבד, לא כפגמי קוד.
+  </p>
+
+  <h2>מה נשאר מחוץ לתכולה</h2>
+  <ul>
+    <li>Goal 012 לא התחיל.</li>
+    <li>לא נוספו אובייקטי DB פונקציונליים לניהול release.</li>
+    <li>לא נוספה לוגיקה עסקית.</li>
+    <li>לא הייתה גישה לבסיסי נתונים ארגוניים.</li>
+    <li>לא נוספו secrets או connection strings אמיתיים.</li>
+    <li>לא הורץ DDL או DML אד-הוק.</li>
+    <li>לא נוספו APEX, ORDS, REST או UI.</li>
+    <li>לא נטענה תאימות Oracle 19c.</li>
+  </ul>
+
+  <h2>פקודות ולידציה למשימת התיעוד</h2>
+  <pre><code>git status --short | cat
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+git diff --check | cat
+source tools/ai-git-workflow-tools/scripts/load-agw.sh &amp;&amp; agw_review_output --run</code></pre>
+
+  <h2>החלטה</h2>
+  <p>שלד ה-Infrastructure MVP הושלם.</p>
+
+  <h2>הצעד המומלץ הבא</h2>
+  <p>
+    לתכנן את Goal 012 כמשימה נפרדת. Goal 012 לא התחיל במסגרת T012.
+  </p>
+</main>
+</body>
+</html>
