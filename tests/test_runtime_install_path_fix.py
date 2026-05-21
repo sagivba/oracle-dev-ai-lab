@@ -1,0 +1,61 @@
+# Purpose: unittest coverage for the pre-Goal-011 runtime install path fix.
+
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class TestRuntimeInstallPathFix(unittest.TestCase):
+    """Validate the focused runtime install fix without connecting to Oracle."""
+
+    def test_env_example_lists_required_local_password_placeholders(self) -> None:
+        env_example = (ROOT / ".env.example").read_text(encoding="utf-8")
+
+        for variable_name in [
+            "AI_APP_OWNER_PWD",
+            "AI_APP_RUNTIME_PWD",
+            "AI_APP_READONLY_PWD",
+            "AI_REVIEWER_PWD",
+        ]:
+            with self.subTest(variable=variable_name):
+                self.assertIn(
+                    f"{variable_name}=change_me_in_local_env",
+                    env_example,
+                )
+
+    def test_install_script_fails_after_sqlplus_error_markers(self) -> None:
+        install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
+
+        self.assertIn("install_output=", install_script)
+        self.assertIn("install_status=$?", install_script)
+        self.assertIn('[[ "$install_status" -ne 0 ]]', install_script)
+        self.assertIn('sqlplus_output_has_error "$install_output"', install_script)
+        self.assertIn("(SP2-|ORA-|PLS-)", install_script)
+        self.assertIn(
+            "SQLPlus install output contained SP2-, ORA-, or PLS- errors.",
+            install_script,
+        )
+
+    def test_success_message_is_shell_gated_not_sql_gated(self) -> None:
+        install_sql = (ROOT / "db/install/install.sql").read_text(encoding="utf-8")
+        install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
+
+        self.assertNotIn("Oracle AI Lab controlled install completed.", install_sql)
+        self.assertIn("Oracle AI Lab controlled install completed.", install_script)
+
+    def test_smoke_object_uses_explicit_remote_db_root(self) -> None:
+        install_sql = (ROOT / "db/install/install.sql").read_text(encoding="utf-8")
+        install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
+
+        self.assertIn('define ORACLE_AI_LAB_DB_ROOT = "&5"', install_sql)
+        self.assertIn(
+            "@@&&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql",
+            install_sql,
+        )
+        self.assertIn('"$REMOTE_DB_DIR" 2>&1)', install_script)
+        self.assertNotIn("@@../src/tables/lab_smoke_test.sql", install_sql)
+
+
+if __name__ == "__main__":
+    unittest.main()

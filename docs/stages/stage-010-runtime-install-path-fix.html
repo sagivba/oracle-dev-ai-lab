@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 010 - Runtime Install Path Fix</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 44px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code {
+      direction: ltr;
+      unicode-bidi: embed;
+      background: #f0f0f0;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    ul {
+      padding-right: 24px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 010 - תיקון נתיב התקנה בזמן ריצה</h1>
+
+  <h2>פרטי משימה</h2>
+  <ul>
+    <li><strong>מספר שלב:</strong> 010</li>
+    <li><strong>Task ID:</strong> pre-Goal-011 runtime install path fix</li>
+    <li><strong>כותרת:</strong> תיקון חסימת נתיב התקנה והרצת SQLPlus מבוקרת</li>
+    <li><strong>תאריך:</strong> 2026-05-21</li>
+  </ul>
+
+  <h2>סיכום</h2>
+  <p>
+    ב-QA נמצא ש-<code>scripts/install-db.sh</code> העתיק את עץ <code>db/</code>
+    ל-container והריץ בהצלחה את קובצי ההתקנה הראשונים, אך SQLPlus לא מצא את
+    <code>db/src/tables/lab_smoke_test.sql</code> דרך הנתיב היחסי
+    <code>../src/tables/lab_smoke_test.sql</code>. בנוסף, הודעת ההצלחה הודפסה גם
+    לאחר שגיאת <code>SP2-0310</code>. התיקון ממוקד לפני Goal 011 ואינו מוסיף
+    packaging או אובייקטים פונקציונליים.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>tests/test_runtime_install_path_fix.py</code></li>
+    <li><code>docs/stages/stage-010-runtime-install-path-fix.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>.env.example</code></li>
+    <li><code>db/install/install.sql</code></li>
+    <li><code>scripts/install-db.sh</code></li>
+    <li><code>tests/test_repo_contract.py</code></li>
+    <li><code>docs/install-workflow.md</code></li>
+  </ul>
+
+  <h2>החלטות שיושמו</h2>
+  <ul>
+    <li><code>DEC-003</code>: Git והקבצים המנוהלים הם מקור האמת.</li>
+    <li><code>DEC-005</code>: יעד ההתקנה נשאר ה-container המקומי <code>oracle-dev-ai-lab-db</code>.</li>
+    <li><code>DEC-010</code>: לא הורצו DDL או DML אד-הוק.</li>
+    <li><code>DEC-011</code>: כיסוי הבדיקות נוסף עם <code>unittest</code>.</li>
+    <li><code>DEC-018</code>: שינויי DB נשארים בקובצי SQL מנוהלים תחת <code>db/</code>.</li>
+    <li><code>DEC-019</code>: תאימות runtime תוצהר רק אם הסקריפטים הרשמיים ירוצו בפועל.</li>
+  </ul>
+
+  <h2>הערות מימוש</h2>
+  <ul>
+    <li>
+      <code>scripts/install-db.sh</code> מעביר ל-<code>install.sql</code> את שורש
+      ה-<code>db/</code> שהועתק לתוך ה-container.
+    </li>
+    <li>
+      <code>db/install/install.sql</code> מפעיל את אובייקט ה-smoke בעזרת
+      <code>@@&&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql</code>
+      במקום נתיב יחסי שתלוי בתיקיית העבודה של SQLPlus.
+    </li>
+    <li>
+      פלט SQLPlus נבדק עבור <code>SP2-</code>, <code>ORA-</code>, ו-<code>PLS-</code>.
+      הודעת ההצלחה מודפסת רק אחרי שהסטטוס והפלט עברו בדיקה.
+    </li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>הנתיב <code>/tmp/oracle-dev-ai-lab-db</code> בתוך ה-container נשאר נתיב העבודה המנוהל של ההתקנה.</li>
+    <li>ערכי הסיסמאות ב-<code>.env.example</code> הם placeholders בלבד ואינם secrets.</li>
+    <li>קובץ ההקשר <code>codex-prompt-fix-runtime-install-path.md</code> לא נמצא בעץ העבודה הנוכחי, ולכן ההקשר הישיר מהמשימה שימש כמקור.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch -c manual/fix-runtime-install-path</code></li>
+    <li><code>rg</code>, <code>sed</code>, ו-<code>find</code> לקריאת מצב הקבצים והבדיקות</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>scripts/review-db-code.sh</code></li>
+    <li><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh &amp;&amp; agw_review_output --run</code></li>
+    <li><code>docker inspect -f '{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}' oracle-dev-ai-lab-db</code></li>
+    <li><code>scripts/lab-up.sh</code></li>
+    <li><code>bash -n scripts/install-db.sh scripts/run-db-tests.sh scripts/lab-up.sh</code></li>
+    <li><code>git diff --check | cat</code></li>
+    <li><code>git status --short | cat</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו</h2>
+  <ul>
+    <li>כל בדיקות <code>unittest</code> עברו: 35 בדיקות.</li>
+    <li><code>scripts/test.sh quick</code> עבר: 35 בדיקות.</li>
+    <li><code>scripts/lint.sh</code> עבר לאחר הרצת formatter על קובץ בדיקה שנגעו בו.</li>
+    <li><code>scripts/review-db-code.sh</code> עבר.</li>
+    <li><code>agw_review_output --run</code> עבר והציג את ה-diff הממוקד.</li>
+    <li><code>bash -n</code> עבר עבור סקריפטי ה-runtime הרלוונטיים.</li>
+    <li><code>git diff --check | cat</code> עבר ללא פלט.</li>
+  </ul>
+
+  <h2>בדיקות שלא יורצו ולמה</h2>
+  <ul>
+    <li>
+      <code>scripts/install-db.sh</code> ו-<code>scripts/run-db-tests.sh</code>
+      לא הורצו עד הסוף כי ב-worktree המקומי אין <code>.env</code> ואין משתני
+      סביבה עם הסיסמאות המקומיות הנדרשות. אין להריץ התקנה עם secrets חסרים.
+    </li>
+  </ul>
+
+  <h2>תוצאות בדיקה</h2>
+  <p>
+    ה-validation הסטטי עבר. בדיקת <code>docker inspect</code> בהרשאה מוגברת
+    הראתה שה-container המקומי <code>oracle-dev-ai-lab-db</code> רץ ובריא:
+    <code>true healthy</code>. ניסיון להריץ <code>scripts/lab-up.sh</code> נעצר
+    על ידי guard תקין מפני שאין <code>.env</code> מקומי עם <code>ORACLE_PWD</code>.
+    לכן אין הצהרה שהתקנת Oracle runtime או בדיקות DB smoke עברו בסביבת dev זו.
+  </p>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>התיקון אינו מוסיף Goal 011 ואינו מוסיף release packaging.</li>
+    <li>התיקון אינו מוסיף אובייקטים עסקיים של release-management.</li>
+  </ul>
+
+  <h2>הצעד הבא המומלץ</h2>
+  <p>
+    לאחר שה-validation יעבור, לחזור לרצף היעדים ולהמשיך ל-<code>Goal 011 - Add Release Packaging Workflow Skeleton</code>.
+  </p>
+</main>
+</body>
+</html>

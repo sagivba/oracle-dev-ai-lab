@@ -17,6 +17,7 @@ define AI_APP_OWNER_PWD = "&1"
 define AI_APP_RUNTIME_PWD = "&2"
 define AI_APP_READONLY_PWD = "&3"
 define AI_REVIEWER_PWD = "&4"
+define ORACLE_AI_LAB_DB_ROOT = "&5"
 
 prompt Running managed install file: 00_create_lab_users.sql
 @@00_create_lab_users.sql
@@ -24,7 +25,5 @@ prompt Running managed install file: 00_create_lab_users.sql
 prompt Running managed install file: 01_create_schema.sql
 @@01_create_schema.sql
 
-prompt Running managed source file: ../src/tables/lab_smoke_test.sql
-@@../src/tables/lab_smoke_test.sql
-
-prompt Oracle AI Lab controlled install completed.
+prompt Running managed source file: &&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql
+@@&&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql

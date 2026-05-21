@@ -97,7 +97,15 @@ The script resolves the repository root, loads local environment values if
 db/install/install.sql
 ```
 
-It does not contain inline SQL DDL or DML.
+It passes the copied container-side `db/` root to `db/install/install.sql` so
+managed source files under `db/src/` are referenced by their explicit runtime
+path inside the container. This keeps the `LAB_SMOKE_TEST` install independent
+of SQLPlus' current working directory.
+
+It does not contain inline SQL DDL or DML. The script captures SQLPlus output
+and fails non-zero if SQLPlus exits non-zero or if the output contains `SP2-`,
+`ORA-`, or `PLS-` error markers. The success message is printed by the shell
+script only after those checks pass.
 
 ## Relationship to Goal 008
 
@@ -117,6 +125,6 @@ release-management functionality.
 ## Validation Status
 
 Current validation is repository-only and shell syntax only unless explicitly
-reported otherwise. Docker was not started, Oracle was not started, no database
-connection was made, and no DDL or DML was executed during the static Goal 008
-fix.
+reported otherwise. Docker runtime validation must be reported separately when
+`scripts/lab-up.sh`, `scripts/install-db.sh`, and `scripts/run-db-tests.sh` are
+actually run against the disposable local lab.
