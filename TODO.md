@@ -114,12 +114,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `db/rollback/rollback.sql`, `scripts/install-db.sh`, `docs/install-workflow.md`, and `tests/test_repo_contract.py`
   - Notes: Goal 007 adds a managed install workflow skeleton, local-container-only shell entry point, conservative user/schema SQL placeholders, and repository-only contract checks. Runtime Oracle validation was not run or claimed.
   - Recommended next action: Run Goal 008 after Goal 007 creates the controlled install workflow.
-- [TODO] Goal 008 - Add DB Smoke Object and SQL Smoke Tests
+- [DONE] Goal 008 - Add DB Smoke Object and SQL Smoke Tests
   - Goal file: `docs/codex-goals/goal-008-db-smoke-tests.md`
   - Purpose: Add minimal `LAB_SMOKE_TEST` object and SQL smoke tests for the Infrastructure MVP.
-  - Evidence: `db/src/tables/lab_smoke_test.sql`, `db/tests/sql/001_db_connectivity.sql`, `db/tests/sql/002_object_inventory.sql`, `db/tests/sql/003_no_invalid_objects.sql`, and `scripts/run-db-tests.sh` are missing.
-  - Notes: No smoke object or SQL smoke tests exist.
-  - Recommended next action: Run Goal 008 after Goal 007 creates the controlled install workflow.
+  - Evidence: `db/src/tables/lab_smoke_test.sql`, `db/tests/sql/001_db_connectivity.sql`, `db/tests/sql/002_object_inventory.sql`, `db/tests/sql/003_no_invalid_objects.sql`, `scripts/run-db-tests.sh`, and `tests/test_repo_contract.py`
+  - Notes: Goal 008 adds `LAB_SMOKE_TEST` as an infrastructure-only object, integrates it through `db/install/install.sql`, and adds SQL smoke tests plus a local-container-only runner. Runtime Oracle validation was not run or claimed.
+  - Recommended next action: Run Goal 009 after the DB smoke object and SQL smoke test structure exist.
 - [TODO] Goal 009 - Add Specification Pipeline Skeleton
   - Goal file: `docs/codex-goals/goal-009-spec-pipeline-skeleton.md`
   - Purpose: Add HTML spec to JSON/TODO/tasks pipeline skeleton and deterministic tooling.
@@ -245,15 +245,15 @@ install scripts, review scripts, package scripts, or functional database objects
 - [DONE] Create managed schema SQL files.
   - Evidence: `db/install/01_create_schema.sql` and `db/install/install.sql`
   - Source: Planning document section 7; golden rule.
-  - Notes: Goal 007 creates the controlled install entry point and schema setup skeleton. No business objects, `LAB_SMOKE_TEST`, or functional release-management SQL was added.
-- [TODO] Create database source directories.
-  - Evidence: `db/src/` does not exist.
+  - Notes: Goal 007 created the controlled install entry point and schema setup skeleton. Goal 008 adds only the infrastructure `LAB_SMOKE_TEST` object; no business objects or functional release-management SQL were added.
+- [DONE] Create database source directories.
+  - Evidence: `db/src/`, `db/src/tables/`, `db/src/constraints/`, `db/src/indexes/`, `db/src/views/`, `db/src/packages/`, `db/src/triggers/`, and `db/src/seed/`
   - Source: Planning document section 7.
-  - Notes: Required categories include tables, constraints, indexes, views, packages, triggers, and seed.
+  - Notes: Goal 004 created the source directory structure; Goal 008 adds the first infrastructure table source file under `db/src/tables/`.
 - [NOT_APPLICABLE_YET] Verify lab users in a database.
-  - Evidence: No Oracle lab container or install workflow exists.
+  - Evidence: Runtime Oracle validation has not been run.
   - Source: Planning document sections 8, 13, and 16.
-  - Notes: DB verification depends on Stage 2 and schema scripts.
+  - Notes: DB verification depends on a running local lab container and local secrets that are not committed to Git.
 
 ## Stage 4 - Spec Pipeline
 
@@ -292,22 +292,22 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/install-db.sh`; `docs/install-workflow.md`
   - Source: Planning document sections 5, 7, 12, and 16.
   - Notes: Script targets only `oracle-dev-ai-lab-db`, loads local environment placeholders, and runs only `db/install/install.sql`.
-- [TODO] Create database test workflow script.
-  - Evidence: `scripts/run-db-tests.sh` is missing.
+- [DONE] Create database test workflow script.
+  - Evidence: `scripts/run-db-tests.sh`
   - Source: Planning document sections 5, 7, 12, and 13.
-  - Notes: Should include smoke tests after DB infrastructure exists.
-- [TODO] Create DB test directories.
-  - Evidence: `db/tests/` does not exist.
+  - Notes: Goal 008 adds a local-container-only SQL smoke test runner that executes managed files from `db/tests/sql/`.
+- [DONE] Create DB test directories.
+  - Evidence: `db/tests/`, `db/tests/sql/`, and `db/tests/utplsql/`
   - Source: Planning document section 7.
-  - Notes: Planned subdirectories include SQL and Python test areas.
-- [TODO] Add minimal smoke object for Infrastructure MVP.
-  - Evidence: No `LAB_SMOKE_TEST` SQL file exists.
+  - Notes: Goal 004 created the directories; Goal 008 adds SQL smoke tests under `db/tests/sql/`.
+- [DONE] Add minimal smoke object for Infrastructure MVP.
+  - Evidence: `db/src/tables/lab_smoke_test.sql`
   - Source: Planning document section 5.
-  - Notes: Smoke object is not a business feature.
+  - Notes: `LAB_SMOKE_TEST` is an infrastructure smoke object only and not a business feature.
 - [NOT_APPLICABLE_YET] Run clean install on a lab DB.
-  - Evidence: No Oracle lab container, install scripts, or schema scripts exist.
+  - Evidence: Runtime Oracle install validation has not been run.
   - Source: Planning document sections 13 and 16.
-  - Notes: Depends on Stages 2 and 3.
+  - Notes: Depends on a running local lab container and local secrets that are not committed to Git.
 
 ## Stage 6 - Review Workflow
 

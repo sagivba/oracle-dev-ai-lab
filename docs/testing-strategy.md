@@ -21,19 +21,31 @@ Rules for this layer:
 - Do not execute DDL or DML.
 - Keep the tests fast, deterministic, and repository-only.
 
-## 2. Future SQL Smoke Tests
+## 2. SQL Smoke Tests
 
-SQL smoke tests are a later Oracle-layer test type. They will eventually cover:
+SQL smoke tests are the Oracle-layer smoke test type introduced by Goal 008.
+They cover:
 
 - DB connectivity;
-- install verification;
+- install verification for the infrastructure smoke object;
 - invalid objects;
-- grants;
 - object inventory;
-- smoke object checks.
+- `LAB_SMOKE_TEST` column checks.
 
-These tests are not implemented in Goal 005.
-They must not require Oracle DB access in the current goal.
+These tests live under:
+
+```text
+db/tests/sql/
+```
+
+They are run by:
+
+```text
+scripts/run-db-tests.sh
+```
+
+They require the local Oracle lab container and local environment variables.
+They are not part of `scripts/test.sh quick`.
 
 ## 3. Future utPLSQL Tests
 
@@ -51,6 +63,8 @@ Current supported entry points are:
 ```text
 scripts/test.sh quick
 scripts/test.sh full
+RUN_DB_TESTS=1 scripts/test.sh full
+scripts/run-db-tests.sh
 PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
@@ -59,12 +73,13 @@ If the environment requires the virtual environment on `PATH`, use:
 ```text
 PATH=.venv/bin:$PATH scripts/test.sh quick
 PATH=.venv/bin:$PATH scripts/test.sh full
+PATH=.venv/bin:$PATH RUN_DB_TESTS=1 scripts/test.sh full
 PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 ## 5. Safety Boundaries
 
-Goal 005 does not:
+Repository-only tests do not:
 
 - start Docker;
 - connect to Oracle;
@@ -73,6 +88,6 @@ Goal 005 does not:
 - claim Docker runtime compatibility;
 - claim Oracle runtime compatibility.
 
-The testing strategy is intentionally staged so that repository contracts come
-first, and Oracle-specific checks arrive only when the controlled lab workflows
-exist.
+SQL smoke tests may connect only to the local `oracle-dev-ai-lab-db` container
+and may run SELECT/metadata checks for test verification. They must not connect
+to organizational databases.

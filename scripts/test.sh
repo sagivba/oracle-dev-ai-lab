@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+# Purpose: Repository test entry point for Python unittest and optional DB smoke tests.
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODE="${1:-quick}"
 TARGET="${2:-local}"
 
@@ -62,6 +64,14 @@ run_local_tests() {
     python -m unittest discover -s tests -p "test_*.py" "$verbosity"
   else
     python -m unittest discover -s tests -p "test_*.py"
+  fi
+
+  if [[ "$MODE" == "full" ]]; then
+    if [[ "${RUN_DB_TESTS:-0}" == "1" ]]; then
+      "${SCRIPT_DIR}/run-db-tests.sh"
+    else
+      echo "Skipping DB smoke tests. Set RUN_DB_TESTS=1 for scripts/test.sh full to run them."
+    fi
   fi
 }
 

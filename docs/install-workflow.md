@@ -1,12 +1,14 @@
 # Purpose
 
-This document defines the Goal 007 controlled database install workflow skeleton
-for `oracle-dev-ai-lab`.
+This document defines the controlled database install workflow for
+`oracle-dev-ai-lab`, including the Goal 007 install skeleton and the Goal 008
+smoke-object integration.
 
 ## Scope
 
-Goal 007 adds the managed install entry points only. It does not validate Oracle
-runtime behavior and does not implement release-management functionality.
+The install workflow uses managed SQL files only. It does not validate Oracle
+runtime behavior unless explicitly run against the local lab, and it does not
+implement release-management functionality.
 
 ## Safety Boundaries
 
@@ -54,6 +56,7 @@ It runs managed install files in this deterministic order:
 ```text
 db/install/00_create_lab_users.sql
 db/install/01_create_schema.sql
+db/src/tables/lab_smoke_test.sql
 ```
 
 Rollback is reserved in:
@@ -72,7 +75,7 @@ scripts/install-db.sh
 
 The script resolves the repository root, loads local environment values if
 `.env` exists, checks the expected local lab container name, copies the managed
-install SQL directory into the container, and invokes only:
+`db/` SQL tree into the container, and invokes only:
 
 ```text
 db/install/install.sql
@@ -82,14 +85,13 @@ It does not contain inline SQL DDL or DML.
 
 ## Relationship to Goal 008
 
-Goal 008 will add the `LAB_SMOKE_TEST` object and SQL smoke tests. Goal 007 does
-not add that object and does not add SQL smoke test implementation.
+Goal 008 adds the `LAB_SMOKE_TEST` infrastructure object and SQL smoke tests.
+`LAB_SMOKE_TEST` is not a business feature and does not represent
+release-management functionality.
 
-## Intentionally Not Implemented in Goal 007
+## Still Intentionally Not Implemented by the Install Workflow
 
 - release-management business tables;
-- `LAB_SMOKE_TEST`;
-- SQL smoke tests;
 - utPLSQL tests;
 - review workflow;
 - packaging workflow;

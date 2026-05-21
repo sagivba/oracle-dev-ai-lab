@@ -1,4 +1,4 @@
-# Purpose: Repository contract tests for Goal 005 and Goal 007 of oracle-dev-ai-lab.
+# Purpose: Repository contract tests for Goals 005, 007, and 008 of oracle-dev-ai-lab.
 
 import re
 import unittest
@@ -24,12 +24,18 @@ class TestRepositoryContract(unittest.TestCase):
             "scripts/test.sh",
             "scripts/lint.sh",
             "scripts/install-db.sh",
+            "scripts/run-db-tests.sh",
             "docker-compose.yml",
             "docs/docker-lab-design.md",
             "db/install/install.sql",
             "db/install/00_create_lab_users.sql",
             "db/install/01_create_schema.sql",
             "db/rollback/rollback.sql",
+            "db/src/tables/lab_smoke_test.sql",
+            "db/tests/sql/001_db_connectivity.sql",
+            "db/tests/sql/002_object_inventory.sql",
+            "db/tests/sql/003_no_invalid_objects.sql",
+            "docs/stages/stage-08-task-G008-db-smoke-tests.html",
         ]
 
         for relative_path in required_files:
@@ -89,7 +95,7 @@ class TestRepositoryContract(unittest.TestCase):
 
         self.assertIn("@@00_create_lab_users.sql", install_sql)
         self.assertIn("@@01_create_schema.sql", install_sql)
-        self.assertNotIn("LAB_SMOKE_TEST", install_sql)
+        self.assertIn("@@../src/tables/lab_smoke_test.sql", install_sql)
 
     def test_goal_007_install_script_targets_local_lab_only(self) -> None:
         install_script = (ROOT / "scripts/install-db.sh").read_text(encoding="utf-8")
@@ -98,7 +104,40 @@ class TestRepositoryContract(unittest.TestCase):
         self.assertIn("install.sql", install_script)
         self.assertIn("oracle-dev-ai-lab-db", install_script)
         self.assertIn("FREEPDB1", install_script)
-        self.assertNotIn("LAB_SMOKE_TEST", install_script)
+
+    def test_goal_008_smoke_test_runner_targets_local_lab_only(self) -> None:
+        run_tests_script = (ROOT / "scripts/run-db-tests.sh").read_text(encoding="utf-8")
+
+        self.assertIn("db/tests/sql", run_tests_script)
+        self.assertIn("oracle-dev-ai-lab-db", run_tests_script)
+        self.assertIn("FREEPDB1", run_tests_script)
+        self.assertIn("sqlplus", run_tests_script)
+
+    def test_goal_008_smoke_object_is_infrastructure_only(self) -> None:
+        checked_files = [
+            "db/src/tables/lab_smoke_test.sql",
+            "db/tests/sql/001_db_connectivity.sql",
+            "db/tests/sql/002_object_inventory.sql",
+            "db/tests/sql/003_no_invalid_objects.sql",
+            "scripts/run-db-tests.sh",
+        ]
+        forbidden_business_terms = [
+            "RELEASE_REQUESTS",
+            "RELEASE_ITEMS",
+            "RELEASE_ENVIRONMENTS",
+            "RELEASE_STATUSES",
+            "RELEASE_APPROVALS",
+            "RELEASE_EXECUTION_LOG",
+        ]
+
+        for relative_path in checked_files:
+            content = (ROOT / relative_path).read_text(encoding="utf-8")
+            for forbidden_term in forbidden_business_terms:
+                with self.subTest(path=relative_path, term=forbidden_term):
+                    self.assertNotIn(forbidden_term, content)
+
+    def test_goal_008_runner_is_executable(self) -> None:
+        self.assertTrue((ROOT / "scripts/run-db-tests.sh").stat().st_mode & 0o111)
 
     def test_goal_007_files_do_not_contain_obvious_example_secrets(self) -> None:
         checked_files = [
@@ -107,6 +146,7 @@ class TestRepositoryContract(unittest.TestCase):
             "db/install/01_create_schema.sql",
             "db/rollback/rollback.sql",
             "scripts/install-db.sh",
+            "scripts/run-db-tests.sh",
             "docs/install-workflow.md",
         ]
         obvious_secret_pattern = re.compile(r"(?i)(oracle|welcome|passw(?:or)?d)[0-9]+")
@@ -118,7 +158,6 @@ class TestRepositoryContract(unittest.TestCase):
 
     def test_goal_005_does_not_require_later_goal_artifacts(self) -> None:
         optional_paths = [
-            "scripts/run-db-tests.sh",
             "scripts/review-db-code.sh",
             "scripts/package-release.sh",
         ]

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Purpose: Official Goal 007 shell entry point for the controlled local DB install.
+# Purpose: Official Goal 007/008 shell entry point for the controlled local DB install.
 # It targets only the local oracle-dev-ai-lab-db container and runs the managed
 # SQL entry point db/install/install.sql. It does not contain inline DDL or DML.
 
@@ -10,8 +10,8 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 CONTAINER_NAME="oracle-dev-ai-lab-db"
 ORACLE_PDB="${ORACLE_PDB:-FREEPDB1}"
-SQL_SOURCE_DIR="${REPO_ROOT}/db/install"
-REMOTE_SQL_DIR="/tmp/oracle-dev-ai-lab-install"
+DB_SOURCE_DIR="${REPO_ROOT}/db"
+REMOTE_DB_DIR="/tmp/oracle-dev-ai-lab-db"
 
 fail() {
   printf 'ERROR: %s\n' "$1" >&2
@@ -64,7 +64,7 @@ require_secret_var "AI_REVIEWER_PWD"
 
 [[ "$CONTAINER_NAME" == "oracle-dev-ai-lab-db" ]] || fail "Install target must remain oracle-dev-ai-lab-db."
 [[ -n "$ORACLE_PDB" ]] || fail "ORACLE_PDB must not be empty."
-[[ -f "${SQL_SOURCE_DIR}/install.sql" ]] || fail "Missing official SQL entry point: db/install/install.sql."
+[[ -f "${DB_SOURCE_DIR}/install/install.sql" ]] || fail "Missing official SQL entry point: db/install/install.sql."
 
 command -v docker >/dev/null 2>&1 || fail "docker command was not found."
 
@@ -72,12 +72,12 @@ if [[ "$(docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME" 2>/dev/null ||
   fail "Local lab container ${CONTAINER_NAME} is not running. Start it separately before installing."
 fi
 
-docker exec "$CONTAINER_NAME" mkdir -p "$REMOTE_SQL_DIR"
-docker cp "${SQL_SOURCE_DIR}/." "${CONTAINER_NAME}:${REMOTE_SQL_DIR}/"
+docker exec "$CONTAINER_NAME" mkdir -p "$REMOTE_DB_DIR"
+docker cp "${DB_SOURCE_DIR}/." "${CONTAINER_NAME}:${REMOTE_DB_DIR}/"
 
 docker exec -i "$CONTAINER_NAME" sqlplus -L -S \
   "sys/${ORACLE_PWD}@localhost:1521/${ORACLE_PDB} as sysdba" \
-  @"${REMOTE_SQL_DIR}/install.sql" \
+  @"${REMOTE_DB_DIR}/install/install.sql" \
   "$AI_APP_OWNER_PWD" \
   "$AI_APP_RUNTIME_PWD" \
   "$AI_APP_READONLY_PWD" \

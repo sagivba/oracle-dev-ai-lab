@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 08 - Goal 008 - DB Smoke Object and SQL Smoke Tests</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 08 - Goal 008 - אובייקט DB Smoke ובדיקות SQL Smoke</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>sagivba/oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/g008-db-smoke-tests</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 008 הוסיף את אובייקט ה-smoke המינימלי <code>LAB_SMOKE_TEST</code>
+    ואת שכבת בדיקות ה-SQL smoke הראשונית של המעבדה. האובייקט הוא
+    infrastructure-only בלבד, ומשמש לווידוא התקנה בסיסית של סביבת DB מקומית
+    עתידית. הוא אינו מייצג יכולת עסקית ואינו חלק ממימוש release-management.
+  </p>
+  <p>
+    הבדיקות נוספו כקובצי SQL מנוהלים תחת <code>db/tests/sql/</code>, ונוסף
+    script רשמי להרצתן בשם <code>scripts/run-db-tests.sh</code>. מצב
+    <code>quick</code> של <code>scripts/test.sh</code> נשאר static/unittest
+    ואינו דורש Docker או Oracle.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>db/src/tables/lab_smoke_test.sql</code></li>
+    <li><code>db/tests/sql/001_db_connectivity.sql</code></li>
+    <li><code>db/tests/sql/002_object_inventory.sql</code></li>
+    <li><code>db/tests/sql/003_no_invalid_objects.sql</code></li>
+    <li><code>scripts/run-db-tests.sh</code></li>
+    <li><code>docs/stages/stage-08-task-G008-db-smoke-tests.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>db/install/install.sql</code> - נוסף include מנוהל לאובייקט ה-smoke.</li>
+    <li><code>db/install/01_create_schema.sql</code> - עודכנה ההבחנה בין שלד schema לבין אובייקט Goal 008.</li>
+    <li><code>scripts/install-db.sh</code> - עודכן להעתקת עץ <code>db/</code> המנוהל כדי שה-install יוכל לכלול קובצי source.</li>
+    <li><code>scripts/test.sh</code> - נוסף gate אופציונלי ל-DB tests במצב full בלבד.</li>
+    <li><code>tests/test_repo_contract.py</code> - נוספו בדיקות contract עבור ארטיפקטים של Goal 008.</li>
+    <li><code>docs/testing-strategy.md</code> - תועדה שכבת SQL smoke tests כעתיד שהפך לשכבה קיימת.</li>
+    <li><code>docs/install-workflow.md</code> - תועדה אינטגרציית <code>LAB_SMOKE_TEST</code> ל-install המנוהל.</li>
+    <li><code>TODO.md</code> - Goal 008 סומן כ-DONE עם ראיות וללא סימון Goal 009.</li>
+  </ul>
+
+  <h2>החלטות שנשמרו</h2>
+  <ul>
+    <li>Git נשאר מקור האמת לכל שינוי DB.</li>
+    <li>כל שינוי DB מיוצג בקובץ SQL גרסתי תחת <code>db/</code>.</li>
+    <li>התקנה מתבצעת דרך <code>db/install/install.sql</code> בלבד.</li>
+    <li>בדיקות SQL רצות רק דרך קבצים מנוהלים תחת <code>db/tests/sql/</code>.</li>
+    <li>Python tests נשארים מבוססי <code>unittest</code>; לא נוסף <code>pytest</code>.</li>
+  </ul>
+
+  <h2>מגבלות בטיחות שנשמרו</h2>
+  <ul>
+    <li>לא בוצע חיבור לבסיס נתונים ארגוני.</li>
+    <li>לא בוצע חיבור לשום בסיס נתונים במסגרת המשימה הסטטית.</li>
+    <li>לא הופעל Docker.</li>
+    <li>לא הופעל Oracle DB.</li>
+    <li>לא בוצעו DDL או DML באופן אד-הוק.</li>
+    <li>לא נשמרו secrets, סיסמאות, tokens או connection strings אמיתיים.</li>
+    <li>לא נטענה תאימות runtime של Docker או Oracle.</li>
+  </ul>
+
+  <h2>מה לא נוסף בכוונה</h2>
+  <ul>
+    <li>לא נוספו טבלאות עסקיות כגון <code>RELEASE_REQUESTS</code> או <code>RELEASE_ITEMS</code>.</li>
+    <li>לא נוסף מימוש release-management פונקציונלי.</li>
+    <li>לא נוסף review workflow.</li>
+    <li>לא נוסף packaging workflow.</li>
+    <li>לא נוסף spec pipeline.</li>
+    <li>לא נוספו בדיקות utPLSQL עסקיות.</li>
+  </ul>
+
+  <h2>הנחות</h2>
+  <ul>
+    <li>הרצת SQL smoke tests דורשת סביבת Oracle Lab מקומית קיימת, container בשם <code>oracle-dev-ai-lab-db</code>, וערכי סביבה מקומיים שאינם נשמרים ב-Git.</li>
+    <li>ברירת המחדל של PDB נשארת <code>FREEPDB1</code>.</li>
+    <li>סיסמאות מקומיות יסופקו רק דרך <code>.env</code> לא מנוטר או דרך סביבת shell מקומית.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch main</code></li>
+    <li><code>git pull --ff-only</code></li>
+    <li><code>git switch -c codex-cli/g008-db-smoke-tests</code></li>
+    <li><code>sed</code> ו-<code>rg</code> לקריאת מסמכי ההקשר והקבצים הרלוונטיים.</li>
+    <li><code>chmod +x scripts/run-db-tests.sh</code></li>
+    <li><code>bash -n scripts/install-db.sh</code></li>
+    <li><code>bash -n scripts/run-db-tests.sh</code></li>
+    <li><code>bash -n scripts/test.sh</code></li>
+    <li><code>git status | cat</code></li>
+    <li><code>git diff --stat | cat</code></li>
+    <li><code>git diff --check | cat</code></li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>python -m unittest discover -s tests</code></li>
+    <li><code>PATH=.venv/bin:$PATH python -m unittest discover -s tests</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>rg</code> לבדיקת scope, secrets ושימוש ב-<code>pytest</code>.</li>
+  </ul>
+
+  <h2>בדיקות ותוצאות</h2>
+  <ul>
+    <li><code>bash -n scripts/install-db.sh</code> עבר.</li>
+    <li><code>bash -n scripts/run-db-tests.sh</code> עבר.</li>
+    <li><code>bash -n scripts/test.sh</code> עבר.</li>
+    <li><code>git diff --check</code> עבר ללא פלט.</li>
+    <li><code>scripts/test.sh quick</code> נכשל כי <code>python</code> אינו נמצא ב-<code>PATH</code> של ה-shell.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר עם 16 בדיקות.</li>
+    <li><code>python -m unittest discover -s tests</code> נכשל כי <code>python</code> אינו נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH python -m unittest discover -s tests</code> נכשל כי discovery ישיר ללא <code>PYTHONPATH=src</code> אינו מוצא את חבילת <code>oracle_ai_lab</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests</code> עבר עם 16 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> עבר עם 16 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+  </ul>
+
+  <h2>מה לא הורץ ולמה</h2>
+  <ul>
+    <li><code>scripts/install-db.sh</code> לא הורץ, כי הוא דורש Oracle Lab מקומי פעיל וסודות מקומיים שלא נשמרים ב-Git.</li>
+    <li><code>scripts/run-db-tests.sh</code> לא הורץ מול Oracle, כי runtime prerequisites לא אומתו במסגרת המשימה.</li>
+    <li>לא הורצו Docker או Oracle runtime checks, ולכן לא נטענת תאימות runtime.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>בדיקות SQL smoke הן שכבת runtime עתידית ותלויות בסביבת Oracle Lab מקומית.</li>
+    <li>קובצי user/schema מ-Goal 007 עדיין משמשים כשלד ולא הוכחו runtime.</li>
+    <li>אין עדיין workflow review או packaging.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 009 - Add DB Code Review Workflow Skeleton</code>.
+  </p>
+</main>
+</body>
+</html>
