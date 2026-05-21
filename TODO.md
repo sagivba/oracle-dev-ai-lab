@@ -35,10 +35,10 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `README.md`
   - Source: Repository observation.
   - Notes: README now states that `oracle-dev-ai-lab` is not a generic Python/Flask template project and frames existing Flask/Docker files as retained starter infrastructure.
-- [PARTIAL] AGENTS.md exists and includes Oracle AI Lab project instructions.
+- [DONE] AGENTS.md exists and includes strict Oracle AI Lab project instructions.
   - Evidence: `AGENTS.md`
   - Source: Repository observation; task requirement.
-  - Notes: Updated in this task to also require reading `docs/01_Setting-AI-oracle-lab.html`.
+  - Notes: AGENTS.md now includes governance reading, goal ordering, commit discipline, database safety, standard checks, and final response expectations.
 - [DONE] Basic Python test script exists.
   - Evidence: `scripts/test.sh`
   - Source: Repository observation.
@@ -47,10 +47,10 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/lint.sh`
   - Source: Repository observation.
   - Notes: It checks Python template files only.
-- [TODO] Required Stage 0 project documents are missing.
-  - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, and `docs/decision-log.md` do not exist.
+- [DONE] Required Stage 0 project documents exist.
+  - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md`
   - Source: Planning document section 12; project rules required repository structure.
-  - Notes: These are Stage 0 deliverables.
+  - Notes: Governance documents now define scope, safety rules, stable decisions, and current vs target structure.
 - [TODO] Required Oracle lab database directories are missing.
   - Evidence: `db/install/`, `db/src/`, `db/tests/`, `db/review/`, and `db/dist/` do not exist.
   - Source: Planning document section 7; project rules required repository structure.
@@ -78,22 +78,22 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `README.md` identifies `oracle-dev-ai-lab`; `pyproject.toml` uses display name `DEVELOPMENT in Oracle using AI Lab`; package folder remains `src/oracle_ai_lab/`; `src/oracle_ai_lab/__init__.py` and `src/oracle_ai_lab/config.py` no longer use `*-template` naming; `docs/template-usage.md` is reframed as legacy notes.
   - Notes: Retained Flask/Python starter infrastructure remains intentionally; no Oracle implementation was added.
   - Recommended next action: Continue with Goal 002.
-- [PARTIAL] Goal 002 - Create Project Documentation Baseline
+- [DONE] Goal 002 - Create Project Documentation Baseline
   - Goal file: `docs/codex-goals/goal-002-project-docs.md`
   - Purpose: Create mandatory project charter, safety rules, decision log, repository structure, and Codex workflow documentation.
-  - Evidence: `docs/codex-workflow.md` exists; `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md` are missing.
-  - Notes: The main Stage 0 governance documents are not present yet.
-  - Recommended next action: Run Goal 002 after Goal 001 is resolved.
-- [PARTIAL] Goal 003 - Create Strict AGENTS.md
+  - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, `docs/repository-structure.md`, and `docs/codex-workflow.md`
+  - Notes: Documentation distinguishes Infrastructure MVP, future functional iterations, and out-of-scope organizational integration. No implementation artifacts were added.
+  - Recommended next action: Continue with Goal 004.
+- [DONE] Goal 003 - Create Strict AGENTS.md
   - Goal file: `docs/codex-goals/goal-003-agents-md.md`
   - Purpose: Create strict Codex operating rules for repository work.
-  - Evidence: `AGENTS.md` exists and includes Oracle AI Lab scope, fixed names, DB safety rules, `unittest` policy, branch naming, standard checks, and a `docs/codex-goals/` section.
-  - Notes: `AGENTS.md` is strong, but it does not explicitly mention `docs/codex-goals/GOALS_INDEX.md` ordering or one-goal-per-commit discipline, and consistency with `docs/project-charter.md` and `docs/safety-rules.md` cannot be verified until Goal 002 exists.
-  - Recommended next action: Reconcile Goal 003 after Goal 002, or make a minimal AGENTS-only cleanup if the owner wants strict goal sequencing documented immediately.
+  - Evidence: `AGENTS.md`; `docs/project-charter.md`; `docs/safety-rules.md`; `docs/decision-log.md`; `docs/repository-structure.md`; `docs/codex-workflow.md`
+  - Notes: AGENTS.md is aligned with the governance docs and includes strict safety rules, `unittest`, goal ordering, one-goal-per-commit discipline, combined-goal exception, standard checks, and final response requirements.
+  - Recommended next action: Continue with Goal 004.
 - [TODO] Goal 004 - Create Oracle Lab Repository Structure
   - Goal file: `docs/codex-goals/goal-004-repository-structure.md`
   - Purpose: Add the Oracle lab folder structure while preserving useful Python template structure.
-  - Evidence: `docs/` and `scripts/` exist, but `specs/001-release-management/tasks/`, `db/install/`, `db/src/`, `db/rollback/`, `db/tests/`, `db/review/`, `db/generated/`, `db/dist/`, `tools/`, and `docs/repository-structure.md` are missing.
+  - Evidence: `docs/repository-structure.md` exists; `docs/` and `scripts/` exist, but `specs/001-release-management/tasks/`, `db/install/`, `db/src/`, `db/rollback/`, `db/tests/`, `db/review/`, `db/generated/`, `db/dist/`, and `tools/` are missing.
   - Notes: This reconciliation task intentionally did not create repository structure artifacts.
   - Recommended next action: Run Goal 004 only after Goals 001 through 003 are satisfied or explicitly skipped.
 - [PARTIAL] Goal 005 - Add Testing Strategy and Baseline unittest Contracts
@@ -165,18 +165,18 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `AGENTS.md`
   - Source: Task requirement 3.
   - Notes: Updated to include the planning document before work.
-- [TODO] Create project charter.
-  - Evidence: `docs/project-charter.md` is missing.
+- [DONE] Create project charter.
+  - Evidence: `docs/project-charter.md`
   - Source: Planning document section 12; Decision 010.
-  - Notes: Stage 0 is mandatory before implementation.
-- [TODO] Create safety rules document.
-  - Evidence: `docs/safety-rules.md` is missing.
+  - Notes: Defines purpose, current phase, source of truth, disposable DB runtime, MVP boundaries, first future use case, out-of-scope items, and references.
+- [DONE] Create safety rules document.
+  - Evidence: `docs/safety-rules.md`
   - Source: Planning document sections 2, 4, 18, and 21.
-  - Notes: Should capture DB safety, no ad-hoc DDL/DML, no secrets, and local Docker-only boundaries.
-- [TODO] Create decision log.
-  - Evidence: `docs/decision-log.md` is missing.
+  - Notes: Defines mandatory repository, DB, DDL/DML, SELECT, secrets, Git-state, compatibility-claim, and testing rules.
+- [DONE] Create decision log.
+  - Evidence: `docs/decision-log.md`
   - Source: Planning document section 20.
-  - Notes: Decisions 001 through 010 should be recorded.
+  - Notes: Includes stable decisions `DEC-001` through `DEC-019`.
 - [DONE] Create Stage 0 intake TODO baseline.
   - Evidence: `TODO.md`
   - Source: This task.
@@ -391,7 +391,7 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Immediate next recommended task
 
-- [TODO] Run `docs/codex-goals/goal-002-project-docs.md`.
-  - Evidence: Goal 001 is now satisfied; `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md` are still missing.
-  - Source: `docs/codex-goals/GOALS_INDEX.md`; `docs/codex-goals/goal-002-project-docs.md`; repository observation.
-  - Notes: Continue with the next incomplete goal in the sequence before repository structure, Docker, DB, review, packaging, or functional work.
+- [TODO] Run `docs/codex-goals/goal-004-repository-structure.md`.
+  - Evidence: Goals 002 and 003 are now satisfied; `specs/001-release-management/`, `db/`, `tools/`, and the target Oracle lab folders are still missing.
+  - Source: `docs/codex-goals/GOALS_INDEX.md`; `docs/codex-goals/goal-004-repository-structure.md`; repository observation.
+  - Notes: Continue with the next incomplete goal in the sequence. Do not add Docker runtime, DB SQL, install, review, packaging, spec pipeline, or functional implementation outside their later goals.

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 02 - Goal 002 + Goal 003 - Governance Docs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 02 - Goal 002 + Goal 003 - מסמכי ממשל וכללי Codex מחייבים</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-002-003-governance-docs</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    המשימה שילבה את Goal 002 ו-Goal 003 לבקשת בעל המאגר. נוצרו מסמכי ממשל
+    בסיסיים לפרויקט ועודכן <code>AGENTS.md</code> כך שיהיה עקבי עם המסמכים
+    החדשים ועם כללי העבודה המחייבים של Oracle AI Lab. לא מומשו תשתיות Docker,
+    SQL, התקנה, סקירה, אריזה, pipeline או אובייקטים פונקציונליים.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/project-charter.md</code></li>
+    <li><code>docs/safety-rules.md</code></li>
+    <li><code>docs/decision-log.md</code></li>
+    <li><code>docs/repository-structure.md</code></li>
+    <li><code>docs/stages/stage-02-task-goal-002-003-governance-docs.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>docs/codex-workflow.md</code> - עודכן מ-workflow כללי ל-workflow ייעודי של Oracle AI Lab.</li>
+    <li><code>AGENTS.md</code> - חוזק עם קריאת מסמכי ממשל, סדר יעדים, משמעת commit, חריג שילוב יעדים, עקיבות ודרישות תשובה סופית.</li>
+    <li><code>TODO.md</code> - Goal 002 ו-Goal 003 סומנו כ-DONE וההמלצה הבאה עודכנה ל-Goal 004.</li>
+  </ul>
+
+  <h2>החלטות שתועדו או יושמו</h2>
+  <ul>
+    <li><code>DEC-001</code> עד <code>DEC-019</code> תועדו ב-<code>docs/decision-log.md</code>.</li>
+    <li>GitHub וה-repository הם מקור האמת.</li>
+    <li>מצב בסיס הנתונים הוא runtime זמני וניתן לשחזור.</li>
+    <li>ה-MVP הראשון הוא Infrastructure MVP.</li>
+    <li>פיתוח פונקציונלי יתחיל רק לאחר Infrastructure MVP יציב ומאושר.</li>
+    <li>אסורים DDL ו-DML אד-הוק.</li>
+    <li>בדיקות Python חייבות להשתמש ב-<code>unittest</code>.</li>
+    <li>בדיקות PL/SQL עסקיות עתידיות ישתמשו ב-utPLSQL.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>שילוב Goal 002 ו-Goal 003 מותר משום שהבקשה הנוכחית דרשה זאת במפורש.</li>
+    <li>מסמכי הממשל הם תיעוד מחייב לפני מימוש תשתיתי.</li>
+    <li>מבנה היעד ב-<code>docs/repository-structure.md</code> הוא תיאור עתידי בלבד ולא יצירת תיקיות בפועל.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch -c codex-cli/goal-002-003-governance-docs origin/main</code></li>
+    <li><code>sed</code> לקריאת קובצי ההנחיה והמסמכים הקיימים.</li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>git diff --stat | cat</code></li>
+    <li><code>git diff --name-only | cat</code></li>
+    <li><code>git diff --check</code></li>
+    <li><code>find db specs tools -maxdepth 2 -type f -o -type d 2&gt;/dev/null | sort | cat</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו ותוצאות</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה.</li>
+    <li><code>PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> נכשל כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> עבר בהצלחה.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו ולמה</h2>
+  <ul>
+    <li>לא הורצו בדיקות Docker משום שהמשימה היא ממשל ותיעוד בלבד.</li>
+    <li>לא הורצו בדיקות Oracle DB משום שלא קיים עדיין lab DB workflow והמשימה אוסרת חיבור DB.</li>
+    <li>לא הורצו install, review או packaging checks משום שה-workflows האלה עדיין לא מומשו.</li>
+    <li>לא הורצו DDL או DML.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>אין עדיין תשתית Oracle Docker.</li>
+    <li>אין עדיין קובצי SQL, סכמות, install workflow, review workflow או packaging workflow.</li>
+    <li>אין עדיין spec pipeline או אובייקטים פונקציונליים.</li>
+    <li>פקודות ללא <code>.venv/bin</code> נכשלות בסביבה זו כי <code>python</code> אינו נמצא ב-<code>PATH</code>.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 004 - Create Oracle Lab Repository Structure</code>,
+    כדי להוסיף את שלד התיקיות של המעבדה בלי לממש עדיין Docker, SQL, התקנה,
+    סקירה, אריזה או פונקציונליות עסקית.
+  </p>
+</main>
+</body>
+</html>

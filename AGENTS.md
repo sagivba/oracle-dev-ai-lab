@@ -21,6 +21,15 @@ Before starting any task in this repository, Codex MUST read and follow:
 - `docs/01_Setting-AI-oracle-lab.html`
 - `TODO.md`
 
+When the task touches governance, repository structure, workflow, safety, or goal
+status, Codex MUST also read the relevant governance documents:
+
+- `docs/project-charter.md`
+- `docs/safety-rules.md`
+- `docs/decision-log.md`
+- `docs/repository-structure.md`
+- `docs/codex-workflow.md`
+
 If these files conflict with generic instructions, template text, or legacy project files, the Oracle AI Lab instructions take precedence.
 
 ## Project purpose
@@ -40,6 +49,21 @@ Codex task prompts for this project may be stored under:
 - `docs/codex-goals/`
 
 When the user asks Codex to run a goal file, Codex MUST read the referenced goal file and follow it exactly, together with this `AGENTS.md`, the project Skill, `project-rules.md`, `TODO.md`, and the planning document.
+
+Goals SHOULD run in the order defined by:
+
+```text
+docs/codex-goals/GOALS_INDEX.md
+```
+
+Default discipline:
+
+```text
+One goal = one focused commit.
+```
+
+Adjacent documentation/governance goals may be combined only when the repository
+owner explicitly requests a combined task. Do not implement future goals early.
 
 ## Fixed project names
 
@@ -112,11 +136,18 @@ codex-cli/T001-create-project-charter
 codex-cli/T002-create-repo-skeleton
 ```
 
-Before starting work, Codex SHOULD run:
+Before starting work, Codex MUST run:
 
 ```bash
 git fetch
 ```
+
+## Commit discipline
+
+Each task should produce one small, reviewable commit unless the user explicitly
+asks not to commit. For goal-based work, the default is one goal per commit. A
+combined-goal commit is allowed only when the repository owner explicitly requests
+that grouping.
 
 ## Database safety rules
 
@@ -256,6 +287,8 @@ This project uses `unittest` for Python tests.
 
 Do not introduce `pytest` unless explicitly requested.
 
+Business PL/SQL unit tests must use utPLSQL in future functional iterations.
+
 Run documented checks before claiming completion.
 
 If `scripts/test.sh` exists, use it as the primary test entrypoint.
@@ -342,6 +375,10 @@ Prefer:
 - readable documentation
 - traceability to a task id, requirement id, or decision id
 
+Every task must be traceable to a goal id, task id, requirement id, or decision
+id. If no traceable source exists, stop and ask for clarification before creating
+implementation behavior.
+
 Avoid:
 
 - speculative abstractions
@@ -380,6 +417,21 @@ Before submitting a change, verify:
 - [ ] Database changes, if any, exist only as versioned SQL files.
 - [ ] No ad-hoc DDL or DML was run.
 - [ ] Assumptions and limitations are documented.
+
+## Final response requirements
+
+For implementation and governance tasks, the final Codex response should include:
+
+- files created
+- files updated
+- commands run
+- checks/tests run
+- checks/tests not run and why
+- assumptions
+- limitations
+- recommended next goal
+
+If the user requests a stricter final response format, follow the user request.
 
 ## If unsure
 
