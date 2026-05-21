@@ -2,16 +2,19 @@
 
 ## Purpose
 
-This document describes the current retained starter structure, the target Oracle
-lab infrastructure structure, and the future functional iteration structure for
-`oracle-dev-ai-lab`.
+This document describes the retained Python starter structure, the governance
+documentation, the Oracle Docker skeleton from Goal 006, and the repository
+folders created by Goal 004 for `oracle-dev-ai-lab`.
 
-This document is descriptive. It does not create the full target structure.
+This document is descriptive. Goal 004 creates folder structure only. It does
+not add Oracle SQL, schemas/users, install workflow, smoke objects, DB tests,
+review workflow, packaging workflow, or functional release-management
+implementation.
 
-## Current Retained Python Starter Infrastructure
+## 1. Retained Python Starter Structure
 
-The repository currently includes useful starter infrastructure retained from the
-original Python template:
+The repository still preserves the useful starter tooling from the original
+Python template:
 
 ```text
 README.md
@@ -35,10 +38,11 @@ requirements.in
 requirements.txt
 ```
 
-The retained Flask app, templates, static files, generic Docker files, and Python
-tests are starter tooling only. They are not the Oracle database lab runtime.
+The retained Flask app, templates, static files, generic Docker files, and
+Python tests are starter tooling only. They are not the Oracle database lab
+runtime.
 
-## Governance Documentation
+## 2. Governance Documentation
 
 The governance documentation area is:
 
@@ -54,115 +58,125 @@ docs/
   stages/
 ```
 
-## Target Oracle Lab Infrastructure Structure
+The governance documents define the project rules, stage order, safety policy,
+and stage-report requirements.
 
-The following paths are expected in later infrastructure goals. They are not all
-created in this documentation/governance task.
+## 3. Oracle Docker Skeleton From Goal 006
+
+Goal 006 already added the local Oracle Docker lab skeleton. That skeleton is
+still retained and is separate from the Goal 004 folder-structure work:
 
 ```text
-docs/
-  project-charter.md
-  safety-rules.md
-  decision-log.md
-  repository-structure.md
-  codex-workflow.md
-  stages/
-
-specs/
-  001-release-management/
-    spec.html
-    spec.json
-    TODO.md
-    traceability-matrix.md
-    tasks/
-
-db/
-  install/
-  src/
-  rollback/
-  tests/
-  review/
-  generated/
-  dist/
-
+docker-compose.yml
+.env.example
 scripts/
   lab-up.sh
   lab-down.sh
   lab-reset.sh
   lab-backup.sh
   lab-restore.sh
-  install-db.sh
-  run-db-tests.sh
-  review-db-code.sh
-  package-release.sh
-  test.sh
+docs/
+  docker-lab-design.md
+```
+
+This skeleton defines the Docker naming and runtime conventions only. It does
+not prove Oracle runtime compatibility until Docker is actually started and
+validated.
+
+## 4. Goal 004 Oracle Lab Repository Structure
+
+Goal 004 adds the missing Oracle lab folder structure while keeping the retained
+Python starter layout intact. The newly created folders are:
+
+```text
+specs/
+  001-release-management/
+    README.md
+    tasks/
+      README.md
+
+db/
+  README.md
+  install/
+    README.md
+  src/
+    README.md
+    tables/
+      README.md
+    constraints/
+      README.md
+    indexes/
+      README.md
+    views/
+      README.md
+    packages/
+      README.md
+    triggers/
+      README.md
+    seed/
+      README.md
+  rollback/
+    README.md
+  tests/
+    README.md
+    sql/
+      README.md
+    utplsql/
+      README.md
+  review/
+    README.md
+  generated/
+    README.md
+  dist/
+    README.md
 
 tools/
+  README.md
 ```
 
-## Target DB Source Categories
+The placeholder READMEs exist only to keep otherwise-empty directories tracked
+in Git and to explain where future implementation files belong.
 
-Future `db/src/` content should be organized by object type:
+## 5. Future Implementation Files Still Intentionally Missing
+
+The following files and workflows are still intentionally missing after Goal 004:
 
 ```text
-db/src/
-  tables/
-  constraints/
-  indexes/
-  views/
-  packages/
-  triggers/
-  seed/
+db/install/install.sql
+db/install/00_create_lab_users.sql
+db/install/01_create_schema.sql
+db/rollback/rollback.sql
+db/src/tables/*.sql
+db/src/constraints/*.sql
+db/src/indexes/*.sql
+db/src/views/*.sql
+db/src/packages/*.sql
+db/src/triggers/*.sql
+db/src/seed/*.sql
+db/tests/sql/*.sql
+db/tests/utplsql/*
+db/review/review-report.md
+db/generated/*
+db/dist/*
+scripts/install-db.sh
+scripts/run-db-tests.sh
+scripts/review-db-code.sh
+scripts/package-release.sh
+tools/extract_spec.py
+tools/validate_spec.py
+tools/generate_todo.py
+tools/generate_tasks.py
 ```
 
-Triggers require explicit justification.
+Goal 004 does not create the functional release-management entities or any
+smoke-test object such as `LAB_SMOKE_TEST`.
 
-## Future Functional Iteration Structure
+## 6. Structure Rules
 
-Future functional work for the fictional release-to-production management system
-must wait until Infrastructure MVP is stable and approved.
-
-Functional work may later add:
-
-```text
-specs/001-release-management/
-  spec.html
-  spec.json
-  TODO.md
-  traceability-matrix.md
-  tasks/
-
-db/src/
-  tables/
-  constraints/
-  indexes/
-  views/
-  packages/
-  triggers/
-  seed/
-
-db/tests/
-  sql/
-  utplsql/
-```
-
-Candidate future entities may include:
-
-- `RELEASE_REQUESTS`
-- `RELEASE_ITEMS`
-- `RELEASE_ENVIRONMENTS`
-- `RELEASE_STATUSES`
-- `RELEASE_APPROVALS`
-- `RELEASE_EXECUTION_LOG`
-
-These are not part of the current governance documentation task.
-
-## Structure Rules
-
-- Do not create the full target structure unless the current goal explicitly asks
-  for it.
-- Do not add DB SQL implementation files in documentation-only tasks.
 - Preserve retained Python starter infrastructure until a later goal explicitly
   changes it.
-- Every new implementation file must be traceable to a goal, task, requirement, or
-  decision.
+- Do not add DB SQL implementation files in Goal 004.
+- Do not add install, review, package, or spec pipeline implementation artifacts
+  in Goal 004.
+- Every new implementation file must be traceable to a goal, task, requirement,
+  or decision.
