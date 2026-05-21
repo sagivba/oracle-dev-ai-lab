@@ -1,245 +1,296 @@
 # AGENTS.md
 
-Instructions for AI agents, Codex CLI, ChatGPT, and other AI-assisted development workflows.
+Instructions for Codex CLI, ChatGPT, and other AI-assisted development workflows in this repository.
 
-This repository is the Oracle AI Lab project: `DEVELOPMENT in Oracle using AI Lab`.
-It started from an AI-friendly Python project template, but Oracle AI Lab project instructions govern project work.
+This repository is the Oracle AI Lab project:
 
-## Project-specific Oracle AI Lab instructions
+`DEVELOPMENT in Oracle using AI Lab`
+
+The technical repository name is:
+
+`oracle-dev-ai-lab`
+
+This repository is not a generic Python/Flask template project. It may still contain template remnants, but Oracle AI Lab project instructions govern all project work.
+
+## Required reading before any task
 
 Before starting any task in this repository, Codex MUST read and follow:
 
 - `.agents/oracle-ai-lab-codex-planner/SKILL.md`
 - `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`
 - `docs/01_Setting-AI-oracle-lab.html`
+- `TODO.md`
 
-If these files conflict with the generic instructions below, the Oracle AI Lab instructions take precedence.
+If these files conflict with generic instructions, template text, or legacy project files, the Oracle AI Lab instructions take precedence.
+
+## Project purpose
+
+The purpose of this repository is to build an isolated Oracle development lab where AI/Codex can develop Oracle database objects from structured specifications, run tests and reviews, and eventually create a release package.
+
+The database is disposable runtime state. GitHub is the source of truth.
+
+The first MVP is an Infrastructure MVP. It must prove that the lab can be created, installed, tested, reviewed, and packaged reproducibly.
+
+Functional development starts only after the Infrastructure MVP is complete.
+
+## Fixed project names
+
+Use these names exactly unless a later explicit project decision changes them:
+
+```text
+Repository: oracle-dev-ai-lab
+Container:  oracle-dev-ai-lab-db
+Volume:     oracle-dev-ai-lab-u01
+Network:    oracle-dev-ai-lab-net
+PDB:        FREEPDB1
+```
+
+## Scope
+
+Initial scope is Oracle database objects and supporting repository workflows only:
+
+- tables
+- constraints
+- indexes
+- views
+- packages
+- package bodies
+- triggers only when justified
+- seed data
+- install scripts
+- rollback scripts
+- tests
+- review reports
+- packaging output
+- project documentation
+
+Out of scope for the first phase:
+
+- APEX
+- ORDS
+- REST APIs
+- UI/frontend work
+- organizational production/development/test databases
+- direct integration with real organizational systems
 
 ## Core rules
 
 - Keep changes small and reviewable.
 - Make one logical change at a time.
-- Do not reorganize the repository unless explicitly requested.
+- Work only inside this repository.
 - Do not edit unrelated files.
 - Do not perform broad refactors unless explicitly requested.
-- Preserve the existing architecture unless the task explicitly asks to change it.
 - Prefer explicit, direct, maintainable code over clever code.
 - Do not introduce speculative abstractions.
 - Do not add dependencies unless they are necessary and documented.
-- Do not change public behavior without adding or updating tests.
+- Do not add secrets, credentials, tokens, passwords, private keys, certificates, or real connection strings.
 - Update documentation when setup, commands, behavior, architecture, or workflow changes.
 - Run the documented checks before claiming the task is complete.
-
-## Technology assumptions
-
-This template assumes:
-
-- Python 3.12+
-- WSL-based local development
-- VS Code connected to WSL
-- `unittest` only
-- optional Docker Compose support
-- GitHub Actions CI
-- small, focused pull requests
-- Codex CLI friendly branch and worktree workflows
-
-Do not introduce `pytest`, a database, a background worker, a frontend framework, a queue, a cache, or an external service dependency unless explicitly requested.
+- If a required assumption is missing, stop and report it.
 
 ## Branch naming
 
 For Codex CLI or AI-assisted implementation work, use this branch prefix:
 
 ```text
-codex-cli/<short-task-name>
+codex-cli/
 ```
 
 Examples:
 
 ```text
-codex-cli/add-health-endpoint
-codex-cli/improve-config-loading
-codex-cli/add-service-tests
-codex-cli/fix-docker-test-target
+codex-cli/T000-project-intake-todo-baseline
+codex-cli/T001-create-project-charter
+codex-cli/T002-create-repo-skeleton
 ```
 
-Use concise, descriptive branch names. Avoid vague names such as:
+Before starting work, Codex SHOULD run:
+
+```bash
+git fetch
+```
+
+## Database safety rules
+
+Codex MUST NOT connect to organizational databases.
+
+Codex MUST connect only to the local Docker container named `oracle-dev-ai-lab-db` when database access is needed.
+
+Codex MUST NOT execute ad-hoc DDL or DML.
+
+Codex MAY execute SELECT statements only for:
+
+- diagnostics
+- metadata inspection
+- compile checks
+- test verification
+- review
+
+Every database change MUST be represented as a versioned SQL file in the repository.
+
+Every schema change MUST be executed only through official repository scripts.
+
+No database change is valid unless it exists as a versioned SQL file and can be installed on a clean lab database by the official scripts.
+
+If database state conflicts with Git state, Git state wins. Recreate the database from the repository.
+
+## Repository structure target
+
+The planning document defines the target structure. Important paths include:
 
 ```text
-codex-cli/fixes
-codex-cli/improvements
-codex-cli/update
+README.md
+AGENTS.md
+TODO.md
+.env.example
+.gitignore
+docker-compose.yml
+
+docs/
+  01_Setting-AI-oracle-lab.html
+  project-charter.md
+  safety-rules.md
+  decision-log.md
+  stages/
+
+specs/
+  001-release-management/
+    spec.html
+    spec.json
+    TODO.md
+    traceability-matrix.md
+    tasks/
+
+db/
+  install/
+  src/
+  rollback/
+  tests/
+  review/
+  generated/
+  dist/
+
+scripts/
+  lab-up.sh
+  lab-down.sh
+  lab-reset.sh
+  lab-backup.sh
+  lab-restore.sh
+  install-db.sh
+  run-db-tests.sh
+  review-db-code.sh
+  package-release.sh
+  test.sh
+
+tools/
 ```
 
-## Architecture boundaries
+Do not create or modify this entire structure unless the current task explicitly asks for it.
 
-Keep responsibilities separated:
+## Documentation rules
 
-- `src/<package_name>/app.py`: application factory and wiring.
-- `src/<package_name>/config.py`: configuration loading.
-- `src/<package_name>/routes/`: request/response boundary only.
-- `src/<package_name>/services/`: application and business logic.
-- `src/<package_name>/model/`: domain models, data structures, model-facing code.
-- `src/<package_name>/utils/`: small generic helpers only.
-- `templates/`: HTML templates.
-- `static/`: CSS, images, and static assets.
-- `tests/`: `unittest`-based test coverage.
-- `docs/`: project documentation.
-- `scripts/`: repeatable local automation commands.
+Every implementation stage MUST create or update a Hebrew standalone HTML stage report under:
 
-Do not put business logic directly inside route handlers.
+```text
+docs/stages/
+```
 
-Route handlers should:
+Stage report filenames should follow this pattern:
 
-- parse request inputs
-- call services
-- return responses
+```text
+docs/stages/stage-XX-task-TXXX-short-name.html
+```
 
-Services should:
+Every stage report must start with:
 
-- contain business/application logic
-- be easy to test with `unittest`
-- avoid Flask-specific request objects unless strictly necessary
+```html
+<!doctype html>
+<html lang="he" dir="rtl">
+```
 
-Models should:
+The stage report must include:
 
-- represent domain data or model-facing structures
-- avoid HTTP concerns
+- stage number
+- task id
+- task title
+- date
+- files created
+- files updated
+- decisions implemented
+- important assumptions
+- commands run
+- checks/tests run
+- checks/tests not run and why
+- test results
+- known limitations
+- next recommended step
 
-Utilities should:
+A task is not complete without the relevant stage report unless the task explicitly says no stage report is required.
 
-- remain generic
-- not become a dumping ground for business rules
+## File-level documentation rules
+
+Every created or materially updated source file, script, SQL file, Python file, shell script, or generated project file MUST start with a short purpose header.
+
+The header should explain:
+
+- what the file does
+- where it fits in the lab workflow
+- whether it changes the database, validates the repository, runs tests, performs review, or creates packaging output
+- the related task id, decision id, or requirement id where applicable
+
+For non-trivial logic, comments MUST explain why the approach is used, not merely what the next line does.
+
+Avoid obvious comments that repeat the code.
 
 ## Testing policy
 
-This project uses `unittest` only.
+This project uses `unittest` for Python tests.
 
 Do not introduce `pytest` unless explicitly requested.
 
-The direct test command is:
+Run documented checks before claiming completion.
+
+If `scripts/test.sh` exists, use it as the primary test entrypoint.
+
+Common check:
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+scripts/test.sh quick
 ```
 
-The preferred project command is:
+If the environment requires the virtual environment on PATH, use:
 
 ```bash
-scripts/test.sh full local
+PATH=.venv/bin:$PATH scripts/test.sh quick
 ```
 
-Add or update tests when changing behavior in:
-
-- routes
-- services
-- validation
-- configuration
-- model/domain logic
-- public APIs
-- command scripts
-- Docker/runtime wiring
-
-Prefer deterministic tests.
-
-Avoid tests that require:
-
-- network access
-- real external services
-- local secrets
-- wall-clock-sensitive assertions
-- specific execution order
-
-## Test targets
-
-The canonical test command is:
-
-```bash
-scripts/test.sh [quick|full] [local|docker-dev|docker-qa]
-```
-
-Defaults:
-
-```bash
-scripts/test.sh
-```
-
-is equivalent to:
-
-```bash
-scripts/test.sh quick local
-```
-
-Use local tests by default:
-
-```bash
-scripts/test.sh full local
-```
-
-When a task changes Docker behavior, app startup, environment variables, dependencies, or runtime wiring, also run:
-
-```bash
-scripts/test.sh full docker-dev
-```
-
-Before merge or release validation, prefer:
-
-```bash
-scripts/test.sh full docker-qa
-```
-
-Do not claim Docker compatibility unless the relevant Docker test target was executed successfully.
-
-## Lint and formatting
-
-Use the project lint command:
+If `scripts/lint.sh` exists, run it when relevant:
 
 ```bash
 scripts/lint.sh
 ```
 
-If formatting is required, use the documented formatter command from the repository, usually:
+If the environment requires the virtual environment on PATH, use:
 
 ```bash
-python -m ruff format src tests
-python -m ruff check --fix src tests
+PATH=.venv/bin:$PATH scripts/lint.sh
 ```
 
-Do not include broad formatting churn in unrelated tasks.
+If a check cannot be run, state clearly:
 
-## Expected checks
+- which check was not run
+- why it was not run
+- whether this affects confidence in the change
 
-For a normal code change, run:
-
-```bash
-scripts/test.sh full local
-scripts/lint.sh
-```
-
-For a Docker-related change, run:
-
-```bash
-scripts/test.sh full local
-scripts/test.sh full docker-dev
-scripts/lint.sh
-```
-
-For release-like validation, run:
-
-```bash
-scripts/test.sh full local
-scripts/test.sh full docker-qa
-scripts/lint.sh
-```
-
-If a check cannot be run, state clearly which check was not run and why.
+Do not claim Docker, Oracle DB, install, review, or package compatibility unless the relevant checks were actually executed successfully.
 
 ## Dependency rules
 
 - Keep dependencies minimal.
 - Prefer the Python standard library when practical.
 - Add a dependency only when it is clearly justified.
-- Update `requirements.in`, `requirements.txt`, and relevant documentation when dependencies change.
-- Do not add development tools, frameworks, or libraries that are unrelated to the current task.
+- Update dependency files and documentation when dependencies change.
+- Do not add development tools, frameworks, or libraries unrelated to the current task.
 - Do not silently change the packaging approach.
 
 ## Secrets and configuration
@@ -254,60 +305,20 @@ Never commit:
 - real connection strings
 - local `.env` files
 
-Environment-file policy:
+Allowed to track:
 
-- Allowed to track: `.env.example`
-- Must not be tracked: `.env`, `.env.*`, or any local secret-bearing file
-
-Create local overrides by copying:
-
-```bash
-cp .env.example .env
+```text
+.env.example
 ```
 
-Do not add real secrets to examples. Use placeholder values only.
+Do not track local secret-bearing files such as:
 
-## Documentation rules
+```text
+.env
+.env.*
+```
 
-When relevant, update:
-
-- `README.md`
-- `docs/dev-python.md`
-- `docs/architecture.md`
-- `docs/codex-workflow.md`
-- `.github/CONTRIBUTING.md`
-- `AGENTS.md`
-
-Documentation must stay aligned with:
-
-- repository structure
-- local setup steps
-- run commands
-- test commands
-- Docker commands
-- CI behavior
-- AI/Codex workflow expectations
-
-If code behavior changes but the README or docs still describe the old behavior, the task is incomplete.
-
-## Pull request expectations
-
-Each PR should do one focused thing.
-
-Good examples:
-
-- add a Flask route
-- add a service function
-- add validation
-- add tests
-- improve documentation
-- fix Docker test execution
-- update CI
-- improve VS Code settings
-
-Avoid mixing unrelated changes in one PR.
-
-Do not combine a feature change with broad formatting, renaming, dependency updates, and documentation rewrites unless explicitly requested.
+Use placeholder values only in examples.
 
 ## Preferred change style
 
@@ -321,6 +332,7 @@ Prefer:
 - simple tests
 - stable commands
 - readable documentation
+- traceability to a task id, requirement id, or decision id
 
 Avoid:
 
@@ -330,7 +342,7 @@ Avoid:
 - global rewrites
 - unnecessary layers
 - unrelated cleanup
-- renaming or moving files without strong reason
+- renaming or moving files without a strong task-specific reason
 
 ## AI-assisted workflow
 
@@ -342,50 +354,24 @@ When using Codex, ChatGPT, or another AI coding tool:
 - update docs together with code
 - do not invent missing requirements
 - do not create extra layers beyond the intended architecture
-- do not silently change the testing framework
 - do not silently change runtime assumptions
 - run the documented checks before claiming completion
-
-Good AI task:
-
-```text
-Add a /api/health endpoint that returns {"status": "ok"}.
-Use unittest only.
-Update tests.
-Do not modify unrelated files.
-Run scripts/test.sh full local.
-```
-
-Better AI task when Docker is relevant:
-
-```text
-Fix scripts/test.sh so tests can run locally and inside Docker.
-Support local, docker-dev, and docker-qa targets.
-Update README.md and AGENTS.md.
-Run scripts/test.sh full local and scripts/test.sh full docker-dev.
-Do not introduce pytest.
-```
-
-Bad AI task:
-
-```text
-Improve the project.
-```
 
 ## Review checklist
 
 Before submitting a change, verify:
 
 - [ ] The diff is focused.
-- [ ] The change matches the documented architecture.
+- [ ] The change matches the current task.
 - [ ] No unrelated files were edited.
-- [ ] Tests were added or updated if behavior changed.
-- [ ] `scripts/test.sh full local` passes.
-- [ ] Docker tests were run if Docker/runtime behavior changed.
-- [ ] `scripts/lint.sh` passes.
-- [ ] Documentation was updated if setup, behavior, commands, or structure changed.
+- [ ] Required documentation was created or updated.
+- [ ] Required stage report exists under `docs/stages/`.
+- [ ] Tests/checks were run, or skipped with a clear reason.
 - [ ] No secrets or local environment files were committed.
 - [ ] No unrelated formatting or cleanup was included.
+- [ ] Database changes, if any, exist only as versioned SQL files.
+- [ ] No ad-hoc DDL or DML was run.
+- [ ] Assumptions and limitations are documented.
 
 ## If unsure
 
@@ -394,5 +380,5 @@ If a requirement is unclear:
 - do not invent behavior
 - make the smallest safe change
 - document assumptions explicitly
-- prefer adding tests around confirmed behavior
 - ask for clarification before broad changes
+- stop and report if proceeding would violate project safety rules
