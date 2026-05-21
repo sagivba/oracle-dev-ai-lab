@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 07 - Goal 007 - Database Install Workflow Skeleton</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 07 - Goal 007 - שלד התקנת DB מבוקרת</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>sagivba/oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-007-install-workflow</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 007 הוסיף שלד מבוקר להתקנת בסיס הנתונים המקומי של Oracle AI Lab.
+    נוצר entry point יחיד ב-<code>db/install/install.sql</code>, קובצי SQL
+    מנוהלים ליצירת משתמשי המעבדה ולשמירת מקום להגדרות schema עתידיות, שלד
+    rollback שמרני, script רשמי בשם <code>scripts/install-db.sh</code>, ומסמך
+    <code>docs/install-workflow.md</code>.
+  </p>
+  <p>
+    המימוש הוא infrastructure-only. לא נוצרו טבלאות עסקיות, לא נוצר
+    <code>LAB_SMOKE_TEST</code>, לא נוספו SQL smoke tests, ולא נוסף מימוש
+    release-management פונקציונלי.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>db/install/install.sql</code></li>
+    <li><code>db/install/00_create_lab_users.sql</code></li>
+    <li><code>db/install/01_create_schema.sql</code></li>
+    <li><code>db/rollback/rollback.sql</code></li>
+    <li><code>scripts/install-db.sh</code></li>
+    <li><code>docs/install-workflow.md</code></li>
+    <li><code>docs/stages/stage-07-task-G007-install-workflow.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - Goal 007 ופריטי Stage 3/5 הרלוונטיים סומנו בהתאם.</li>
+    <li><code>tests/test_repo_contract.py</code> - נוספו בדיקות contract לקובצי Goal 007 וליעד המקומי בלבד.</li>
+  </ul>
+
+  <h2>החלטות שנשמרו</h2>
+  <ul>
+    <li>Git נשאר מקור האמת לכל שינוי DB.</li>
+    <li>כל שינוי DB עתידי חייב להיות מיוצג בקובץ SQL מנוהל.</li>
+    <li>ה-script מכוון רק ל-container המקומי <code>oracle-dev-ai-lab-db</code>.</li>
+    <li>ברירת המחדל של PDB היא <code>FREEPDB1</code>.</li>
+    <li>לא נשמרו secrets או סיסמאות אמיתיות.</li>
+    <li>לא הוכנסה תלות ב-<code>pytest</code>; בדיקות Python נשארו <code>unittest</code>.</li>
+  </ul>
+
+  <h2>מגבלות בטיחות שנשמרו</h2>
+  <ul>
+    <li>לא בוצע חיבור לבסיס נתונים ארגוני.</li>
+    <li>לא בוצע חיבור לשום בסיס נתונים.</li>
+    <li>Docker לא הופעל.</li>
+    <li>Oracle DB לא הופעל.</li>
+    <li>לא בוצעו DDL או DML.</li>
+    <li>לא נטענה תאימות runtime של Docker או Oracle.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>ערכי הסיסמאות יוגדרו רק בקובץ <code>.env</code> מקומי שאינו נשמר ב-Git או בסביבת shell מקומית.</li>
+    <li>runtime validation של CREATE USER, grants ו-schema setup יבוצע רק כשיעד מאוחר יותר יאשר זאת.</li>
+    <li>השלד משתמש ב-SQL*Plus/sqlcl-compatible syntax אך לא הורץ מול Oracle במסגרת Goal 007.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch main</code></li>
+    <li><code>git pull --ff-only</code></li>
+    <li><code>git switch -c codex-cli/goal-007-install-workflow</code></li>
+    <li><code>sed</code> ו-<code>rg</code> לקריאת מסמכי ההקשר, היעד, הסקריפטים והבדיקות.</li>
+    <li><code>chmod +x scripts/install-db.sh</code></li>
+    <li><code>bash -n scripts/install-db.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>git diff --check</code></li>
+    <li><code>git diff --cached --check</code></li>
+  </ul>
+
+  <h2>תוצאות ולידציה</h2>
+  <ul>
+    <li><code>bash -n scripts/install-db.sh</code> עבר.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר עם 13 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+    <li>הרצת <code>unittest</code> ישירה עברה עם 13 בדיקות.</li>
+    <li><code>git diff --check</code> עבר.</li>
+    <li><code>git diff --cached --check</code> עבר.</li>
+  </ul>
+
+  <h2>מה לא הורץ ולמה</h2>
+  <ul>
+    <li>לא הורץ <code>scripts/install-db.sh</code> כי Goal 007 אינו טוען runtime validation.</li>
+    <li>לא הורץ Docker ולא בוצע <code>docker exec</code>, בהתאם לגבולות המשימה.</li>
+    <li>לא הורצו SQL smoke tests, כי הם שייכים ל-Goal 008.</li>
+    <li>לא הורץ utPLSQL, כי הוא שייך לאיטרציות פונקציונליות עתידיות.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>קובצי user/schema הם skeleton עם TODOs ולא מימוש runtime מאומת.</li>
+    <li>אין עדיין <code>LAB_SMOKE_TEST</code>.</li>
+    <li>אין עדיין <code>scripts/run-db-tests.sh</code>.</li>
+    <li>אין עדיין review workflow או packaging workflow.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 008 - Add DB Smoke Object and SQL Smoke Tests</code>.
+  </p>
+</main>
+</body>
+</html>
