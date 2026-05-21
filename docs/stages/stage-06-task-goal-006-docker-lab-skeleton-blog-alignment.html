@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 06 - Goal 006 - Docker Lab Skeleton Blog Alignment</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 06 - Goal 006 - שלד Docker Lab בהתאמה למדריך Oracle 26ai</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-006-docker-lab-skeleton-blog-alignment</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    נוצר שלד Docker מקומי עבור Oracle AI Database 26ai Free בהתאם למדריך של
+    Sagiv Barhoom, תוך התאמה לשמות המחייבים של הפרויקט וללא שמירת סיסמאות
+    אמיתיות. Docker לא הופעל במסגרת המשימה; בוצעה ולידציה סטטית בלבד.
+  </p>
+
+  <h2>מקור טכני שנקרא</h2>
+  <ul>
+    <li><code>https://www.sagiv-barhoom.me/oracle/2026/04/05/oracle_26ai_docker_setup.html</code></li>
+  </ul>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>scripts/lab-up.sh</code></li>
+    <li><code>scripts/lab-down.sh</code></li>
+    <li><code>scripts/lab-reset.sh</code></li>
+    <li><code>scripts/lab-backup.sh</code></li>
+    <li><code>scripts/lab-restore.sh</code></li>
+    <li><code>docs/docker-lab-design.md</code></li>
+    <li><code>docs/stages/stage-06-task-goal-006-docker-lab-skeleton-blog-alignment.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>docker-compose.yml</code> - נוסף service בשם <code>db</code> עם Oracle image, volume, port ו-network.</li>
+    <li><code>.env.example</code> - נוספו placeholders בלבד עבור Oracle image, password, port, PDB ו-backup root.</li>
+    <li><code>.gitignore</code> - נוספה התעלמות מ-<code>backups/</code>.</li>
+    <li><code>TODO.md</code> - Goal 006 ופריטי Stage 2 סומנו בהתאם לשלד שנוצר.</li>
+  </ul>
+
+  <h2>החלטות ודרישות שיושמו</h2>
+  <ul>
+    <li>Image: <code>container-registry.oracle.com/database/free:latest</code></li>
+    <li>Container: <code>oracle-dev-ai-lab-db</code></li>
+    <li>Volume: <code>oracle-dev-ai-lab-u01</code></li>
+    <li>Network: <code>oracle-dev-ai-lab-net</code></li>
+    <li>Mount: <code>/opt/oracle/oradata</code></li>
+    <li>Port mapping: <code>1521:1521</code></li>
+    <li>PDB/service: <code>FREEPDB1</code></li>
+    <li>Readiness marker: <code>DATABASE IS READY TO USE!</code></li>
+    <li>Backup/restore משתמשים בקונספט של metadata + tar דרך container זמני של Alpine.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>המשתמש ייצור <code>.env</code> מקומי מתוך <code>.env.example</code> ויחליף את <code>ORACLE_PWD</code> בערך מקומי שאינו נשמר ב-Git.</li>
+    <li>המשתמש יתחבר ל-Oracle Container Registry ויאשר תנאים לפני pull/start בפועל.</li>
+    <li>השלד אינו מוכיח runtime עד ש-Docker יופעל והודעת readiness תופיע בלוגים.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch -c codex-cli/goal-006-docker-lab-skeleton-blog-alignment origin/main</code></li>
+    <li><code>chmod +x scripts/lab-up.sh scripts/lab-down.sh scripts/lab-reset.sh scripts/lab-backup.sh scripts/lab-restore.sh</code></li>
+    <li><code>bash -n scripts/lab-up.sh scripts/lab-down.sh scripts/lab-reset.sh scripts/lab-backup.sh scripts/lab-restore.sh</code></li>
+    <li><code>ORACLE_PWD=static_validation_only docker compose config --quiet</code></li>
+    <li><code>ORACLE_PWD=static_validation_only docker compose config</code></li>
+    <li><code>grep -RIn "Oracle123\|oracle26ai\|oracle26ai-data" ...</code></li>
+    <li><code>find db specs tools -maxdepth 2 ...</code></li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>git diff --stat | cat</code></li>
+    <li><code>git diff --name-only | cat</code></li>
+    <li><code>git diff --check</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו ותוצאות</h2>
+  <ul>
+    <li>בדיקות syntax של Bash עברו.</li>
+    <li>בדיקת Docker Compose config סטטית עברה עם placeholder סביבתי זמני שלא נשמר בקובץ.</li>
+    <li>בדיקת grep לא מצאה שמות או סיסמאות לדוגמה מהמדריך שאסור להעתיק לפרויקט.</li>
+    <li>בדיקת מבנה אישרה שלא נוצרו תיקיות <code>db/</code>, <code>specs/</code> או <code>tools/</code>.</li>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה רגילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה.</li>
+    <li>פקודת unittest ישירה עם <code>.venv/bin</code> ב-<code>PATH</code> עברה בהצלחה.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו ולמה</h2>
+  <ul>
+    <li>Docker לא הופעל ולא הורץ pull/up, בהתאם להנחיה לא להתחיל Docker ללא צורך מפורש.</li>
+    <li>לא בוצעו בדיקות Oracle DB משום שה-container לא הופעל.</li>
+    <li>לא הורצו install, review או packaging checks משום שה-workflows האלה עדיין לא קיימים.</li>
+    <li>לא הורצו DDL או DML.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>אין טענה שה-Oracle container עלה בפועל.</li>
+    <li>אין טענה שהודעת <code>DATABASE IS READY TO USE!</code> נצפתה בפועל.</li>
+    <li>אין עדיין schemas, install workflow, smoke tests, review workflow או package workflow.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    לפי סדר היעדים הרשמי, היעד הבא המומלץ עדיין הוא
+    <code>Goal 004 - Create Oracle Lab Repository Structure</code>, משום ש-Goal 006
+    קודם לצורך התאמת Docker למדריך, אך Goal 004 ו-Goal 005 עדיין חסרים.
+  </p>
+</main>
+</body>
+</html>

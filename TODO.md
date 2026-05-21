@@ -102,12 +102,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/test.sh` and template tests under `tests/` exist; `docs/testing-strategy.md` and `tests/test_repo_contract.py` are missing.
   - Notes: Current tests validate the template Flask app, not the Oracle lab repository contract.
   - Recommended next action: Run Goal 005 after the required docs and repository structure exist.
-- [PARTIAL] Goal 006 - Add Oracle Docker Lab Skeleton
+- [DONE] Goal 006 - Add Oracle Docker Lab Skeleton
   - Goal file: `docs/codex-goals/goal-006-docker-lab-skeleton.md`
   - Purpose: Add Oracle AI Database 26ai Free Docker skeleton and lab lifecycle scripts.
-  - Evidence: `docker-compose.yml` and `.env.example` exist, but current Docker files are template Flask app oriented; `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, `scripts/lab-restore.sh`, and `docs/docker-lab-design.md` are missing.
-  - Notes: No Oracle Docker runtime infrastructure exists yet.
-  - Recommended next action: Run Goal 006 after repository structure and test strategy goals are reconciled.
+  - Evidence: `docker-compose.yml`; `.env.example`; `scripts/lab-up.sh`; `scripts/lab-down.sh`; `scripts/lab-reset.sh`; `scripts/lab-backup.sh`; `scripts/lab-restore.sh`; `docs/docker-lab-design.md`
+  - Notes: Skeleton is aligned to Sagiv Barhoom's Oracle 26ai Docker setup post using project names and placeholder-only secrets. Docker was not started, so runtime compatibility is not claimed.
+  - Recommended next action: Continue with the first earlier incomplete goal in the sequence, Goal 004.
 - [TODO] Goal 007 - Add Database Install Workflow Skeleton
   - Goal file: `docs/codex-goals/goal-007-install-workflow.md`
   - Purpose: Create controlled DB installation workflow and lab user SQL skeletons.
@@ -219,22 +219,22 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Stage 2 - Docker Lab DB
 
-- [PARTIAL] Generic Docker files exist.
+- [PARTIAL] Docker files include retained app infrastructure and Oracle lab skeleton.
   - Evidence: `Dockerfile`, `docker-compose.yml`, `docker-compose.dev.yml`, `docker-compose.qa.yml`
   - Source: Repository observation.
-  - Notes: These define a Flask app container, not Oracle AI Database 26ai Free.
-- [TODO] Define isolated Oracle AI Database 26ai Free Docker service.
-  - Evidence: No Docker configuration for `oracle-dev-ai-lab-db`.
+  - Notes: `docker-compose.yml` now includes an Oracle `db` skeleton; existing app Docker scaffolding remains retained starter infrastructure.
+- [DONE] Define isolated Oracle AI Database 26ai Free Docker service.
+  - Evidence: `docker-compose.yml` service `db` uses `container-registry.oracle.com/database/free:latest`, `1521:1521`, and `/opt/oracle/oradata`.
   - Source: Planning document sections 1, 3, 5, 8, and 16.
-  - Notes: This task intentionally does not create Docker runtime infrastructure.
-- [TODO] Define required Docker resource names.
-  - Evidence: No `oracle-dev-ai-lab-db`, `oracle-dev-ai-lab-u01`, or `oracle-dev-ai-lab-net` runtime configuration exists.
+  - Notes: Docker was not started; this is static skeleton alignment only.
+- [DONE] Define required Docker resource names.
+  - Evidence: `docker-compose.yml`; `docs/docker-lab-design.md`
   - Source: Project rules fixed names; planning document Decision 004.
-  - Notes: Must use exactly the fixed names.
-- [TODO] Create lab lifecycle scripts.
-  - Evidence: `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, and `scripts/lab-restore.sh` are missing.
+  - Notes: Uses `oracle-dev-ai-lab-db`, `oracle-dev-ai-lab-u01`, `oracle-dev-ai-lab-net`, and `FREEPDB1`.
+- [DONE] Create lab lifecycle scripts.
+  - Evidence: `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, and `scripts/lab-restore.sh`
   - Source: Planning document section 7; Stage 2 row in section 12.
-  - Notes: Should be implemented only in a Docker lab task.
+  - Notes: Scripts are Bash-oriented and include startup, stop, reset, backup, and restore behavior using project names.
 
 ## Stage 3 - Lab Schemas
 
