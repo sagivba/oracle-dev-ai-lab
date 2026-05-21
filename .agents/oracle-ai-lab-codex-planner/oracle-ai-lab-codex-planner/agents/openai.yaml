@@ -1,0 +1,5 @@
+interface:
+  display_name: Oracle AI Lab Codex Planner
+  short_description: Creates strict Codex prompts and review checklists for the Oracle AI lab project.
+  icon: book-open
+  color: blue
