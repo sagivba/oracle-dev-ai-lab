@@ -33,6 +33,14 @@ The first MVP is an Infrastructure MVP. It must prove that the lab can be create
 
 Functional development starts only after the Infrastructure MVP is complete.
 
+## Codex goals
+
+Codex task prompts for this project may be stored under:
+
+- `docs/codex-goals/`
+
+When the user asks Codex to run a goal file, Codex MUST read the referenced goal file and follow it exactly, together with this `AGENTS.md`, the project Skill, `project-rules.md`, `TODO.md`, and the planning document.
+
 ## Fixed project names
 
 Use these names exactly unless a later explicit project decision changes them:

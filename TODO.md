@@ -64,6 +64,93 @@ install scripts, review scripts, package scripts, or functional database objects
   - Source: Planning document section 7; project rules required repository structure.
   - Notes: Spec pipeline tooling should be created in Stage 4, not this intake task.
 
+## Codex goals execution baseline
+
+- [DONE] Goal 000 - Operating Rules for All Goals
+  - Goal file: `docs/codex-goals/goal-000-operating-rules.md`
+  - Purpose: Establish mandatory execution rules for all later Codex goals.
+  - Evidence: Goal file exists; `.agents/oracle-ai-lab-codex-planner/SKILL.md`, `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`, `AGENTS.md`, and `docs/01_Setting-AI-oracle-lab.html` contain the mandatory operating rules.
+  - Notes: The goal states that no repository changes are required by Goal 000.
+  - Recommended next action: Skip Goal 000 as already satisfied; continue with Goal 001.
+- [PARTIAL] Goal 001 - Align Template Identity
+  - Goal file: `docs/codex-goals/goal-001-template-alignment.md`
+  - Purpose: Align repository identity to `oracle-dev-ai-lab` without adding Oracle implementation.
+  - Evidence: `pyproject.toml` uses project name `DEVELOPMENT in Oracle using AI Lab`; package folder is `src/oracle_ai_lab/`; however `README.md`, `pyproject.toml`, `src/oracle_ai_lab/__init__.py`, `src/oracle_ai_lab/config.py`, `docs/template-usage.md`, and `.github/CONTRIBUTING.md` still contain template-oriented wording.
+  - Notes: Identity is partly aligned, but generic template remnants remain prominent.
+  - Recommended next action: Run or reconcile `docs/codex-goals/goal-001-template-alignment.md` before later goals.
+- [PARTIAL] Goal 002 - Create Project Documentation Baseline
+  - Goal file: `docs/codex-goals/goal-002-project-docs.md`
+  - Purpose: Create mandatory project charter, safety rules, decision log, repository structure, and Codex workflow documentation.
+  - Evidence: `docs/codex-workflow.md` exists; `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md` are missing.
+  - Notes: The main Stage 0 governance documents are not present yet.
+  - Recommended next action: Run Goal 002 after Goal 001 is resolved.
+- [PARTIAL] Goal 003 - Create Strict AGENTS.md
+  - Goal file: `docs/codex-goals/goal-003-agents-md.md`
+  - Purpose: Create strict Codex operating rules for repository work.
+  - Evidence: `AGENTS.md` exists and includes Oracle AI Lab scope, fixed names, DB safety rules, `unittest` policy, branch naming, standard checks, and a `docs/codex-goals/` section.
+  - Notes: `AGENTS.md` is strong, but it does not explicitly mention `docs/codex-goals/GOALS_INDEX.md` ordering or one-goal-per-commit discipline, and consistency with `docs/project-charter.md` and `docs/safety-rules.md` cannot be verified until Goal 002 exists.
+  - Recommended next action: Reconcile Goal 003 after Goal 002, or make a minimal AGENTS-only cleanup if the owner wants strict goal sequencing documented immediately.
+- [TODO] Goal 004 - Create Oracle Lab Repository Structure
+  - Goal file: `docs/codex-goals/goal-004-repository-structure.md`
+  - Purpose: Add the Oracle lab folder structure while preserving useful Python template structure.
+  - Evidence: `docs/` and `scripts/` exist, but `specs/001-release-management/tasks/`, `db/install/`, `db/src/`, `db/rollback/`, `db/tests/`, `db/review/`, `db/generated/`, `db/dist/`, `tools/`, and `docs/repository-structure.md` are missing.
+  - Notes: This reconciliation task intentionally did not create repository structure artifacts.
+  - Recommended next action: Run Goal 004 only after Goals 001 through 003 are satisfied or explicitly skipped.
+- [PARTIAL] Goal 005 - Add Testing Strategy and Baseline unittest Contracts
+  - Goal file: `docs/codex-goals/goal-005-testing-strategy.md`
+  - Purpose: Add testing strategy documentation and baseline repository contract tests using `unittest`.
+  - Evidence: `scripts/test.sh` and template tests under `tests/` exist; `docs/testing-strategy.md` and `tests/test_repo_contract.py` are missing.
+  - Notes: Current tests validate the template Flask app, not the Oracle lab repository contract.
+  - Recommended next action: Run Goal 005 after the required docs and repository structure exist.
+- [PARTIAL] Goal 006 - Add Oracle Docker Lab Skeleton
+  - Goal file: `docs/codex-goals/goal-006-docker-lab-skeleton.md`
+  - Purpose: Add Oracle AI Database 26ai Free Docker skeleton and lab lifecycle scripts.
+  - Evidence: `docker-compose.yml` and `.env.example` exist, but current Docker files are template Flask app oriented; `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, `scripts/lab-restore.sh`, and `docs/docker-lab-design.md` are missing.
+  - Notes: No Oracle Docker runtime infrastructure exists yet.
+  - Recommended next action: Run Goal 006 after repository structure and test strategy goals are reconciled.
+- [TODO] Goal 007 - Add Database Install Workflow Skeleton
+  - Goal file: `docs/codex-goals/goal-007-install-workflow.md`
+  - Purpose: Create controlled DB installation workflow and lab user SQL skeletons.
+  - Evidence: `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `db/rollback/rollback.sql`, `scripts/install-db.sh`, and `docs/install-workflow.md` are missing.
+  - Notes: No install workflow has been implemented.
+  - Recommended next action: Run Goal 007 after the Oracle Docker skeleton exists.
+- [TODO] Goal 008 - Add DB Smoke Object and SQL Smoke Tests
+  - Goal file: `docs/codex-goals/goal-008-db-smoke-tests.md`
+  - Purpose: Add minimal `LAB_SMOKE_TEST` object and SQL smoke tests for the Infrastructure MVP.
+  - Evidence: `db/src/tables/lab_smoke_test.sql`, `db/tests/sql/001_db_connectivity.sql`, `db/tests/sql/002_object_inventory.sql`, `db/tests/sql/003_no_invalid_objects.sql`, and `scripts/run-db-tests.sh` are missing.
+  - Notes: No smoke object or SQL smoke tests exist.
+  - Recommended next action: Run Goal 008 after Goal 007 creates the controlled install workflow.
+- [TODO] Goal 009 - Add Specification Pipeline Skeleton
+  - Goal file: `docs/codex-goals/goal-009-spec-pipeline-skeleton.md`
+  - Purpose: Add HTML spec to JSON/TODO/tasks pipeline skeleton and deterministic tooling.
+  - Evidence: `specs/001-release-management/spec.html`, `spec.json`, `TODO.md`, `traceability-matrix.md`, `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, `tests/test_spec_pipeline.py`, and `docs/spec-pipeline.md` are missing.
+  - Notes: No spec pipeline artifacts exist.
+  - Recommended next action: Run Goal 009 after Infrastructure MVP skeleton foundations are in place.
+- [TODO] Goal 010 - Add Review Workflow Skeleton
+  - Goal file: `docs/codex-goals/goal-010-review-workflow.md`
+  - Purpose: Add DB code, repository contract, safety, and traceability review workflow.
+  - Evidence: `scripts/review-db-code.sh`, `db/review/review-report.md`, `docs/review-workflow.md`, and `tests/test_review_contract.py` are missing.
+  - Notes: Review workflow is not present.
+  - Recommended next action: Run Goal 010 after install, smoke, and spec skeleton work can provide meaningful review targets.
+- [TODO] Goal 011 - Add Release Packaging Workflow Skeleton
+  - Goal file: `docs/codex-goals/goal-011-packaging-workflow.md`
+  - Purpose: Add deterministic release packaging workflow and manifest structure.
+  - Evidence: `scripts/package-release.sh`, `tools/package_release.py`, `db/dist/README.md`, `docs/packaging-workflow.md`, and `tests/test_packaging_contract.py` are missing.
+  - Notes: Packaging workflow is not present.
+  - Recommended next action: Run Goal 011 after review workflow exists.
+- [NOT_APPLICABLE_YET] Goal 012 - Add Release Management Functional Spec Placeholder
+  - Goal file: `docs/codex-goals/goal-012-functional-spec-placeholder.md`
+  - Purpose: Add only a placeholder spec for the future release-management use case.
+  - Evidence: `specs/001-release-management/spec.html`, `specs/001-release-management/README.md`, and `docs/functional-iterations-plan.md` are missing; Infrastructure MVP foundations are also incomplete.
+  - Notes: This goal is intentionally functional-scope preparation and should wait until earlier infrastructure goals are resolved.
+  - Recommended next action: Do not run yet; revisit after Goals 001 through 011 are complete or intentionally skipped.
+- [NOT_APPLICABLE_YET] Goal 013 - Add Functional Iteration Readiness Checklist
+  - Goal file: `docs/codex-goals/goal-013-functional-iteration-readiness.md`
+  - Purpose: Add checklist that blocks real functional development until Infrastructure MVP is complete.
+  - Evidence: `docs/functional-readiness-checklist.md`, `docs/goals-plan.md`, and `specs/001-release-management/tasks/README.md` are missing; Infrastructure MVP is not complete.
+  - Notes: Functional readiness depends on Docker, install, smoke tests, review, packaging, and approved project documentation.
+  - Recommended next action: Do not run yet; revisit after Infrastructure MVP workflows exist.
+
 ## Stage 0 - Project Charter and project alignment
 
 - [DONE] Planning source document exists.
@@ -304,7 +391,7 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Immediate next recommended task
 
-- [TODO] T001 - Create Stage 0 project charter, safety rules, and decision log.
-  - Evidence: Required Stage 0 documents are missing: `docs/project-charter.md`, `docs/safety-rules.md`, and `docs/decision-log.md`.
-  - Source: Planning document section 12; Decision 010; project rules.
-  - Notes: This should happen before Docker, schema, install, review, package, or functional implementation tasks.
+- [TODO] Run or reconcile `docs/codex-goals/goal-001-template-alignment.md`.
+  - Evidence: Goal 000 requires no repository changes and is satisfied by the existing goal files, project Skill, project rules, planning document, and `AGENTS.md`; Goal 001 remains `PARTIAL` because README, metadata, config defaults, and template documentation still contain template-era wording.
+  - Source: `docs/codex-goals/GOALS_INDEX.md`; `docs/codex-goals/goal-001-template-alignment.md`; repository observation.
+  - Notes: Continue with the first incomplete goal in the goal sequence before moving to project docs, repository structure, Docker, DB, review, packaging, or functional work.
