@@ -126,12 +126,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `specs/001-release-management/spec.html`, `spec.json`, `TODO.md`, `traceability-matrix.md`, `specs/001-release-management/tasks/T001-spec-pipeline-placeholder.md`, `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, `tests/test_spec_pipeline.py`, and `docs/spec-pipeline.md`
   - Notes: Goal 009 adds deterministic standard-library skeleton tooling only. It does not generate functional release-management DB objects, review workflow files, or packaging workflow files.
   - Recommended next action: Run Goal 010 after the spec pipeline skeleton exists.
-- [TODO] Goal 010 - Add Review Workflow Skeleton
+- [DONE] Goal 010 - Add Review Workflow Skeleton
   - Goal file: `docs/codex-goals/goal-010-review-workflow.md`
   - Purpose: Add DB code, repository contract, safety, and traceability review workflow.
-  - Evidence: `scripts/review-db-code.sh`, `db/review/review-report.md`, `docs/review-workflow.md`, and `tests/test_review_contract.py` are missing.
-  - Notes: Review workflow is not present.
-  - Recommended next action: Run Goal 010 after install, smoke, and spec skeleton work can provide meaningful review targets.
+  - Evidence: `scripts/review-db-code.sh`, `db/review/review-report.md`, `docs/review-workflow.md`, and `tests/test_review_contract.py`
+  - Notes: Goal 010 adds a safe-by-default static review skeleton, required report sections, severity levels, BLOCKER approval rule, and repository-only contract tests. Runtime Oracle diagnostics were not run or claimed.
+  - Recommended next action: Run Goal 011 after the review workflow skeleton exists.
 - [TODO] Goal 011 - Add Release Packaging Workflow Skeleton
   - Goal file: `docs/codex-goals/goal-011-packaging-workflow.md`
   - Purpose: Add deterministic release packaging workflow and manifest structure.
@@ -311,22 +311,22 @@ install scripts, review scripts, package scripts, or functional database objects
 
 ## Stage 6 - Review Workflow
 
-- [TODO] Create review script.
-  - Evidence: `scripts/review-db-code.sh` is missing.
+- [DONE] Create review script.
+  - Evidence: `scripts/review-db-code.sh`
   - Source: Planning document sections 7, 12, and 14.
-  - Notes: Review should inspect repository and DB code according to defined severity levels.
-- [TODO] Create review output area.
-  - Evidence: `db/review/` does not exist.
+  - Notes: Goal 010 adds a static, repository-only review script that validates required review workflow artifacts and managed DB source conventions.
+- [DONE] Create review output area.
+  - Evidence: `db/review/` and `db/review/review-report.md`
   - Source: Planning document sections 7 and 14.
-  - Notes: Expected report path is `db/review/review-report.md`.
-- [TODO] Define review report contents.
-  - Evidence: `db/review/review-report.md` is missing.
+  - Notes: Goal 004 created the directory and Goal 010 adds the review report template.
+- [DONE] Define review report contents.
+  - Evidence: `db/review/review-report.md`
   - Source: Planning document section 14.
-  - Notes: Must include spec coverage, object inventory, security review, risks, required fixes, and approval status.
+  - Notes: The template includes required sections, severity levels, and the rule that release packaging is not approved if any BLOCKER exists.
 - [NOT_APPLICABLE_YET] Produce review report without BLOCKER findings.
-  - Evidence: No review workflow or DB artifacts exist.
+  - Evidence: Full review execution and release approval remain out of scope for the skeleton.
   - Source: Planning document sections 14 and 16.
-  - Notes: Depends on installable DB artifacts and review script.
+  - Notes: Goal 010 creates the review workflow skeleton only; runtime diagnostics and release approval require later explicit review execution.
 
 ## Stage 7 - Packaging Workflow
 

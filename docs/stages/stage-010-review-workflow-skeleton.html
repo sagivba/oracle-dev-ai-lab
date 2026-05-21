@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 010 - Goal 010 - Review Workflow Skeleton</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 010 - Goal 010 - שלד Review Workflow</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>sagivba/oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-010-review-workflow</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 010 הוסיף שלד workflow לסקירת DB code, repository contract, כללי
+    בטיחות ועקיבות. ה-review הוא static/repository-only כברירת מחדל, אינו
+    דורש Docker או Oracle, ואינו טוען runtime validation.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>scripts/review-db-code.sh</code></li>
+    <li><code>db/review/review-report.md</code></li>
+    <li><code>docs/review-workflow.md</code></li>
+    <li><code>tests/test_review_contract.py</code></li>
+    <li><code>docs/stages/stage-010-review-workflow-skeleton.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - Goal 010 ופריטי Stage 6 הרלוונטיים סומנו כ-DONE.</li>
+  </ul>
+
+  <h2>התנהגות הסקריפט</h2>
+  <ul>
+    <li><code>scripts/review-db-code.sh</code> רץ מתוך שורש ה-repository ומחשב את ה-root בצורה יציבה.</li>
+    <li>הסקריפט בודק שקובץ הדוח קיים ושכולל את כל sections הנדרשים.</li>
+    <li>הסקריפט בודק שכל severity levels קיימים: <code>BLOCKER</code>, <code>MAJOR</code>, <code>MINOR</code>, <code>QUESTION</code>.</li>
+    <li>הסקריפט בודק שכללי BLOCKER approval קיימים בדוח.</li>
+    <li>הסקריפט בודק ש-DB source files תחת <code>db/src/</code> הם קובצי <code>.sql</code> או README placeholders.</li>
+    <li>הסקריפט אינו מריץ Docker, אינו מריץ Oracle, ואינו מבצע DDL או DML.</li>
+  </ul>
+
+  <h2>כללי בטיחות שנשמרו</h2>
+  <ul>
+    <li>לא בוצע חיבור לבסיס נתונים ארגוני.</li>
+    <li>לא בוצע חיבור לבסיס נתונים מקומי.</li>
+    <li>לא הופעל Docker.</li>
+    <li>לא בוצעו DDL או DML.</li>
+    <li>לא נוספו secrets או connection strings.</li>
+    <li>לא נוספו קובצי packaging של Goal 011.</li>
+    <li>לא נוסף מימוש פונקציונלי של release-management.</li>
+  </ul>
+
+  <h2>מה לא נעשה בכוונה</h2>
+  <ul>
+    <li>לא בוצעה סקירת runtime מול Oracle.</li>
+    <li>לא נוצר release package.</li>
+    <li>לא נוספו manifest, deployment notes או package output.</li>
+    <li>לא נוצרו אובייקטי DB עסקיים.</li>
+    <li>לא נוספו טבלאות כגון <code>RELEASE_REQUESTS</code> או <code>RELEASE_ITEMS</code>.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh</code></li>
+    <li><code>agw_inspect_git_state --run</code></li>
+    <li><code>agw_start_codex_task --branch codex-cli/goal-010-review-workflow</code></li>
+    <li><code>agw_start_codex_task --branch codex-cli/goal-010-review-workflow --run</code></li>
+    <li><code>git branch --show-current</code></li>
+    <li><code>bash -n scripts/review-db-code.sh</code></li>
+    <li><code>scripts/review-db-code.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>git diff --check | cat</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>agw_review_output --run</code></li>
+  </ul>
+
+  <h2>תוצאות בדיקות</h2>
+  <ul>
+    <li><code>bash -n scripts/review-db-code.sh</code> עבר.</li>
+    <li><code>scripts/review-db-code.sh</code> עבר ובדק את שלד הדוח.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר עם 31 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר עם 31 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+  </ul>
+
+  <h2>מגבלות וסיכונים</h2>
+  <ul>
+    <li>הדוח הוא template/skeleton ואינו אישור release package.</li>
+    <li>Object inventory הוא static בלבד ואינו מבוסס metadata מ-Oracle.</li>
+    <li>Security review הוא שלד static בלבד; בדיקת grants runtime תידרש בהמשך.</li>
+    <li>Packaging approval תלוי ב-Goal 011 וב-review מלא עתידי.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 011 - Add Release Packaging Workflow Skeleton</code>.
+  </p>
+</main>
+</body>
+</html>
