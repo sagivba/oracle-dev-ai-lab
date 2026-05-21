@@ -96,12 +96,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `docs/repository-structure.md`; `specs/001-release-management/`; `specs/001-release-management/tasks/`; `db/`; `db/install/`; `db/src/`; `db/src/tables/`; `db/src/constraints/`; `db/src/indexes/`; `db/src/views/`; `db/src/packages/`; `db/src/triggers/`; `db/src/seed/`; `db/rollback/`; `db/tests/`; `db/tests/sql/`; `db/tests/utplsql/`; `db/review/`; `db/generated/`; `db/dist/`; `tools/`
   - Notes: Goal 004 created the folder-only Oracle lab repository structure and placeholder READMEs. No Oracle SQL implementation was added.
   - Recommended next action: Continue with Goal 005.
-- [PARTIAL] Goal 005 - Add Testing Strategy and Baseline unittest Contracts
+- [DONE] Goal 005 - Add Testing Strategy and Baseline unittest Contracts
   - Goal file: `docs/codex-goals/goal-005-testing-strategy.md`
   - Purpose: Add testing strategy documentation and baseline repository contract tests using `unittest`.
-  - Evidence: `scripts/test.sh` and template tests under `tests/` exist; `docs/testing-strategy.md` and `tests/test_repo_contract.py` are missing.
-  - Notes: Current tests validate the template Flask app, not the Oracle lab repository contract.
-  - Recommended next action: Run Goal 005 after the required docs and repository structure exist.
+  - Evidence: `docs/testing-strategy.md`; `tests/test_repo_contract.py`; `scripts/test.sh`; `scripts/lint.sh`
+  - Notes: Goal 005 adds repository-contract tests with Python `unittest`, keeps `pytest` out of the test stack, preserves the existing quick local unittest entrypoint, and `scripts/test.sh quick` passes when `python` is available through `.venv/bin`.
+  - Recommended next action: Continue with Goal 007.
 - [DONE] Goal 006 - Add Oracle Docker Lab Skeleton
   - Goal file: `docs/codex-goals/goal-006-docker-lab-skeleton.md`
   - Purpose: Add Oracle AI Database 26ai Free Docker skeleton and lab lifecycle scripts.
