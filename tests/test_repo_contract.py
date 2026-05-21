@@ -95,7 +95,11 @@ class TestRepositoryContract(unittest.TestCase):
 
         self.assertIn("@@00_create_lab_users.sql", install_sql)
         self.assertIn("@@01_create_schema.sql", install_sql)
-        self.assertIn("@@../src/tables/lab_smoke_test.sql", install_sql)
+        self.assertIn('define ORACLE_AI_LAB_DB_ROOT = "&5"', install_sql)
+        self.assertIn(
+            "@@&&ORACLE_AI_LAB_DB_ROOT/src/tables/lab_smoke_test.sql",
+            install_sql,
+        )
 
     def test_goal_008_install_creates_required_lab_users(self) -> None:
         users_sql = (ROOT / "db/install/00_create_lab_users.sql").read_text(encoding="utf-8")
@@ -126,6 +130,11 @@ class TestRepositoryContract(unittest.TestCase):
         self.assertIn("install.sql", install_script)
         self.assertIn("oracle-dev-ai-lab-db", install_script)
         self.assertIn("FREEPDB1", install_script)
+        self.assertIn('"$REMOTE_DB_DIR"', install_script)
+        self.assertIn("sqlplus_output_has_error", install_script)
+        self.assertIn("SP2-", install_script)
+        self.assertIn("ORA-", install_script)
+        self.assertIn("PLS-", install_script)
 
     def test_goal_008_smoke_test_runner_targets_local_lab_only(self) -> None:
         run_tests_script = (ROOT / "scripts/run-db-tests.sh").read_text(encoding="utf-8")

@@ -18,6 +18,12 @@ fail() {
   exit 1
 }
 
+sqlplus_output_has_error() {
+  local output="$1"
+
+  [[ "$output" =~ (SP2-|ORA-|PLS-) ]]
+}
+
 load_dotenv_if_present() {
   local env_file="${REPO_ROOT}/.env"
   local line key value
@@ -75,10 +81,26 @@ fi
 docker exec "$CONTAINER_NAME" mkdir -p "$REMOTE_DB_DIR"
 docker cp "${DB_SOURCE_DIR}/." "${CONTAINER_NAME}:${REMOTE_DB_DIR}/"
 
-docker exec -i "$CONTAINER_NAME" sqlplus -L -S \
+set +e
+install_output="$(docker exec -i "$CONTAINER_NAME" sqlplus -L -S \
   "sys/${ORACLE_PWD}@localhost:1521/${ORACLE_PDB} as sysdba" \
   @"${REMOTE_DB_DIR}/install/install.sql" \
   "$AI_APP_OWNER_PWD" \
   "$AI_APP_RUNTIME_PWD" \
   "$AI_APP_READONLY_PWD" \
-  "$AI_REVIEWER_PWD"
+  "$AI_REVIEWER_PWD" \
+  "$REMOTE_DB_DIR" 2>&1)"
+install_status=$?
+set -e
+
+printf '%s\n' "$install_output"
+
+if [[ "$install_status" -ne 0 ]]; then
+  fail "SQLPlus install failed with exit status ${install_status}."
+fi
+
+if sqlplus_output_has_error "$install_output"; then
+  fail "SQLPlus install output contained SP2-, ORA-, or PLS- errors."
+fi
+
+printf 'Oracle AI Lab controlled install completed.\n'
