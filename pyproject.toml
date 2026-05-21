@@ -1,7 +1,7 @@
 [project]
 name = "DEVELOPMENT in Oracle using AI Lab"
 version = "0.1.0"
-description = "AI-friendly Python project template"
+description = "Oracle AI Lab repository with retained Python starter tooling"
 requires-python = ">=3.12"
 dependencies = [
   "Flask>=3.0,<4.0",

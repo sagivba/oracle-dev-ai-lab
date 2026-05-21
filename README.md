@@ -1,246 +1,166 @@
 # DEVELOPMENT in Oracle using AI Lab
 
-AI-friendly Python project template.
+`oracle-dev-ai-lab` is the repository for an isolated Oracle development lab where
+AI/Codex can help develop Oracle database objects from structured specifications,
+run tests and review checks, and eventually produce a release package.
 
-This repository is a reusable template for small-to-medium Python applications developed with:
+This repository is not a generic Python/Flask template project. It still preserves
+useful starter infrastructure from the original template, including Python 3.12+,
+`unittest`, scripts, CI, and optional Flask/Docker app scaffolding, but Oracle AI Lab
+project instructions govern all project work.
 
-- Python 3.12+
-- VS Code / WSL
-- `unittest`
-- optional Docker Compose
-- GitHub Actions CI
-- Codex CLI friendly workflows
-- clear documentation for humans and AI agents
+## Current Status
 
-## Purpose
+This repository is in early identity and planning alignment.
 
-The goal of this template is to provide a clean, predictable starting point for Python projects.
+Implemented so far:
 
-It favors:
+- Oracle AI Lab operating rules in `AGENTS.md`
+- project planning source in `docs/01_Setting-AI-oracle-lab.html`
+- staged Codex goal files in `docs/codex-goals/`
+- a root `TODO.md` baseline
+- retained Python starter package named `oracle_ai_lab`
+- retained `unittest`, lint, CI, and optional Flask/Docker starter tooling
 
-- small, reviewable changes
-- simple architecture
-- deterministic tests
-- minimal dependencies
-- explicit scripts
-- documentation that stays close to the code
-- AI-friendly repository conventions
+Not implemented yet:
 
-## Use this template
+- Oracle Docker lab runtime
+- database schemas or SQL install files
+- DB smoke tests
+- review workflow
+- packaging workflow
+- release-management functional database objects
 
-This repository is intended to be used as a GitHub Template repository.
+Do not treat the retained Flask app or generic Docker files as the final Oracle lab
+implementation. They are starter infrastructure kept until later goals decide how
+they should fit into the lab.
 
-For the full workflow, including:
+## Fixed Project Names
 
-- preparing this repository as a template
-- using `Use this template`
-- creating a new repository from the template
-- cloning the new repository
-- running `scripts/init_from_template.sh`
-- importing the template into an existing local directory
-- understanding when Git creates a new directory
+Use these names exactly unless a later explicit project decision changes them:
 
-Full instructions: [docs/template-usage.md](docs/template-usage.md)
-
-Minimal flow:
-
-```bash
-gh repo create sagivba/my-new-project --template sagivba/DEVELOPMENT in Oracle using AI Lab --private --clone
-cd my-new-project
-scripts/init_from_template.sh my-new-project
+```text
+Project display name: DEVELOPMENT in Oracle using AI Lab
+Repository name:      oracle-dev-ai-lab
+Python package name:  oracle_ai_lab
+Container:            oracle-dev-ai-lab-db
+Volume:               oracle-dev-ai-lab-u01
+Network:              oracle-dev-ai-lab-net
+PDB:                  FREEPDB1
+Oracle version:       Oracle AI Database 26ai Free
 ```
 
-Do not run the initialization script from `src/`. Run it from the project root.
+## Start Here
 
-## Start here
-
-Before making changes, read these files:
+Before making changes, read:
 
 ```text
 AGENTS.md
-.github/CONTRIBUTING.md
+.agents/oracle-ai-lab-codex-planner/SKILL.md
+.agents/oracle-ai-lab-codex-planner/references/project-rules.md
+docs/01_Setting-AI-oracle-lab.html
+TODO.md
 ```
 
-Use:
-
-- `AGENTS.md` for AI agents, Codex CLI, ChatGPT, and other AI-assisted coding workflows.
-- `.github/CONTRIBUTING.md` for human contribution rules, review expectations, testing policy, dependency policy, and documentation expectations.
-
-These two files are part of the template contract. Keep them aligned with the repository structure, commands, and workflow.
-
-## Use this template
-
-This repository is intended to be marked as a GitHub Template repository.
-
-After creating a new repository from this template, run:
-
-```bash
-scripts/init_from_template.sh my-new-project
-```
-
-Or, if you want to choose the Python package name explicitly:
-
-```bash
-scripts/init_from_template.sh "My New Project" --package my_new_project
-```
-
-The initialization script updates:
-
-- project name
-- Python package directory under `src/`
-- imports and package references
-- `README.md`
-- `pyproject.toml`
-- `.env.example`
-- Docker-related project naming references where possible
-
-The script creates this marker file:
+For staged implementation work, follow the goals in:
 
 ```text
-.template-initialized
+docs/codex-goals/GOALS_INDEX.md
 ```
 
-This prevents accidental repeated initialization. A second run will fail unless `--force` is used.
+Run goals in order unless the expected output already exists and passes the stated
+success criteria.
 
-Use `--force` only when you intentionally want to re-run initialization:
+## Development Setup
 
-```bash
-scripts/init_from_template.sh my-new-project --force
-```
-
-## Project structure
-
-```text
-DEVELOPMENT in Oracle using AI Lab-template/
-├── .github/
-│   ├── workflows/
-│   │   └── ci.yml
-│   └── CONTRIBUTING.md
-├── .vscode/
-│   ├── settings.json
-│   ├── launch.json
-│   └── tasks.json
-├── docs/
-│   ├── architecture.md
-│   ├── codex-workflow.md
-│   └── dev-python.md
-├── scripts/
-│   ├── init_from_template.sh
-│   ├── test.sh
-│   ├── lint.sh
-│   └── clean.sh
-├── src/
-│   └── oracle_ai_lab/
-│       ├── __init__.py
-│       ├── app.py
-│       ├── config.py
-│       ├── routes/
-│       ├── services/
-│       ├── model/
-│       └── utils/
-├── tests/
-├── templates/
-├── static/
-├── .env.example
-├── .gitignore
-├── AGENTS.md
-├── Dockerfile
-├── docker-compose.yml
-├── docker-compose.dev.yml
-├── docker-compose.qa.yml
-├── Makefile
-├── README.md
-├── TODO.md
-├── requirements.in
-├── requirements.txt
-└── pyproject.toml
-```
-
-## Architecture
-
-The template uses a simple layered structure:
-
-```text
-routes -> services -> model
-              |
-            utils
-```
-
-Responsibilities:
-
-- `app.py`: application factory and wiring
-- `config.py`: configuration loading
-- `routes/`: HTTP request/response boundary
-- `services/`: application and business logic
-- `model/`: domain models, data structures, model-facing code
-- `utils/`: small generic helpers only
-- `tests/`: `unittest` test coverage
-
-Do not put business logic directly inside route handlers.
-
-For more detail, read:
-
-```text
-docs/architecture.md
-```
-
-## Quick start
-
-### 1. Create and activate a virtual environment
+Create and activate a virtual environment:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-For Conda:
-
-```bash
-conda create -n DEVELOPMENT in Oracle using AI Lab-template python=3.12 -y
-conda activate DEVELOPMENT in Oracle using AI Lab-template
-```
-
-### 2. Install dependencies
+Install dependencies:
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### 3. Create local environment file
+Create local environment overrides:
 
 ```bash
 cp .env.example .env
 ```
 
-The important value is:
+The tracked `.env.example` uses placeholder/non-secret values only.
 
-```text
-PYTHONPATH=src
-```
+## Running Tests
 
-### 4. Run tests
+This project uses `unittest`.
+
+Preferred project command:
 
 ```bash
 scripts/test.sh quick
 ```
 
-or:
+Full local test output:
 
 ```bash
-scripts/test.sh full
+scripts/test.sh full local
 ```
 
-### 5. Run the app
+Equivalent direct command:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+If your shell cannot find `python` but the repository virtual environment exists,
+run:
+
+```bash
+PATH=.venv/bin:$PATH scripts/test.sh quick
+```
+
+## Lint and Formatting
+
+Run lint checks:
+
+```bash
+scripts/lint.sh
+```
+
+If needed with the local virtual environment:
+
+```bash
+PATH=.venv/bin:$PATH scripts/lint.sh
+```
+
+Formatting commands:
+
+```bash
+python -m ruff format src tests
+python -m ruff check --fix src tests
+```
+
+## Retained Python Starter App
+
+The current Python package is:
+
+```text
+src/oracle_ai_lab/
+```
+
+It contains a small Flask starter app with a web page and health endpoint. This is
+retained starter infrastructure only. It is useful for checking Python tooling, CI,
+Docker scaffolding, and `unittest`, but it is not the Oracle database lab runtime.
+
+Run it locally if needed:
 
 ```bash
 PYTHONPATH=src flask --app oracle_ai_lab.app:create_app run --debug
-```
-
-Open:
-
-```text
-http://127.0.0.1:5000
 ```
 
 Health endpoint:
@@ -257,290 +177,85 @@ Expected response:
 }
 ```
 
-## Running tests
+## Docker Status
 
-This project supports running tests either locally or inside Docker.
+Docker files are currently retained starter app infrastructure. They do not yet
+define the Oracle AI Database 26ai Free lab container.
 
-### Local tests
+Do not claim Oracle Docker compatibility until the relevant Docker lab goal is
+implemented and tested.
 
-Use local tests when working in WSL with a dedicated Python environment such as `venv` or Conda.
-
-```bash
-scripts/test.sh quick
-scripts/test.sh full
-```
-
-Equivalent direct command:
-
-```bash
-PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-### Docker Dev tests
-
-Use Docker Dev tests when you want to run the test suite inside the Dev Docker Compose environment.
-
-```bash
-scripts/test.sh quick docker-dev
-scripts/test.sh full docker-dev
-```
-
-### Docker QA tests
-
-Use Docker QA tests when validating the project in a QA-like Docker Compose environment before merging.
-
-```bash
-scripts/test.sh quick docker-qa
-scripts/test.sh full docker-qa
-```
-
-### Test command format
-
-```bash
-scripts/test.sh [quick|full] [local|docker-dev|docker-qa]
-```
-
-Defaults:
-
-```bash
-scripts/test.sh
-```
-
-is equivalent to:
-
-```bash
-scripts/test.sh quick local
-```
-
-### Docker Compose project names
-
-The Docker test targets use project-name based Compose names.
-
-You can override them with environment variables:
-
-```bash
-PROJECT_NAME=oracle_ai_lab scripts/test.sh full docker-dev
-DEV_COMPOSE_PROJECT=oracle_ai_lab_dev scripts/test.sh full docker-dev
-QA_COMPOSE_PROJECT=oracle_ai_lab_qa scripts/test.sh full docker-qa
-```
-
-## Docker
-
-Docker support is optional. The primary local development flow is WSL + VS Code + a dedicated Python environment.
-
-### Start Dev environment
+Starter app Docker commands, if needed:
 
 ```bash
 docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
-```
-
-### Start QA environment
-
-```bash
-docker compose -p oracle_ai_lab_qa -f docker-compose.yml -f docker-compose.qa.yml up -d --build
-```
-
-### Stop Dev environment
-
-```bash
 docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml down
 ```
 
-### Stop QA environment
+## Repository Structure
 
-```bash
-docker compose -p oracle_ai_lab_qa -f docker-compose.yml -f docker-compose.qa.yml down
-```
-
-### View logs
-
-```bash
-docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml logs -f app
-```
-
-## Lint and formatting
-
-Run lint checks:
-
-```bash
-scripts/lint.sh
-```
-
-Format code:
-
-```bash
-python -m ruff format src tests
-python -m ruff check --fix src tests
-```
-
-## Testing policy
-
-This repository uses **unittest**.
-
-Do not introduce `pytest` unless the project explicitly decides to migrate.
-
-Expected test command:
-
-```bash
-PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-Preferred project command:
-
-```bash
-scripts/test.sh full local
-```
-
-Testing rules are also documented in:
+Current important paths:
 
 ```text
 AGENTS.md
-.github/CONTRIBUTING.md
+TODO.md
+docs/
+  01_Setting-AI-oracle-lab.html
+  codex-goals/
+  stages/
+scripts/
+src/oracle_ai_lab/
+tests/
 ```
 
-## VS Code / WSL
-
-Open the repository from WSL:
-
-```bash
-code .
-```
-
-The template includes:
-
-- `.vscode/settings.json`
-- `.vscode/launch.json`
-- `.vscode/tasks.json`
-
-These files configure:
-
-- unittest discovery
-- Flask launch profile
-- test tasks
-- lint task
-- Docker Dev/QA tasks
-
-For more detail, read:
+Target Oracle lab structure is defined in:
 
 ```text
-docs/dev-python.md
+docs/01_Setting-AI-oracle-lab.html
+.agents/oracle-ai-lab-codex-planner/references/project-rules.md
 ```
 
-## GitHub Actions CI
+Do not create the full target structure outside the goal that explicitly asks for it.
 
-The workflow is located at:
+## AI / Codex Workflow
+
+Use branch prefix:
 
 ```text
-.github/workflows/ci.yml
+codex-cli/
 ```
 
-The CI workflow runs:
-
-- dependency installation
-- Ruff lint check
-- Ruff format check
-- unittest discovery
-
-## AI / Codex notes
-
-Read this file before making automated changes:
+For goal-based work, prefer:
 
 ```text
-AGENTS.md
+codex-cli/goal-xxx-short-name
 ```
 
-`AGENTS.md` defines:
+One goal should produce one focused commit.
 
-- architecture boundaries
-- AI/Codex working rules
-- branch naming conventions
-- local and Docker test targets
-- lint expectations
-- dependency rules
-- documentation rules
-- review checklist
-
-Recommended Codex CLI branch prefix:
+Each implementation task must update or create a Hebrew standalone HTML report under:
 
 ```text
-codex-cli/<short-task-name>
+docs/stages/
 ```
 
-Examples:
+## Important Files
 
-```text
-codex-cli/add-health-endpoint
-codex-cli/fix-docker-test-target
-codex-cli/improve-config-loading
-```
-
-For more detail, read:
-
-```text
-docs/codex-workflow.md
-```
-
-## Contributing
-
-Read this file before opening or reviewing pull requests:
-
-```text
-.github/CONTRIBUTING.md
-```
-
-`CONTRIBUTING.md` defines:
-
-- working principles
-- architecture expectations
-- environment rules
-- testing rules
-- dependency rules
-- secrets and configuration policy
-- CI rules
-- documentation rules
-- pull request guidance
-- preferred change style
-- AI-assisted contribution rules
-
-## Recommended workflow after creating a new repo from this template
-
-```bash
-git clone <new-repo-url>
-cd <new-repo>
-
-scripts/init_from_template.sh my-new-project
-
-cp .env.example .env
-
-python -m venv .venv
-source .venv/bin/activate
-
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-
-scripts/test.sh full local
-scripts/lint.sh
-
-git status
-git add .
-git commit -m "Initialize project from template"
-```
-
-Optional Docker validation:
-
-```bash
-PROJECT_NAME=my_new_project scripts/test.sh full docker-dev
-PROJECT_NAME=my_new_project scripts/test.sh full docker-qa
-```
-
-## Important files
-
-- `AGENTS.md`: instructions for AI agents and Codex-style workflows
-- `.github/CONTRIBUTING.md`: human contribution rules and review expectations
-- `docs/dev-python.md`: local Python development guide
-- `docs/architecture.md`: architecture boundaries
-- `docs/codex-workflow.md`: Codex workflow guidance
-- `scripts/init_from_template.sh`: one-time initialization script after creating a new repository from the template
-- `scripts/test.sh`: canonical local and Docker test runner
+- `AGENTS.md`: mandatory repository instructions for Codex and AI-assisted work
+- `.agents/oracle-ai-lab-codex-planner/SKILL.md`: project-specific Codex planning skill
+- `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`: fixed names, safety rules, and target structure
+- `docs/01_Setting-AI-oracle-lab.html`: planning source document
+- `docs/codex-goals/GOALS_INDEX.md`: staged goal sequence
+- `TODO.md`: current repository baseline and goal status
+- `scripts/test.sh`: canonical test runner
 - `scripts/lint.sh`: canonical lint runner
 - `.github/workflows/ci.yml`: CI definition
+
+## Safety Rules
+
+- Do not connect to organizational databases.
+- Do not connect to any Oracle database unless the current goal explicitly requires it.
+- Do not run ad-hoc DDL or DML.
+- Do not add secrets or real credentials.
+- Do not introduce `pytest`.
+- Keep changes small, reviewable, and scoped to the current goal.

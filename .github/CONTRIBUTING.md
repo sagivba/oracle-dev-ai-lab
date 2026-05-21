@@ -2,11 +2,26 @@
 
 ## Purpose
 
-This repository is an AI-friendly Python project template.
+This repository is the Oracle AI Lab project:
+
+```text
+DEVELOPMENT in Oracle using AI Lab
+```
+
+The technical repository name is:
+
+```text
+oracle-dev-ai-lab
+```
 
 Keep it simple, readable, reviewable, and easy for both humans and AI agents to understand.
 
-This template is designed for:
+The repository currently preserves useful starter infrastructure from the original
+Python template, but it is no longer a generic Python/Flask template project.
+Oracle AI Lab instructions in `AGENTS.md`, project rules, `TODO.md`, and the
+planning document govern project work.
+
+The retained starter infrastructure is designed for:
 
 - Python 3.12+
 - WSL-based local development
@@ -18,6 +33,9 @@ This template is designed for:
 - optional Docker Compose support
 - GitHub Actions CI
 - Codex CLI and AI-assisted development workflows
+
+Do not treat the retained Flask app or Docker files as the final Oracle lab
+implementation.
 
 ## Working Principles
 
@@ -183,6 +201,8 @@ Good examples:
 - improve documentation
 - add CI
 - add optional Docker support
+- align Oracle AI Lab documentation
+- add repository contract tests
 - improve VS Code configuration
 
 Avoid mixing unrelated changes in one PR.
