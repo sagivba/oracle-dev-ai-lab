@@ -4,6 +4,15 @@ Instructions for AI agents, Codex CLI, ChatGPT, and other AI-assisted developmen
 
 This repository is an AI-friendly Python project template. The main goal is to keep the project simple, readable, reviewable, and predictable for both humans and automated agents.
 
+## Project-specific Oracle AI Lab instructions
+
+Before starting any task in this repository, Codex MUST read and follow:
+
+- `.agents/oracle-ai-lab-codex-planner/SKILL.md`
+- `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`
+
+If these files conflict with the generic instructions below, the Oracle AI Lab instructions take precedence.
+
 ## Core rules
 
 - Keep changes small and reviewable.
