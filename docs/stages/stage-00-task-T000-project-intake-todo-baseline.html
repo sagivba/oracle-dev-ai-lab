@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 00 - T000 - Project Intake and TODO Baseline</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 00 - T000 - קליטת פרויקט ובסיס TODO</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/T000-project-intake-todo-baseline</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    המשימה ביצעה קליטת מצב בלבד: נקראו מסמכי ההנחיה, נבדק מבנה המאגר, ונוצר
+    בסיס TODO תפעולי שמפריד בין מה שכבר קיים, מה שחלקי, ומה שעדיין חסר.
+    לא מומשה תשתית Docker, לא נוצרו סכמות Oracle, ולא נוספו אובייקטי DB.
+  </p>
+
+  <h2>מה נבדק</h2>
+  <ul>
+    <li>נבדק שמסמך התכנון <code>docs/01_Setting-AI-oracle-lab.html</code> קיים.</li>
+    <li>נבדקו קבצי ההנחיה של Codex ושל פרויקט Oracle AI Lab.</li>
+    <li>נבדקו נתיבי הבסיס הנדרשים: README, AGENTS, docs, specs, db, scripts ו-tools.</li>
+    <li>נבדק האם קיימים scripts לבדיקות.</li>
+    <li>נבדק האם <code>AGENTS.md</code> מפנה למסמך התכנון המחייב.</li>
+  </ul>
+
+  <h2>קבצי מקור שנקראו</h2>
+  <ul>
+    <li><code>AGENTS.md</code></li>
+    <li><code>.agents/oracle-ai-lab-codex-planner/SKILL.md</code></li>
+    <li><code>.agents/oracle-ai-lab-codex-planner/references/project-rules.md</code></li>
+    <li><code>docs/01_Setting-AI-oracle-lab.html</code></li>
+    <li><code>README.md</code></li>
+    <li><code>docs/architecture.md</code></li>
+    <li><code>docs/dev-python.md</code></li>
+    <li><code>docs/codex-workflow.md</code></li>
+    <li><code>scripts/test.sh</code></li>
+    <li><code>Dockerfile</code> ו-<code>docker-compose.yml</code></li>
+    <li>קבצי קוד ובדיקות תחת <code>src/</code> ו-<code>tests/</code></li>
+  </ul>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/stages/stage-00-task-T000-project-intake-todo-baseline.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - הוחלף TODO תבניתי בבסיס TODO לפרויקט Oracle AI Lab.</li>
+    <li><code>AGENTS.md</code> - נוספה הפניה מחייבת למסמך התכנון <code>docs/01_Setting-AI-oracle-lab.html</code>.</li>
+  </ul>
+
+  <h2>מה כבר הושלם במאגר</h2>
+  <ul>
+    <li>קיים מסמך תכנון ראשי: <code>docs/01_Setting-AI-oracle-lab.html</code>.</li>
+    <li>קיימים Skill וכללי פרויקט תחת <code>.agents/oracle-ai-lab-codex-planner/</code>.</li>
+    <li>קיים שלד Python תבניתי עם Flask, בדיקות unittest ופקודות lint/test.</li>
+    <li>קיים <code>scripts/test.sh</code> שמריץ בדיקות unittest עבור התבנית הנוכחית.</li>
+  </ul>
+
+  <h2>מה נשאר פתוח</h2>
+  <ul>
+    <li>מסמכי Stage 0 חסרים: <code>docs/project-charter.md</code>, <code>docs/safety-rules.md</code>, <code>docs/decision-log.md</code>.</li>
+    <li>מבנה <code>db/</code> עבור install, src, tests, review ו-dist עדיין חסר.</li>
+    <li>מבנה <code>specs/001-release-management/</code> עדיין חסר.</li>
+    <li>תיקיית <code>tools/</code> וכלי pipeline עדיין חסרים.</li>
+    <li>קבצי Docker הקיימים הם עבור Flask app תבניתי, לא עבור Oracle AI Database 26ai Free.</li>
+    <li>ה-README עדיין ברובו README של תבנית Python ולא README מיושר לפרויקט Oracle AI Lab.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git status --short | cat</code></li>
+    <li><code>find . -maxdepth 3 -type f | sort | cat</code></li>
+    <li><code>find .agents/oracle-ai-lab-codex-planner -maxdepth 3 -type f | sort | cat</code></li>
+    <li><code>git switch -c codex-cli/T000-project-intake-todo-baseline</code></li>
+    <li><code>find</code>, <code>sed</code>, <code>ls</code>, <code>stat</code>, ו-<code>git branch</code> לצורכי בדיקת מבנה וענף.</li>
+    <li><code>scripts/test.sh quick</code> - נכשל תחילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code> - נכשל תחילה כי <code>python</code> לא נמצא ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> - הורץ כי הסקריפט קיים; בהרצה רגילה נכשל בגלל חסרון <code>python</code> ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> - עבר בהצלחה: 5 בדיקות unittest רצו בהצלחה.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> - עבר בהצלחה: Ruff דיווח שכל הבדיקות עברו ו-16 קבצים כבר מפורמטים.</li>
+  </ul>
+
+  <h2>מה לא הורץ ולמה</h2>
+  <ul>
+    <li>לא הורצו בדיקות Docker משום שהמשימה אינה משנה Docker, וקבצי Docker הקיימים אינם תשתית Oracle Lab DB.</li>
+    <li>לא הורצו בדיקות DB משום שאין עדיין container Oracle, install scripts, schemas או DB test workflow.</li>
+    <li>לא הורצו DDL או DML, בהתאם למגבלות המשימה.</li>
+  </ul>
+
+  <h2>הנחות</h2>
+  <ul>
+    <li>המסמך <code>docs/01_Setting-AI-oracle-lab.html</code> הוא מקור התכנון המחייב בשלב זה.</li>
+    <li>קוד Flask הקיים נחשב תבניתי וחלקי ביחס למטרת Oracle AI Lab, ולא הוסר במשימה זו.</li>
+    <li>יצירת <code>docs/stages/</code> נדרשה כדי לשמור את דוח השלב, ואינה נחשבת מימוש תשתיתי.</li>
+  </ul>
+
+  <h2>מגבלות</h2>
+  <ul>
+    <li>הדוח אינו מאשר תאימות Docker או Oracle DB.</li>
+    <li>הדוח אינו מאשר שה-Infrastructure MVP קיים.</li>
+    <li>הדוח אינו מחליף את מסמכי Stage 0 החסרים.</li>
+  </ul>
+
+  <h2>הצעד הבא המומלץ</h2>
+  <p class="note">
+    הצעד הבא המומלץ הוא T001: יצירת <code>docs/project-charter.md</code>,
+    <code>docs/safety-rules.md</code> ו-<code>docs/decision-log.md</code>.
+    רק לאחר יישור Stage 0 כדאי להתחיל במשימות שלד, Docker, סכמות, התקנה,
+    סקירה, אריזה או פיתוח פונקציונלי.
+  </p>
+</main>
+</body>
+</html>
