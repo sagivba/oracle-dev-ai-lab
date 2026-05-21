@@ -1,11 +1,310 @@
-# TODO
+# TODO - DEVELOPMENT in Oracle using AI Lab
 
-## Initial project tasks
+## Purpose
 
-- [ ] Rename placeholder service/model names if needed.
-- [ ] Confirm Python version.
-- [ ] Confirm Docker usage.
-- [ ] Add project-specific domain logic.
-- [ ] Add meaningful tests for domain logic.
-- [ ] Update README with real project purpose.
-- [ ] Review AGENTS.md for project-specific AI constraints.
+This file is the Stage 0 intake baseline for `oracle-dev-ai-lab`. It records what the
+project is supposed to contain according to `docs/01_Setting-AI-oracle-lab.html`, what
+currently exists in the repository, what is missing, and what should happen next.
+
+This baseline is documentation only. It does not implement Docker, Oracle schemas,
+install scripts, review scripts, package scripts, or functional database objects.
+
+## Status legend
+
+- [DONE] The required item exists and is aligned enough to count as present.
+- [TODO] The required item is missing.
+- [PARTIAL] A generic/template version exists, but it is not yet aligned to Oracle AI Lab.
+- [BLOCKED] The item cannot proceed until a required decision or source file is provided.
+- [NOT_APPLICABLE_YET] The item depends on completion of earlier Infrastructure MVP work.
+
+## Current repository baseline
+
+- [DONE] Repository contains the required project planning document.
+  - Evidence: `docs/01_Setting-AI-oracle-lab.html`
+  - Source: Repository observation; required by this task.
+  - Notes: This document is the current source for project stages, decisions, and expected structure.
+- [DONE] Repository contains the Oracle AI Lab Codex Skill and project rules.
+  - Evidence: `.agents/oracle-ai-lab-codex-planner/SKILL.md`; `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`
+  - Source: Repository observation; AGENTS.md project-specific instructions.
+  - Notes: These files define fixed names, safety rules, branch rules, and stage report requirements.
+- [PARTIAL] Repository contains a generic Python template application.
+  - Evidence: `src/oracle_ai_lab/`, `tests/`, `templates/`, `static/`, `Dockerfile`, `docker-compose.yml`
+  - Source: Repository observation.
+  - Notes: Existing Flask health/welcome code is template infrastructure, not the Oracle DB lab infrastructure described in the planning document.
+- [PARTIAL] Root README exists but still describes a reusable Python project template.
+  - Evidence: `README.md`
+  - Source: Repository observation.
+  - Notes: The title matches the display name, but most content still references template usage and Flask app behavior.
+- [PARTIAL] AGENTS.md exists and includes Oracle AI Lab project instructions.
+  - Evidence: `AGENTS.md`
+  - Source: Repository observation; task requirement.
+  - Notes: Updated in this task to also require reading `docs/01_Setting-AI-oracle-lab.html`.
+- [DONE] Basic Python test script exists.
+  - Evidence: `scripts/test.sh`
+  - Source: Repository observation.
+  - Notes: It runs unittest for the template app; it is not yet the full Oracle lab test workflow.
+- [PARTIAL] Basic lint script exists.
+  - Evidence: `scripts/lint.sh`
+  - Source: Repository observation.
+  - Notes: It checks Python template files only.
+- [TODO] Required Stage 0 project documents are missing.
+  - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, and `docs/decision-log.md` do not exist.
+  - Source: Planning document section 12; project rules required repository structure.
+  - Notes: These are Stage 0 deliverables.
+- [TODO] Required Oracle lab database directories are missing.
+  - Evidence: `db/install/`, `db/src/`, `db/tests/`, `db/review/`, and `db/dist/` do not exist.
+  - Source: Planning document section 7; project rules required repository structure.
+  - Notes: This task intentionally does not create them.
+- [TODO] Required spec directory is missing.
+  - Evidence: `specs/001-release-management/` does not exist.
+  - Source: Planning document sections 7, 9, 10, and 12.
+  - Notes: Functional spec work belongs after the relevant stage is authorized.
+- [TODO] Required tools directory is missing.
+  - Evidence: `tools/` does not exist.
+  - Source: Planning document section 7; project rules required repository structure.
+  - Notes: Spec pipeline tooling should be created in Stage 4, not this intake task.
+
+## Stage 0 - Project Charter and project alignment
+
+- [DONE] Planning source document exists.
+  - Evidence: `docs/01_Setting-AI-oracle-lab.html`
+  - Source: Task prerequisite; planning document sections 1 through 21.
+  - Notes: This task was allowed to proceed because the planning document exists.
+- [DONE] Project Skill and rules exist.
+  - Evidence: `.agents/oracle-ai-lab-codex-planner/SKILL.md`; `.agents/oracle-ai-lab-codex-planner/references/project-rules.md`
+  - Source: AGENTS.md; project rules.
+  - Notes: These files are the required Codex operating context.
+- [PARTIAL] AGENTS.md contains Oracle AI Lab instructions.
+  - Evidence: `AGENTS.md`
+  - Source: Task requirement 3.
+  - Notes: Updated to include the planning document before work.
+- [TODO] Create project charter.
+  - Evidence: `docs/project-charter.md` is missing.
+  - Source: Planning document section 12; Decision 010.
+  - Notes: Stage 0 is mandatory before implementation.
+- [TODO] Create safety rules document.
+  - Evidence: `docs/safety-rules.md` is missing.
+  - Source: Planning document sections 2, 4, 18, and 21.
+  - Notes: Should capture DB safety, no ad-hoc DDL/DML, no secrets, and local Docker-only boundaries.
+- [TODO] Create decision log.
+  - Evidence: `docs/decision-log.md` is missing.
+  - Source: Planning document section 20.
+  - Notes: Decisions 001 through 010 should be recorded.
+- [DONE] Create Stage 0 intake TODO baseline.
+  - Evidence: `TODO.md`
+  - Source: This task.
+  - Notes: This file replaces the generic template TODO with the Oracle AI Lab baseline.
+- [DONE] Create Hebrew HTML report for T000.
+  - Evidence: `docs/stages/stage-00-task-T000-project-intake-todo-baseline.html`
+  - Source: This task; project rules Hebrew HTML stage report requirement.
+  - Notes: Documentation only; no infrastructure implementation.
+
+## Stage 1 - Repo Skeleton
+
+- [PARTIAL] Root repository skeleton exists.
+  - Evidence: `README.md`, `AGENTS.md`, `.env.example`, `.gitignore`, `.github/`, `scripts/`, `src/`, `tests/`
+  - Source: Planning document section 7.
+  - Notes: Present skeleton is the Python template, not yet the required Oracle lab skeleton.
+- [TODO] Align README with Oracle AI Lab scope.
+  - Evidence: `README.md` still describes an AI-friendly Python project template.
+  - Source: Planning document sections 1, 5, 7, and 12.
+  - Notes: Should be done in a focused documentation task.
+- [DONE] Create required `docs/stages/` documentation area.
+  - Evidence: `docs/stages/` created by this task for the T000 report.
+  - Source: Project rules required repository structure.
+  - Notes: Directory now exists because the T000 stage report was added.
+- [TODO] Create required Oracle lab `db/` directory structure.
+  - Evidence: `db/` does not exist.
+  - Source: Planning document section 7; project rules.
+  - Notes: Do not add implementation SQL in the skeleton task unless explicitly authorized.
+- [TODO] Create required `specs/001-release-management/` directory structure.
+  - Evidence: `specs/001-release-management/` does not exist.
+  - Source: Planning document section 7.
+  - Notes: Should include placeholders only when the skeleton/spec task authorizes it.
+- [TODO] Create required `tools/` directory.
+  - Evidence: `tools/` does not exist.
+  - Source: Planning document section 7.
+  - Notes: Tool implementation belongs to Stage 4.
+- [PARTIAL] Tests exist for template app behavior.
+  - Evidence: `tests/test_app.py`, `tests/test_model.py`, `tests/test_services.py`
+  - Source: Repository observation.
+  - Notes: They do not yet validate the Oracle lab repository contract.
+
+## Stage 2 - Docker Lab DB
+
+- [PARTIAL] Generic Docker files exist.
+  - Evidence: `Dockerfile`, `docker-compose.yml`, `docker-compose.dev.yml`, `docker-compose.qa.yml`
+  - Source: Repository observation.
+  - Notes: These define a Flask app container, not Oracle AI Database 26ai Free.
+- [TODO] Define isolated Oracle AI Database 26ai Free Docker service.
+  - Evidence: No Docker configuration for `oracle-dev-ai-lab-db`.
+  - Source: Planning document sections 1, 3, 5, 8, and 16.
+  - Notes: This task intentionally does not create Docker runtime infrastructure.
+- [TODO] Define required Docker resource names.
+  - Evidence: No `oracle-dev-ai-lab-db`, `oracle-dev-ai-lab-u01`, or `oracle-dev-ai-lab-net` runtime configuration exists.
+  - Source: Project rules fixed names; planning document Decision 004.
+  - Notes: Must use exactly the fixed names.
+- [TODO] Create lab lifecycle scripts.
+  - Evidence: `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, and `scripts/lab-restore.sh` are missing.
+  - Source: Planning document section 7; Stage 2 row in section 12.
+  - Notes: Should be implemented only in a Docker lab task.
+
+## Stage 3 - Lab Schemas
+
+- [TODO] Create managed lab user SQL files.
+  - Evidence: `db/install/00_create_lab_users.sql` is missing.
+  - Source: Planning document sections 7 and 8.
+  - Notes: Required users are `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER`.
+- [TODO] Create managed schema SQL files.
+  - Evidence: `db/install/01_create_schema.sql` and `db/install/install.sql` are missing.
+  - Source: Planning document section 7; golden rule.
+  - Notes: All schema changes must be versioned SQL files.
+- [TODO] Create database source directories.
+  - Evidence: `db/src/` does not exist.
+  - Source: Planning document section 7.
+  - Notes: Required categories include tables, constraints, indexes, views, packages, triggers, and seed.
+- [NOT_APPLICABLE_YET] Verify lab users in a database.
+  - Evidence: No Oracle lab container or install workflow exists.
+  - Source: Planning document sections 8, 13, and 16.
+  - Notes: DB verification depends on Stage 2 and schema scripts.
+
+## Stage 4 - Spec Pipeline
+
+- [TODO] Create release-management spec directory.
+  - Evidence: `specs/001-release-management/` is missing.
+  - Source: Planning document sections 6, 7, 9, and 10.
+  - Notes: The first functional use case is release-to-production management.
+- [TODO] Create semantic `spec.html`.
+  - Evidence: `specs/001-release-management/spec.html` is missing.
+  - Source: Planning document section 10.
+  - Notes: Must include required semantic sections and requirement IDs.
+- [TODO] Create generated/derived spec files.
+  - Evidence: `specs/001-release-management/spec.json`, `TODO.md`, and `traceability-matrix.md` are missing.
+  - Source: Planning document section 9.
+  - Notes: Generated artifacts should be traceable to requirements.
+- [TODO] Create task directory and task files.
+  - Evidence: `specs/001-release-management/tasks/` is missing.
+  - Source: Planning document sections 7 and 11.
+  - Notes: Task files should include source requirements, required behavior, and success criteria.
+- [TODO] Create spec pipeline tools.
+  - Evidence: `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py`, and `tools/generate_plsql_skeleton.py` are missing.
+  - Source: Planning document section 7; Stage 4 row in section 12.
+  - Notes: Do not implement tooling in this intake task.
+- [TODO] Add unittest coverage for repository/spec contracts.
+  - Evidence: Existing tests cover template Flask app, model, and service behavior only.
+  - Source: Planning document section 13.
+  - Notes: Future tests should avoid network, secrets, and external DB dependencies unless explicitly scoped.
+
+## Stage 5 - Install/Test Workflow
+
+- [PARTIAL] Generic `scripts/test.sh` exists.
+  - Evidence: `scripts/test.sh`
+  - Source: Repository observation; project rules standard tests.
+  - Notes: It runs unittest locally or inside generic app Docker targets; it does not install or test Oracle DB artifacts.
+- [TODO] Create database install workflow script.
+  - Evidence: `scripts/install-db.sh` is missing.
+  - Source: Planning document sections 5, 7, 12, and 16.
+  - Notes: Must install from managed SQL files only.
+- [TODO] Create database test workflow script.
+  - Evidence: `scripts/run-db-tests.sh` is missing.
+  - Source: Planning document sections 5, 7, 12, and 13.
+  - Notes: Should include smoke tests after DB infrastructure exists.
+- [TODO] Create DB test directories.
+  - Evidence: `db/tests/` does not exist.
+  - Source: Planning document section 7.
+  - Notes: Planned subdirectories include SQL and Python test areas.
+- [TODO] Add minimal smoke object for Infrastructure MVP.
+  - Evidence: No `LAB_SMOKE_TEST` SQL file exists.
+  - Source: Planning document section 5.
+  - Notes: Smoke object is not a business feature.
+- [NOT_APPLICABLE_YET] Run clean install on a lab DB.
+  - Evidence: No Oracle lab container, install scripts, or schema scripts exist.
+  - Source: Planning document sections 13 and 16.
+  - Notes: Depends on Stages 2 and 3.
+
+## Stage 6 - Review Workflow
+
+- [TODO] Create review script.
+  - Evidence: `scripts/review-db-code.sh` is missing.
+  - Source: Planning document sections 7, 12, and 14.
+  - Notes: Review should inspect repository and DB code according to defined severity levels.
+- [TODO] Create review output area.
+  - Evidence: `db/review/` does not exist.
+  - Source: Planning document sections 7 and 14.
+  - Notes: Expected report path is `db/review/review-report.md`.
+- [TODO] Define review report contents.
+  - Evidence: `db/review/review-report.md` is missing.
+  - Source: Planning document section 14.
+  - Notes: Must include spec coverage, object inventory, security review, risks, required fixes, and approval status.
+- [NOT_APPLICABLE_YET] Produce review report without BLOCKER findings.
+  - Evidence: No review workflow or DB artifacts exist.
+  - Source: Planning document sections 14 and 16.
+  - Notes: Depends on installable DB artifacts and review script.
+
+## Stage 7 - Packaging Workflow
+
+- [TODO] Create package script.
+  - Evidence: `scripts/package-release.sh` is missing.
+  - Source: Planning document sections 7, 12, and 15.
+  - Notes: Should create a release package only after install/test/review workflows exist.
+- [TODO] Create package output area.
+  - Evidence: `db/dist/` does not exist.
+  - Source: Planning document sections 7 and 15.
+  - Notes: Expected output pattern is `db/dist/release_001/`.
+- [TODO] Define release package manifest and contents.
+  - Evidence: No `manifest.md`, packaged `install.sql`, `rollback.sql`, reports, or `src/` package output exist.
+  - Source: Planning document section 15.
+  - Notes: Package should include install, rollback, test report, review report, deployment notes, and source files.
+- [NOT_APPLICABLE_YET] Build release package.
+  - Evidence: Packaging script and DB artifacts are missing.
+  - Source: Planning document section 16.
+  - Notes: Depends on Stages 5 and 6.
+
+## Stage 8 - Functional Iterations
+
+- [NOT_APPLICABLE_YET] Implement release-management business tables.
+  - Evidence: Infrastructure MVP is not complete; no `db/src/tables/` exists.
+  - Source: Planning document sections 5, 6, and 17.
+  - Notes: Functional work starts only after Infrastructure MVP completion.
+- [NOT_APPLICABLE_YET] Implement release-management constraints, indexes, and views.
+  - Evidence: Infrastructure MVP is not complete; no DB source structure exists.
+  - Source: Planning document sections 6, 7, and 17.
+  - Notes: Candidate entities include release requests, items, environments, statuses, approvals, and execution log.
+- [NOT_APPLICABLE_YET] Implement release-management PL/SQL packages.
+  - Evidence: Infrastructure MVP is not complete; no `db/src/packages/` exists.
+  - Source: Planning document sections 6, 10, and 17.
+  - Notes: PL/SQL API is not required for the Infrastructure MVP.
+- [NOT_APPLICABLE_YET] Add functional seed data and tests.
+  - Evidence: Infrastructure MVP is not complete; no `db/src/seed/` or `db/tests/` exists.
+  - Source: Planning document sections 6, 7, 13, and 17.
+  - Notes: Functional tests should be traceable to requirement IDs once the spec exists.
+- [NOT_APPLICABLE_YET] Produce functional review and release package.
+  - Evidence: Infrastructure MVP is not complete.
+  - Source: Planning document sections 14, 15, and 17.
+  - Notes: Functional package readiness depends on the infrastructure workflows.
+
+## Open questions
+
+- [TODO] Confirm whether the existing Flask/Python template app should remain in the repository long term.
+  - Evidence: `src/oracle_ai_lab/`, `templates/`, `static/`, and Flask dependencies exist, but first-stage scope is Oracle database objects only.
+  - Source: Planning document section 7; repository observation.
+  - Notes: Do not remove or refactor without an explicit decision.
+- [TODO] Confirm whether generic Docker app files should be retained, replaced, or separated from Oracle DB Docker infrastructure.
+  - Evidence: `Dockerfile` and compose files run a Flask app, not Oracle AI Database 26ai Free.
+  - Source: Planning document sections 3 and 8; repository observation.
+  - Notes: This task does not change Docker files.
+- [TODO] Confirm exact Stage 0 document ownership and approval process.
+  - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, and `docs/decision-log.md` are missing.
+  - Source: Planning document Decision 010.
+  - Notes: Stage 0 is mandatory before implementation.
+- [TODO] Confirm whether generated Python cache and Ruff cache files should be ignored/cleaned in a later housekeeping task.
+  - Evidence: `__pycache__/` and `.ruff_cache/` files are visible in the repository working tree scan.
+  - Source: Repository observation.
+  - Notes: Not changed in this task because it is outside the requested scope.
+
+## Immediate next recommended task
+
+- [TODO] T001 - Create Stage 0 project charter, safety rules, and decision log.
+  - Evidence: Required Stage 0 documents are missing: `docs/project-charter.md`, `docs/safety-rules.md`, and `docs/decision-log.md`.
+  - Source: Planning document section 12; Decision 010; project rules.
+  - Notes: This should happen before Docker, schema, install, review, package, or functional implementation tasks.
