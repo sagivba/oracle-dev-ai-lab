@@ -51,18 +51,18 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `docs/project-charter.md`, `docs/safety-rules.md`, `docs/decision-log.md`, and `docs/repository-structure.md`
   - Source: Planning document section 12; project rules required repository structure.
   - Notes: Governance documents now define scope, safety rules, stable decisions, and current vs target structure.
-- [TODO] Required Oracle lab database directories are missing.
-  - Evidence: `db/install/`, `db/src/`, `db/tests/`, `db/review/`, and `db/dist/` do not exist.
+- [DONE] Required Oracle lab database directories exist.
+  - Evidence: `db/install/`, `db/src/`, `db/src/tables/`, `db/src/constraints/`, `db/src/indexes/`, `db/src/views/`, `db/src/packages/`, `db/src/triggers/`, `db/src/seed/`, `db/rollback/`, `db/tests/sql/`, `db/tests/utplsql/`, `db/review/`, `db/generated/`, and `db/dist/`
   - Source: Planning document section 7; project rules required repository structure.
-  - Notes: This task intentionally does not create them.
-- [TODO] Required spec directory is missing.
-  - Evidence: `specs/001-release-management/` does not exist.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder READMEs; no SQL implementation was added.
+- [DONE] Required spec directory exists.
+  - Evidence: `specs/001-release-management/` and `specs/001-release-management/tasks/`
   - Source: Planning document sections 7, 9, 10, and 12.
-  - Notes: Functional spec work belongs after the relevant stage is authorized.
-- [TODO] Required tools directory is missing.
-  - Evidence: `tools/` does not exist.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder READMEs; functional spec work belongs to later goals.
+- [DONE] Required tools directory exists.
+  - Evidence: `tools/`
   - Source: Planning document section 7; project rules required repository structure.
-  - Notes: Spec pipeline tooling should be created in Stage 4, not this intake task.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder README; tool implementation belongs to later goals.
 
 ## Codex goals execution baseline
 
@@ -90,12 +90,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `AGENTS.md`; `docs/project-charter.md`; `docs/safety-rules.md`; `docs/decision-log.md`; `docs/repository-structure.md`; `docs/codex-workflow.md`
   - Notes: AGENTS.md is aligned with the governance docs and includes strict safety rules, `unittest`, goal ordering, one-goal-per-commit discipline, combined-goal exception, standard checks, and final response requirements.
   - Recommended next action: Continue with Goal 004.
-- [TODO] Goal 004 - Create Oracle Lab Repository Structure
+- [DONE] Goal 004 - Create Oracle Lab Repository Structure
   - Goal file: `docs/codex-goals/goal-004-repository-structure.md`
   - Purpose: Add the Oracle lab folder structure while preserving useful Python template structure.
-  - Evidence: `docs/repository-structure.md` exists; `docs/` and `scripts/` exist, but `specs/001-release-management/tasks/`, `db/install/`, `db/src/`, `db/rollback/`, `db/tests/`, `db/review/`, `db/generated/`, `db/dist/`, and `tools/` are missing.
-  - Notes: This reconciliation task intentionally did not create repository structure artifacts.
-  - Recommended next action: Run Goal 004 only after Goals 001 through 003 are satisfied or explicitly skipped.
+  - Evidence: `docs/repository-structure.md`; `specs/001-release-management/`; `specs/001-release-management/tasks/`; `db/`; `db/install/`; `db/src/`; `db/src/tables/`; `db/src/constraints/`; `db/src/indexes/`; `db/src/views/`; `db/src/packages/`; `db/src/triggers/`; `db/src/seed/`; `db/rollback/`; `db/tests/`; `db/tests/sql/`; `db/tests/utplsql/`; `db/review/`; `db/generated/`; `db/dist/`; `tools/`
+  - Notes: Goal 004 created the folder-only Oracle lab repository structure and placeholder READMEs. No Oracle SQL implementation was added.
+  - Recommended next action: Continue with Goal 005.
 - [PARTIAL] Goal 005 - Add Testing Strategy and Baseline unittest Contracts
   - Goal file: `docs/codex-goals/goal-005-testing-strategy.md`
   - Purpose: Add testing strategy documentation and baseline repository contract tests using `unittest`.
@@ -200,18 +200,18 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `docs/stages/` created by this task for the T000 report.
   - Source: Project rules required repository structure.
   - Notes: Directory now exists because the T000 stage report was added.
-- [TODO] Create required Oracle lab `db/` directory structure.
-  - Evidence: `db/` does not exist.
+- [DONE] Create required Oracle lab `db/` directory structure.
+  - Evidence: `db/`, `db/install/`, `db/src/`, `db/src/tables/`, `db/src/constraints/`, `db/src/indexes/`, `db/src/views/`, `db/src/packages/`, `db/src/triggers/`, `db/src/seed/`, `db/rollback/`, `db/tests/`, `db/tests/sql/`, `db/tests/utplsql/`, `db/review/`, `db/generated/`, and `db/dist/`
   - Source: Planning document section 7; project rules.
-  - Notes: Do not add implementation SQL in the skeleton task unless explicitly authorized.
-- [TODO] Create required `specs/001-release-management/` directory structure.
-  - Evidence: `specs/001-release-management/` does not exist.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder READMEs; no implementation SQL was added.
+- [DONE] Create required `specs/001-release-management/` directory structure.
+  - Evidence: `specs/001-release-management/` and `specs/001-release-management/tasks/`
   - Source: Planning document section 7.
-  - Notes: Should include placeholders only when the skeleton/spec task authorizes it.
-- [TODO] Create required `tools/` directory.
-  - Evidence: `tools/` does not exist.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder READMEs; functional spec content belongs to later goals.
+- [DONE] Create required `tools/` directory.
+  - Evidence: `tools/`
   - Source: Planning document section 7.
-  - Notes: Tool implementation belongs to Stage 4.
+  - Notes: Goal 004 created the folder-only skeleton and placeholder README; tool implementation belongs to later goals.
 - [PARTIAL] Tests exist for template app behavior.
   - Evidence: `tests/test_app.py`, `tests/test_model.py`, `tests/test_services.py`
   - Source: Repository observation.

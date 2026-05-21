@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 04 - Goal 004 - Oracle Lab Repository Structure</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 04 - Goal 004 - יצירת מבנה תיקיות למעבדת Oracle</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-004-repository-structure</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 004 הוסיף את שלד התיקיות החסר למעבדת Oracle תוך שמירה על מבנה ה-Python
+    starter הקיים. נוספו README-ים מצייני-מטרה רק במקומות שנדרשו כדי לשמור
+    תיקיות ריקות ב-Git. לא נוסף מימוש Oracle SQL אמיתי, לא הופעל Oracle DB, לא
+    נוצר חיבור ל-DB, ולא בוצעו DDL או DML.
+  </p>
+
+  <p>
+    תאימות runtime של Docker לא נבדקה ולא נטענה במסגרת משימה זו. המשימה עוסקת
+    במבנה repository בלבד.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>specs/001-release-management/README.md</code></li>
+    <li><code>specs/001-release-management/tasks/README.md</code></li>
+    <li><code>db/README.md</code></li>
+    <li><code>db/install/README.md</code></li>
+    <li><code>db/src/README.md</code></li>
+    <li><code>db/src/tables/README.md</code></li>
+    <li><code>db/src/constraints/README.md</code></li>
+    <li><code>db/src/indexes/README.md</code></li>
+    <li><code>db/src/views/README.md</code></li>
+    <li><code>db/src/packages/README.md</code></li>
+    <li><code>db/src/triggers/README.md</code></li>
+    <li><code>db/src/seed/README.md</code></li>
+    <li><code>db/rollback/README.md</code></li>
+    <li><code>db/tests/README.md</code></li>
+    <li><code>db/tests/sql/README.md</code></li>
+    <li><code>db/tests/utplsql/README.md</code></li>
+    <li><code>db/review/README.md</code></li>
+    <li><code>db/generated/README.md</code></li>
+    <li><code>db/dist/README.md</code></li>
+    <li><code>tools/README.md</code></li>
+    <li><code>docs/stages/stage-04-task-G004-repository-structure.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>docs/repository-structure.md</code> - עודכן כדי להבחין בין starter קיים, governance, שלד Docker מ-Goal 006, ומבנה Goal 004.</li>
+    <li><code>TODO.md</code> - Goal 004 סומן כ-DONE והסטטוס של תיקיות המבנה עודכן בהתאם.</li>
+  </ul>
+
+  <h2>תיקיות שנוצרו</h2>
+  <ul>
+    <li><code>specs/001-release-management/</code></li>
+    <li><code>specs/001-release-management/tasks/</code></li>
+    <li><code>db/</code></li>
+    <li><code>db/install/</code></li>
+    <li><code>db/src/</code></li>
+    <li><code>db/src/tables/</code></li>
+    <li><code>db/src/constraints/</code></li>
+    <li><code>db/src/indexes/</code></li>
+    <li><code>db/src/views/</code></li>
+    <li><code>db/src/packages/</code></li>
+    <li><code>db/src/triggers/</code></li>
+    <li><code>db/src/seed/</code></li>
+    <li><code>db/rollback/</code></li>
+    <li><code>db/tests/</code></li>
+    <li><code>db/tests/sql/</code></li>
+    <li><code>db/tests/utplsql/</code></li>
+    <li><code>db/review/</code></li>
+    <li><code>db/generated/</code></li>
+    <li><code>db/dist/</code></li>
+    <li><code>tools/</code></li>
+  </ul>
+
+  <h2>החלטות שיושמו או נשמרו</h2>
+  <ul>
+    <li>נשמרו קבצי ה-Python starter הקיימים: <code>src/</code>, <code>tests/</code>, <code>static/</code>, <code>templates/</code>, ו-<code>scripts/</code>.</li>
+    <li>נשמר שלד Docker מ-Goal 006 ללא שינוי מהותי.</li>
+    <li>Goal 004 יצר מבנה תיקיות בלבד ולא מימש SQL אמיתי.</li>
+    <li>לא נוצרו schema users, install workflow, smoke object, DB tests, review workflow או packaging workflow.</li>
+    <li>כל placeholder README נכתב כדי לשמור תיקייה ריקה ב-Git ולהסביר את תפקידה העתידי.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>אין לשנות או למחוק את שלד ה-Python starter כל עוד Goal אחר לא מבקש זאת מפורשות.</li>
+    <li>README-ים מצייני-מטרה מספיקים לשמירת תיקיות עתידיות ריקות ב-Git.</li>
+    <li>העבודה אינה דורשת התחברות ל-DB או הפעלת Docker.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch main</code></li>
+    <li><code>git pull --ff-only</code></li>
+    <li><code>git switch codex-cli/goal-004-repository-structure</code></li>
+    <li><code>sed</code> לקריאת <code>AGENTS.md</code>, <code>TODO.md</code>, מסמכי הממשל ו-<code>docs/codex-goals/</code>.</li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו ותוצאות</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה הראשונה כי <code>python</code> לא היה ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה הראשונה כי <code>python</code> לא היה ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה.</li>
+    <li>הרצה ישירה של <code>unittest</code> עם <code>.venv/bin</code> ב-<code>PATH</code> עברה בהצלחה.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו ולמה</h2>
+  <ul>
+    <li>לא הופעל Docker כי המשימה לא עוסקת באימות runtime.</li>
+    <li>לא נוצר חיבור ל-Oracle DB כי המשימה אוסרת זאת ומבצעת רק שינוי מבני.</li>
+    <li>לא הורצו DDL או DML.</li>
+    <li>לא הורצו install, review, packaging או spec pipeline checks משום שהם שייכים ל-Goals מאוחרים יותר.</li>
+  </ul>
+
+  <h2>תוצאות בדיקה</h2>
+  <ul>
+    <li>כל בדיקות Python הקיימות עברו.</li>
+    <li>Lint עבר.</li>
+    <li>מבנה התיקיות נוצר ונשמר באמצעות README placeholders.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>אין עדיין SQL אמיתי ב-<code>db/</code>.</li>
+    <li>אין עדיין install workflow, DB smoke object, review workflow או packaging workflow.</li>
+    <li>אין עדיין spec pipeline או מימוש פונקציונלי ל-release-management.</li>
+    <li>Docker runtime compatibility לא נבדקה ולא נטענה.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 005 - Add Testing Strategy and Baseline unittest Contracts</code>,
+    משום שכעת מבנה התיקיות הבסיסי קיים וניתן להוסיף עליו בדיקות contract בסיסיות
+    ללא מימוש Oracle DB אמיתי.
+  </p>
+</main>
+</body>
+</html>
