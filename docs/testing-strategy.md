@@ -1,0 +1,78 @@
+# Purpose
+
+This document defines the testing strategy for `oracle-dev-ai-lab` at Goal 005.
+It establishes the current Python contract-test layer and separates it from
+future Oracle database test layers.
+
+## 1. Python `unittest` Repository Contract Tests
+
+Repository contract tests are the current automated test layer for the project.
+They use Python `unittest` and the standard library only.
+
+These tests check repository structure, governance files, required scripts, and
+placeholder directories that support later Oracle work.
+
+Rules for this layer:
+
+- Use `unittest`.
+- Do not require `pytest`.
+- Do not require Docker.
+- Do not require Oracle DB access.
+- Do not execute DDL or DML.
+- Keep the tests fast, deterministic, and repository-only.
+
+## 2. Future SQL Smoke Tests
+
+SQL smoke tests are a later Oracle-layer test type. They will eventually cover:
+
+- DB connectivity;
+- install verification;
+- invalid objects;
+- grants;
+- object inventory;
+- smoke object checks.
+
+These tests are not implemented in Goal 005.
+They must not require Oracle DB access in the current goal.
+
+## 3. Future utPLSQL Tests
+
+utPLSQL will be used later for PL/SQL business unit tests in functional
+iterations.
+
+These tests are not implemented in Goal 005.
+They belong to later Oracle functional work after Infrastructure MVP foundations
+exist.
+
+## 4. Test Entry Points
+
+Current supported entry points are:
+
+```text
+scripts/test.sh quick
+scripts/test.sh full
+PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+If the environment requires the virtual environment on `PATH`, use:
+
+```text
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/test.sh full
+PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+## 5. Safety Boundaries
+
+Goal 005 does not:
+
+- start Docker;
+- connect to Oracle;
+- execute DDL;
+- execute DML;
+- claim Docker runtime compatibility;
+- claim Oracle runtime compatibility.
+
+The testing strategy is intentionally staged so that repository contracts come
+first, and Oracle-specific checks arrive only when the controlled lab workflows
+exist.

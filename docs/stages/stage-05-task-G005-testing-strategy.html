@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 05 - Goal 005 - Testing Strategy and Repository Contracts</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: #202124;
+      background: #f6f7f9;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 40px 56px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      line-height: 1.25;
+      color: #111827;
+    }
+    h1 {
+      margin-top: 0;
+      padding-bottom: 14px;
+      border-bottom: 3px solid #334155;
+    }
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #d0d7de;
+    }
+    code {
+      direction: ltr;
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    .meta,
+    .note {
+      padding: 14px 18px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>שלב 05 - Goal 005 - אסטרטגיית בדיקות ו-contract tests ל-repository</h1>
+
+  <section class="meta">
+    <p><strong>פרויקט:</strong> DEVELOPMENT in Oracle using AI Lab</p>
+    <p><strong>Repository:</strong> <code>oracle-dev-ai-lab</code></p>
+    <p><strong>תאריך:</strong> 2026-05-21</p>
+    <p><strong>ענף עבודה:</strong> <code>codex-cli/goal-005-testing-strategy</code></p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 005 הוסיף מסמך אסטרטגיית בדיקות שמפריד בין בדיקות contract של
+    repository, בדיקות SQL עתידיות ו-utPLSQL עתידי. בנוסף נוצרו baseline
+    unittest tests שמאמתים את מבנה המאגר, מסמכי הממשל, תיקיות היעד, והעובדה
+    ש-<code>scripts/test.sh</code> תומך בהרצת unittest מקומית.
+  </p>
+
+  <p>
+    Python tests משתמשים ב-<code>unittest</code> בלבד. <code>pytest</code> לא
+    הוכנס ל-stack. Docker לא הופעל, לא נוצר חיבור ל-Oracle DB, לא בוצעו DDL או
+    DML, ולא נטענה תאימות runtime של Docker או Oracle.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/testing-strategy.md</code></li>
+    <li><code>tests/test_repo_contract.py</code></li>
+    <li><code>docs/stages/stage-05-task-G005-testing-strategy.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - Goal 005 סומן כ-DONE, עם evidence מעודכן והמלצה ל-Goal 007.</li>
+  </ul>
+
+  <h2>החלטות שיושמו או נשמרו</h2>
+  <ul>
+    <li>Python tests נשארו מבוססי <code>unittest</code> בלבד.</li>
+    <li>לא נוספה תלות ב-<code>pytest</code>.</li>
+    <li>האסטרטגיה מבדילה בין contract tests של repository, SQL smoke tests עתידיים ו-utPLSQL עתידי.</li>
+    <li>הבדיקות המאומתות כאן הן repository-only ואינן דורשות Docker או Oracle.</li>
+    <li>הקונבנציה של <code>scripts/test.sh quick</code> נשמרה ללא שינוי מהותי.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>ה-virtualenv המקומי זמין ב-<code>.venv</code>, ולכן יש להשתמש ב-<code>PATH=.venv/bin:$PATH</code> כאשר <code>python</code> אינו ב-<code>PATH</code>.</li>
+    <li>README-ים מצייני-מטרה ותיקיות placeholder שנוצרו ב-Goal 004 מספיקים כדי לאמת את מבנה המאגר בשלב זה.</li>
+    <li>Future SQL smoke tests ו-utPLSQL יבוצעו רק כאשר workflows תשתיתיים מתאימים יתווספו ב-Goals מאוחרים יותר.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <ul>
+    <li><code>git fetch</code></li>
+    <li><code>git switch main</code></li>
+    <li><code>git pull --ff-only</code></li>
+    <li><code>git switch -c codex-cli/goal-005-testing-strategy</code></li>
+    <li><code>sed</code> לקריאת <code>AGENTS.md</code>, <code>TODO.md</code>, מסמכי הממשל, <code>docs/codex-goals/goal-005-testing-strategy.md</code>, <code>scripts/test.sh</code> ו-<code>scripts/lint.sh</code>.</li>
+    <li><code>scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code></li>
+    <li><code>PATH=.venv/bin:$PATH python -m ruff check --fix tests/test_repo_contract.py</code></li>
+    <li><code>PATH=.venv/bin:$PATH python -m ruff format tests/test_repo_contract.py</code></li>
+    <li><code>git diff --check</code></li>
+    <li><code>git diff --cached --check</code></li>
+  </ul>
+
+  <h2>בדיקות שהורצו ותוצאות</h2>
+  <ul>
+    <li><code>scripts/test.sh quick</code> נכשל בהרצה הראשונה כי <code>python</code> לא היה ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר בהצלחה.</li>
+    <li><code>scripts/lint.sh</code> נכשל בהרצה הראשונה כי <code>python</code> לא היה ב-<code>PATH</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר בהצלחה לאחר תיקון import order ו-formatting ב-<code>tests/test_repo_contract.py</code>.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v</code> עבר בהצלחה.</li>
+    <li><code>git diff --check</code> עבר בהצלחה.</li>
+    <li><code>git diff --cached --check</code> עבר בהצלחה.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו ולמה</h2>
+  <ul>
+    <li>Docker לא הופעל ולא נבדק, כי Goal 005 הוא repository-testing בלבד.</li>
+    <li>Oracle DB לא הופעל ולא נבדק, כי לא נדרש חיבור ל-DB בשלב זה.</li>
+    <li>לא בוצעו DDL או DML.</li>
+    <li>לא הורצו SQL smoke tests או utPLSQL אמיתיים, כי אלה layers עתידיים בלבד.</li>
+    <li>לא נוצרו install, review, packaging או spec pipeline artifacts.</li>
+  </ul>
+
+  <h2>תוצאות בדיקה</h2>
+  <ul>
+    <li>כל בדיקות Python הקיימות עברו.</li>
+    <li>אסטרטגיית הבדיקות החדשה מתועדת ב-<code>docs/testing-strategy.md</code>.</li>
+    <li>Baseline repository contract tests קיימים ומאמתים את מבנה המאגר והמסמכים המחייבים.</li>
+    <li><code>pytest</code> לא הוכנס לפרויקט.</li>
+  </ul>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>אין עדיין SQL smoke tests אמיתיים.</li>
+    <li>אין עדיין utPLSQL אמיתי.</li>
+    <li>אין עדיין install workflow, review workflow או packaging workflow.</li>
+    <li>אין עדיין מימוש פונקציונלי של release-management.</li>
+    <li>Docker runtime compatibility ו-Oracle runtime compatibility לא נטענו.</li>
+  </ul>
+
+  <h2>היעד הבא המומלץ</h2>
+  <p class="note">
+    היעד הבא המומלץ הוא <code>Goal 007 - Add Database Install Workflow Skeleton</code>,
+    משום שכעת יש contract tests יציבים ומסמך testing strategy שמסמנים את הגבול
+    בין בדיקות repository לבין workflow תשתיתי של DB.
+  </p>
+</main>
+</body>
+</html>
