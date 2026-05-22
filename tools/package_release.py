@@ -130,14 +130,13 @@ def render_empty_folder_marker(folder: str) -> str:
 
 This marker keeps the `src/{folder}/` release package folder represented in Git.
 Git does not track empty directories, and no managed SQL files exist for this
-object type in this generated package.
-object type in this package.
+object type in this generated release package.
 
 # Package Folder Status
 
 - Object type folder: `src/{folder}/`
 - Managed SQL files: none
-- Scope: skeleton-only packaging contract metadata
+- Scope: release package folder contract metadata
 """
 
 
