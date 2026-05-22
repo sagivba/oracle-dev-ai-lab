@@ -150,6 +150,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `docs/functional-readiness-checklist.md`, `docs/goals-plan.md`, `specs/001-release-management/tasks/README.md`, and `docs/stages/stage-013-functional-iteration-readiness.html`
   - Notes: Goal 013 is governance/readiness documentation only. It blocks real functional DB work until Infrastructure MVP and validation gates are satisfied, and it does not add functional DB objects or runtime behavior.
   - Recommended next action: Create a separate later goal for the first functional iteration, starting from the readiness checklist.
+- [DONE] Goal 014 - Record Local Oracle Lab Runtime Validation
+  - Goal file: `docs/codex-goals/goal-014-record-local-oracle-lab-runtime-validation.md`
+  - Purpose: Record manual local Dev Oracle runtime validation performed after `v0.1.0`.
+  - Evidence: `docs/codex-goals/goal-014-record-local-oracle-lab-runtime-validation.md`, `docs/infrastructure-mvp-closure.md`, `docs/functional-readiness-checklist.md`, `docs/goals-plan.md`, and `docs/stages/stage-014-local-oracle-lab-runtime-validation.html`
+  - Notes: Goal 014 is documentation/governance only. It records clean disposable local lab validation and does not add functional DB objects, change runtime scripts, touch QA, access organizational databases, or commit secrets.
+  - Recommended next action: Merge Goal 014, then create tag `v0.1.1` for `Infrastructure MVP + local Oracle runtime validation baseline`.
 
 ## Stage 0 - Project Charter and project alignment
 

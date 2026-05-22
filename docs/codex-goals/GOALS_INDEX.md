@@ -18,6 +18,7 @@ Run these goals in order. Do not skip a goal unless its output already exists an
 | 011 | `goal-011-packaging-workflow.md` | Add release packaging workflow and manifest structure. |
 | 012 | `goal-012-functional-spec-placeholder.md` | Add release-management functional spec placeholder only. |
 | 013 | `goal-013-functional-iteration-readiness.md` | Add readiness checklist before real functional development. |
+| 014 | `goal-014-record-local-oracle-lab-runtime-validation.md` | Record local Dev Oracle runtime validation evidence. |
 
 Commit recommendation:
 
