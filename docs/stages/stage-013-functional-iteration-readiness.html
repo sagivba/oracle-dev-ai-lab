@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 013 - Functional Iteration Readiness</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code,
+    pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background: #f0f0f0;
+    }
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 013 - רשימת מוכנות לאיטרציה פונקציונלית</h1>
+
+  <h2>פרטי המשימה</h2>
+  <ul>
+    <li><strong>מזהה:</strong> Goal 013</li>
+    <li><strong>שם:</strong> Add Functional Iteration Readiness Checklist</li>
+    <li><strong>תאריך:</strong> 2026-05-22</li>
+    <li><strong>Baseline:</strong> <code>844f7beabd3ad7a25a8981a87cfe6bbf2f1d179d</code></li>
+  </ul>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 013 מוסיף שער מוכנות לפני התחלת פיתוח DB פונקציונלי אמיתי.
+    השער מחייב השלמת Infrastructure MVP, בדיקות, התקנה נקייה, smoke tests,
+    review ללא BLOCKER, אריזה מלאה, כללי AGENTS.md מחמירים, charter מאושר,
+    אסטרטגיית בדיקות מאושרת ומבנה utPLSQL עתידי.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/functional-readiness-checklist.md</code></li>
+    <li><code>docs/goals-plan.md</code></li>
+    <li><code>docs/stages/stage-013-functional-iteration-readiness.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>specs/001-release-management/tasks/README.md</code></li>
+    <li><code>TODO.md</code></li>
+  </ul>
+
+  <h2>החלטות שיושמו</h2>
+  <ul>
+    <li><code>DEC-013</code> - ה-MVP הראשון הוא Infrastructure MVP.</li>
+    <li><code>DEC-014</code> - פיתוח פונקציונלי מתחיל רק לאחר שער מוכנות.</li>
+    <li><code>DEC-018</code> - שינויי DB עתידיים חייבים להיות SQL מנוהל ב-Git.</li>
+    <li><code>DEC-019</code> - אין טענות תאימות ללא בדיקות שעברו בפועל.</li>
+  </ul>
+
+  <h2>הנחות חשובות</h2>
+  <ul>
+    <li>Goal 013 הוא צעד תיעוד וממשל בלבד.</li>
+    <li>ה-branch נוצר מה-baseline המבוקש של GitHub/main.</li>
+    <li>ה-QA worktree אינו חלק משלב היישום ולא נוגעים בו.</li>
+  </ul>
+
+  <h2>מחוץ לתכולה</h2>
+  <ul>
+    <li>לא נוספו טבלאות release-management.</li>
+    <li>לא נוספו constraints, indexes או seed data.</li>
+    <li>לא נוספו SQL tests להתנהגות עסקית אמיתית.</li>
+    <li>לא נוספו PL/SQL packages, package bodies, procedures או functions.</li>
+    <li>לא נוספו views או triggers.</li>
+    <li>לא שונו install, rollback, review, package, Docker או Oracle runtime behavior.</li>
+    <li>לא נוספו REST, ORDS, APEX או UI.</li>
+    <li>לא הייתה גישה לבסיסי נתונים ארגוניים ולא הורץ DDL/DML אד-הוק.</li>
+  </ul>
+
+  <h2>פקודות שהורצו</h2>
+  <pre><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh
+agw_post_merge_sync --run
+agw_status
+git rev-parse HEAD
+git switch -c codex-cli/goal-013-functional-iteration-readiness
+git status --short | cat
+PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+git diff --check | cat
+source tools/ai-git-workflow-tools/scripts/load-agw.sh
+agw_review_output --run</code></pre>
+
+  <h2>בדיקות שהורצו</h2>
+  <ul>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> - עבר, 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> - עבר, 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> - עבר.</li>
+    <li><code>git diff --check | cat</code> - עבר ללא פלט.</li>
+    <li><code>agw_review_output --run</code> - עבר לאחר טעינת AGW.</li>
+  </ul>
+
+  <h2>בדיקות שלא הורצו</h2>
+  <ul>
+    <li>בדיקות Oracle runtime אינן חלק משינוי התיעוד הזה, ולא נטענת ולידציה חדשה מעבר לפקודות שנדרשו למשימה.</li>
+  </ul>
+
+  <h2>תוצאות בדיקה</h2>
+  <p>
+    כל בדיקות ה-repository, ה-lint, בדיקת whitespace ו-AGW review output עברו.
+    לא הורצה ולידציית Oracle runtime חדשה כי Goal 013 הוא שינוי תיעודי בלבד.
+  </p>
+
+  <h2>מגבלות ידועות</h2>
+  <ul>
+    <li>הרשימה היא gate תיעודי; היא אינה מריצה בדיקות בעצמה.</li>
+    <li>האיטרציה הפונקציונלית הראשונה עדיין צריכה goal נפרד ומפורש.</li>
+  </ul>
+
+  <h2>הצעד הבא</h2>
+  <p>
+    ליצור goal נפרד לאיטרציה הפונקציונלית הראשונה רק לאחר שה-readiness gate
+    מאומת ומאושר.
+  </p>
+</main>
+</body>
+</html>
