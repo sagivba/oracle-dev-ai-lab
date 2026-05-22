@@ -138,12 +138,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `scripts/package-release.sh`, `tools/package_release.py`, `db/dist/README.md`, `db/dist/release_001/`, `docs/packaging-workflow.md`, and `tests/test_packaging_contract.py`
   - Notes: Goal 011 remains skeleton-only. It packages managed, versioned repository DB source files into a deterministic `db/dist/release_001/` contract, copies the review report, keeps the package explicitly not approved, and does not add functional release-management DB objects.
   - Recommended next action: Infrastructure MVP closure is documented in `docs/infrastructure-mvp-closure.md`; plan Goal 012 as a separate task without starting it here.
-- [NOT_APPLICABLE_YET] Goal 012 - Add Release Management Functional Spec Placeholder
+- [DONE] Goal 012 - Add Release Management Functional Spec Placeholder
   - Goal file: `docs/codex-goals/goal-012-functional-spec-placeholder.md`
   - Purpose: Add only a placeholder spec for the future release-management use case.
-  - Evidence: `docs/infrastructure-mvp-closure.md` documents Infrastructure MVP skeleton closure; Goal 012 implementation artifacts remain intentionally absent.
-  - Notes: This goal is intentionally functional-scope preparation and was not started by T012.
-  - Recommended next action: Plan Goal 012 explicitly as a separate task before creating any functional placeholder artifacts.
+  - Evidence: `specs/001-release-management/spec.html`, `specs/001-release-management/README.md`, `docs/functional-iterations-plan.md`, `docs/stages/stage-012-functional-spec-placeholder.html`, and refreshed spec traceability artifacts under `specs/001-release-management/`
+  - Notes: Goal 012 is documentation/specification only. Candidate release-management entity names are future planning candidates only; no functional DB objects, PL/SQL, views, triggers, seed data, deployment logic, REST, ORDS, APEX, or UI were added.
+  - Recommended next action: Plan Goal 013 or a separate first functional iteration readiness task before creating any functional DB objects.
 - [NOT_APPLICABLE_YET] Goal 013 - Add Functional Iteration Readiness Checklist
   - Goal file: `docs/codex-goals/goal-013-functional-iteration-readiness.md`
   - Purpose: Add checklist that blocks real functional development until Infrastructure MVP is complete.

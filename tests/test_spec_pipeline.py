@@ -1,4 +1,4 @@
-# Purpose: unittest coverage for the Goal 009 specification pipeline skeleton.
+# Purpose: unittest coverage for the release-management specification pipeline placeholder.
 
 from __future__ import annotations
 
@@ -19,7 +19,10 @@ TASK_PLACEHOLDER = SPEC_DIR / "tasks" / "T001-spec-pipeline-placeholder.md"
 
 
 class TestSpecPipeline(unittest.TestCase):
-    """Validate Goal 009 without network, Docker, Oracle, or external services."""
+    """Validate the release-management specification pipeline placeholder.
+
+    The checks stay local and avoid external services.
+    """
 
     def run_tool(self, *args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -68,7 +71,7 @@ class TestSpecPipeline(unittest.TestCase):
         section_map = {section["id"]: section for section in payload["sections"]}
 
         self.assertFalse(section_map["plsql-api"]["required"])
-        self.assertEqual(section_map["plsql-api"]["optional_for"], "Infrastructure MVP")
+        self.assertEqual(section_map["plsql-api"]["optional_for"], "Goal 012 placeholder")
 
     def test_tools_support_help(self) -> None:
         for tool in [
@@ -107,21 +110,51 @@ class TestSpecPipeline(unittest.TestCase):
             self.assertEqual(second_result.returncode, 0, second_result.stderr)
             self.assertEqual(first.read_text(encoding="utf-8"), second.read_text(encoding="utf-8"))
 
-    def test_goal_009_does_not_generate_business_db_objects(self) -> None:
-        checked_paths = [
-            SPEC_HTML,
-            SPEC_JSON,
-            SPEC_TODO,
-            TRACEABILITY,
-            TASK_PLACEHOLDER,
+    def test_goal_012_documents_candidate_entities_as_future_scope_only(self) -> None:
+        html = SPEC_HTML.read_text(encoding="utf-8")
+        candidate_entities = [
+            "RELEASE_REQUESTS",
+            "RELEASE_ITEMS",
+            "RELEASE_ENVIRONMENTS",
+            "RELEASE_STATUSES",
+            "RELEASE_APPROVALS",
+            "RELEASE_EXECUTION_LOG",
         ]
-        forbidden_tokens = ["RELEASE_REQUESTS", "RELEASE_ITEMS"]
 
-        for path in checked_paths:
-            content = path.read_text(encoding="utf-8")
-            for token in forbidden_tokens:
-                with self.subTest(path=path, token=token):
-                    self.assertNotIn(token, content)
+        self.assertIn("planning candidates only", html)
+        self.assertIn("must not be created", html)
+
+        for token in candidate_entities:
+            with self.subTest(token=token):
+                self.assertIn(token, html)
+
+    def test_candidate_entities_are_not_implemented_as_db_sources(self) -> None:
+        checked_paths = [
+            ROOT / "db" / "src" / "tables",
+            ROOT / "db" / "src" / "constraints",
+            ROOT / "db" / "src" / "indexes",
+            ROOT / "db" / "src" / "views",
+            ROOT / "db" / "src" / "packages",
+            ROOT / "db" / "src" / "triggers",
+            ROOT / "db" / "src" / "seed",
+        ]
+        candidate_entities = [
+            "RELEASE_REQUESTS",
+            "RELEASE_ITEMS",
+            "RELEASE_ENVIRONMENTS",
+            "RELEASE_STATUSES",
+            "RELEASE_APPROVALS",
+            "RELEASE_EXECUTION_LOG",
+        ]
+
+        for directory in checked_paths:
+            for path in directory.rglob("*"):
+                if not path.is_file():
+                    continue
+                content = path.read_text(encoding="utf-8")
+                for token in candidate_entities:
+                    with self.subTest(path=path, token=token):
+                        self.assertNotIn(token, content)
 
 
 if __name__ == "__main__":
