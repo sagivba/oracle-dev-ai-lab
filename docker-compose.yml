@@ -1,4 +1,7 @@
 services:
+  # Retained Python/Flask starter service.
+  # This service is kept only as starter Python/test/CI infrastructure.
+  # It is not part of the Oracle database lab runtime or functional DB iterations.
   app:
     build:
       context: .
