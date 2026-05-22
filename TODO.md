@@ -144,12 +144,12 @@ install scripts, review scripts, package scripts, or functional database objects
   - Evidence: `specs/001-release-management/spec.html`, `specs/001-release-management/README.md`, `docs/functional-iterations-plan.md`, `docs/stages/stage-012-functional-spec-placeholder.html`, and refreshed spec traceability artifacts under `specs/001-release-management/`
   - Notes: Goal 012 is documentation/specification only. Candidate release-management entity names are future planning candidates only; no functional DB objects, PL/SQL, views, triggers, seed data, deployment logic, REST, ORDS, APEX, or UI were added.
   - Recommended next action: Plan Goal 013 or a separate first functional iteration readiness task before creating any functional DB objects.
-- [NOT_APPLICABLE_YET] Goal 013 - Add Functional Iteration Readiness Checklist
+- [DONE] Goal 013 - Add Functional Iteration Readiness Checklist
   - Goal file: `docs/codex-goals/goal-013-functional-iteration-readiness.md`
   - Purpose: Add checklist that blocks real functional development until Infrastructure MVP is complete.
-  - Evidence: `docs/functional-readiness-checklist.md`, `docs/goals-plan.md`, and `specs/001-release-management/tasks/README.md` are missing; Infrastructure MVP is not complete.
-  - Notes: Functional readiness depends on Docker, install, smoke tests, review, packaging, and approved project documentation.
-  - Recommended next action: Do not run yet; revisit after Infrastructure MVP workflows exist.
+  - Evidence: `docs/functional-readiness-checklist.md`, `docs/goals-plan.md`, `specs/001-release-management/tasks/README.md`, and `docs/stages/stage-013-functional-iteration-readiness.html`
+  - Notes: Goal 013 is governance/readiness documentation only. It blocks real functional DB work until Infrastructure MVP and validation gates are satisfied, and it does not add functional DB objects or runtime behavior.
+  - Recommended next action: Create a separate later goal for the first functional iteration, starting from the readiness checklist.
 
 ## Stage 0 - Project Charter and project alignment
 
