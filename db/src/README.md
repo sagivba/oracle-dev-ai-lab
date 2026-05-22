@@ -1,7 +1,7 @@
 # Purpose
 
-Goal 004 creates this directory as the root container for Oracle source files
-that will arrive in later goals.
+This directory stores versioned Oracle database source files used by the lab
+install, review, test, and packaging workflows.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Source files under this tree are repository source artifacts. They may change
+the local lab database only when installed through the managed install workflow.

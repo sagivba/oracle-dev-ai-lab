@@ -1,8 +1,8 @@
 # Purpose
 
-These Goal 011 deployment notes describe the skeleton release package boundaries
-for `oracle-dev-ai-lab`. They are generated from repository files only and do
-not contain functional deployment instructions.
+These deployment notes describe the release package boundaries for
+`oracle-dev-ai-lab`. They are generated from repository files only and do not
+contain functional deployment instructions.
 
 # Deployment Notes
 

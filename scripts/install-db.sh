@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Purpose: Official Goal 007/008 shell entry point for the controlled local DB install.
+# Purpose: Official shell entry point for the controlled local DB install.
 # It targets only the local oracle-dev-ai-lab-db container and runs the managed
 # SQL entry point db/install/install.sql. It does not contain inline DDL or DML.
 

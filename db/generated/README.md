@@ -1,6 +1,7 @@
 # Purpose
 
-Goal 004 reserves this directory for future generated database artifacts.
+This directory stores generated database artifacts that are useful for review or
+packaging but are not the authoritative source of database changes.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Generated artifacts must be reproducible from tracked source files. Do not use
+this directory for secrets, local environment files, or unmanaged DB changes.

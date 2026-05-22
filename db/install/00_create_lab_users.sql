@@ -1,4 +1,4 @@
--- Purpose: Goal 007/008 controlled local Oracle AI Lab user/schema setup.
+-- Purpose: Controlled local Oracle AI Lab user and schema setup.
 -- This managed SQL file creates or updates only the local lab users required by
 -- the install workflow. It stores no secrets and receives passwords from
 -- db/install/install.sql substitution variables.
@@ -91,4 +91,4 @@ grant create session to AI_REVIEWER;
 
 drop procedure ORACLE_AI_LAB_ENSURE_USER;
 
-prompt Oracle AI Lab local users are ready for Goal 008 infrastructure install.
+prompt Oracle AI Lab local users are ready for infrastructure install.

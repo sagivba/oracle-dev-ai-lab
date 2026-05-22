@@ -1,6 +1,7 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle trigger definitions.
+This directory stores versioned Oracle trigger source files for the lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Trigger files are source artifacts for managed install, review, and package
+workflows. Triggers should be added only when explicitly justified by functional
+requirements.

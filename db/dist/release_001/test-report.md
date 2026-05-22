@@ -1,8 +1,9 @@
 # Purpose
 
-This Goal 011 placeholder records the release package test-report contract. It
+This generated test report records the release package validation contract. It
 does not claim Oracle runtime validation, Docker validation, install validation,
-or functional release-management validation.
+or functional release-management validation unless those checks are recorded by
+the current release process.
 
 # Test Report
 

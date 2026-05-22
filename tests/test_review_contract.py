@@ -1,4 +1,4 @@
-# Purpose: unittest contract coverage for the Goal 010 review workflow skeleton.
+# Purpose: unittest contract coverage for the repository review workflow.
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ class TestReviewWorkflowContract(unittest.TestCase):
         self.assertIn("must not connect to organizational databases", doc)
         self.assertIn("must not execute ad-hoc DDL or DML", doc)
         self.assertIn("oracle-dev-ai-lab-db", doc)
-        self.assertIn("Goal 011", doc)
+        self.assertIn("release packaging", doc)
 
     def test_review_script_uses_local_project_paths_and_managed_files(self) -> None:
         script = SCRIPT.read_text(encoding="utf-8")

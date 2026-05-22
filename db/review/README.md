@@ -1,6 +1,7 @@
 # Purpose
 
-Goal 004 reserves this directory for future database review output.
+This directory stores database review templates and review output for the Oracle
+lab workflow.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Review artifacts summarize static repository checks and future runtime review
+evidence. They do not approve release packaging when BLOCKER findings exist.

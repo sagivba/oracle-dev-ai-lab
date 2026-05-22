@@ -1,4 +1,4 @@
--- Purpose: Goal 008 SQL smoke test for local lab database connectivity.
+-- Purpose: SQL smoke test for local lab database connectivity.
 -- This file is read-only and exists to fail clearly if the managed SQL test
 -- runner cannot connect to the local Oracle lab PDB.
 

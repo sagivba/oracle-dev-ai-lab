@@ -1,7 +1,8 @@
 # Purpose
 
-Goal 004 creates this directory as the root of the Oracle lab database
-workspace.
+This directory is the root of the Oracle lab database workspace.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+It stores managed install files, versioned database source, rollback references,
+SQL and future utPLSQL tests, review output, generated working artifacts, and
+release package output. Database changes must be represented here as versioned
+repository files and executed only through official scripts.

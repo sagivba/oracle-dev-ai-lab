@@ -1,4 +1,4 @@
--- Purpose: Goal 008 infrastructure smoke object for the Oracle AI Lab.
+-- Purpose: Infrastructure smoke table for the Oracle AI Lab.
 -- LAB_SMOKE_TEST is not release-management functionality. It exists only to
 -- prove that managed install, SQL smoke tests, review, and packaging can target a
 -- versioned DB object.

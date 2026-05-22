@@ -1,6 +1,6 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle table definitions.
+This directory stores versioned Oracle table source files for the lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Table files are installed only through the managed DB install workflow and are
+included in review and package output as source artifacts.

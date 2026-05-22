@@ -2,7 +2,8 @@
 
 This marker keeps the `src/packages/` release package folder represented in Git.
 Git does not track empty directories, and no managed SQL files exist for this
-object type in the Goal 011 skeleton package.
+object type in this generated package.
+object type in this package.
 
 # Package Folder Status
 

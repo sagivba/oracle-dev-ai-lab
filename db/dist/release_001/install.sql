@@ -1,4 +1,4 @@
--- Purpose: Goal 011 generated release package install entry point skeleton.
+-- Purpose: Generated release package install entry point.
 -- It documents package contents only and intentionally does not execute DDL
 -- or DML. Functional deployment logic belongs to later approved goals.
 

@@ -1,7 +1,8 @@
 # Purpose
 
-Goal 004 creates this directory as the placeholder home for future repository
-tooling.
+This directory stores repository-local tooling for specification processing,
+validation, review support, packaging, and other Oracle AI Lab workflows.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Tools in this directory must stay deterministic, local to the repository, and
+safe by default. They must not embed secrets, contact organizational databases,
+or perform ad-hoc DDL/DML outside official workflows.

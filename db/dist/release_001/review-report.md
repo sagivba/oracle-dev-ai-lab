@@ -1,9 +1,10 @@
 # Purpose
 
-This Goal 010 review report template defines the required review sections,
-severity levels, and approval rule for `oracle-dev-ai-lab`. It is a skeleton
-artifact only and does not claim that full DB code review, Oracle runtime
-validation, packaging readiness, or release approval has passed.
+This review report template defines the required review sections, severity
+levels, and approval rule for `oracle-dev-ai-lab`. It is a repository review
+artifact and does not claim that full DB code review, Oracle runtime validation,
+packaging readiness, or release approval has passed unless concrete review
+evidence is recorded.
 
 # Review Report
 
@@ -22,9 +23,9 @@ A release package is not approved if any BLOCKER exists.
 
 Status: SKELETON
 
-The review workflow checks that the Goal 009 specification pipeline artifacts
-exist. Future review iterations will compare DB source files and tasks against
-specific requirement and acceptance criteria identifiers.
+The review workflow checks that the specification pipeline artifacts exist.
+Future review iterations will compare DB source files and tasks against specific
+requirement and acceptance criteria identifiers.
 
 ## Infrastructure decisions coverage
 
@@ -40,23 +41,23 @@ Status: SKELETON
 
 Current static inventory expects versioned DB source files under `db/src/`.
 Runtime object inventory through Oracle metadata is intentionally not claimed in
-Goal 010.
+this static review template.
 
 ## Data model review
 
 Status: SKELETON
 
-Goal 010 does not add functional release-management data model objects. Later
-functional iterations must review tables, constraints, indexes, seed data, and
-traceability to requirements.
+This template does not add or approve functional release-management data model
+objects. Functional iterations must review tables, constraints, indexes, seed
+data, and traceability to requirements.
 
 ## PL/SQL review
 
 Status: SKELETON
 
-Goal 010 does not add functional PL/SQL packages, package bodies, procedures, or
-functions. Later functional iterations must review PL/SQL contracts, error
-handling, privileges, and test coverage.
+This template does not add or approve functional PL/SQL packages, package
+bodies, procedures, or functions. Functional iterations must review PL/SQL
+contracts, error handling, privileges, and test coverage.
 
 ## Security review
 
@@ -72,15 +73,15 @@ Status: SKELETON
 
 Deployment review is limited to static checks that install/test/review scripts
 use official managed repository files. Release packaging is not implemented by
-Goal 010.
+this review template.
 
 ## Risks
 
-- QUESTION: Runtime Oracle review diagnostics were not run in Goal 010.
+- QUESTION: Runtime Oracle review diagnostics are not part of this static review template.
 - QUESTION: Full spec-to-object traceability remains future work until real
   functional objects exist.
-- QUESTION: Packaging approval remains blocked until the Goal 011 packaging
-  workflow exists.
+- QUESTION: Packaging approval remains blocked until release package evidence is
+  generated and reviewed.
 
 ## Required fixes
 
@@ -100,4 +101,4 @@ Goal 010.
 Status: NOT APPROVED FOR RELEASE PACKAGING.
 
 This template does not approve a release package. A release package is not
-approved if any BLOCKER exists, and packaging belongs to Goal 011.
+approved if any BLOCKER exists.

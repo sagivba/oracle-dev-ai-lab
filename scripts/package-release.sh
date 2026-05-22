@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Purpose: Goal 011 release packaging workflow entry point for Oracle AI Lab.
+# Purpose: Release packaging workflow entry point for Oracle AI Lab.
 # It runs the repository-local Python packaging helper only; it does not connect
 # to Oracle, run Docker, access organizational databases, or execute DDL/DML.
 

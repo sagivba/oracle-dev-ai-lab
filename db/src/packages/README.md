@@ -1,7 +1,8 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle package specifications and
-bodies.
+This directory stores versioned Oracle package specifications and package bodies
+for future lab database logic.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Package files are source artifacts for managed install, review, utPLSQL testing,
+and package output. They must be added only when functional scope requires
+PL/SQL logic.

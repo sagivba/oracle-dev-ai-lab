@@ -96,7 +96,7 @@ def write_outputs(payload: dict[str, Any], tasks_dir: Path, traceability_path: P
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate deterministic Goal 012 task and traceability placeholders."
+        description="Generate deterministic task and traceability placeholders."
     )
     parser.add_argument("--json", type=Path, default=DEFAULT_JSON, help="Path to spec.json.")
     parser.add_argument(

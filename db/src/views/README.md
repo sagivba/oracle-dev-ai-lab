@@ -1,6 +1,6 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle view definitions.
+This directory stores versioned Oracle view source files for the lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+View files are source artifacts for managed install, review, and package
+workflows. They must not be applied through ad-hoc DDL.

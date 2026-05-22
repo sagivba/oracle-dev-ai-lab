@@ -1,6 +1,6 @@
 # Purpose
 
-Goal 004 reserves this directory for future utPLSQL-based database tests.
+This directory stores future utPLSQL tests for PL/SQL logic in the lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+utPLSQL tests belong to functional iterations that introduce PL/SQL packages or
+procedural logic. They must run only against the local disposable lab database.
