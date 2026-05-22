@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>Stage 15 - שיפור תיעוד מסירה לפני פיתוח פונקציונלי</title>
+  <style>
+    body {
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      line-height: 1.65;
+      margin: 0;
+      background: #f6f7f9;
+      color: #1f2933;
+    }
+    main {
+      max-width: 980px;
+      margin: 32px auto;
+      background: #ffffff;
+      padding: 32px 40px;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+    }
+    h1, h2 {
+      color: #0f172a;
+    }
+    h1 {
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 14px;
+    }
+    h2 {
+      margin-top: 30px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 8px;
+    }
+    code, pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    ul {
+      padding-right: 24px;
+    }
+    li {
+      margin: 7px 0;
+    }
+    .note {
+      background: #eef6ff;
+      border-right: 5px solid #2563eb;
+      padding: 14px 16px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 15 - שיפור תיעוד מסירה לפני פיתוח פונקציונלי</h1>
+
+  <section class="note">
+    <p>
+      שלב זה בוצע כמשימת תיעוד ידנית על הענף
+      <code>manual/T015-handoff-documentation-cleanup</code>.
+      מטרתו להקטין בלבול עבור מפתח או AI Agent לפני תחילת הפיתוח הפונקציונלי הראשון.
+    </p>
+  </section>
+
+  <h2>סיכום</h2>
+  <p>
+    עודכן תיעוד המסירה של הפרויקט כך שהמצב הנוכחי, מבנה התיעוד, גבולות תיקיית
+    <code>docs/stages/</code>, סטטוס Flask starter, וגבולות ה-CI יהיו ברורים יותר.
+  </p>
+  <p>
+    לא בוצעו שינויי SQL, לא שונה runtime behavior, ולא נוספו אובייקטים פונקציונליים.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/README.md</code> - אינדקס תיעוד חי והיסטורי.</li>
+    <li><code>docs/stages/README.md</code> - הסבר שתיקיית stages היא תיעוד היסטורי.</li>
+    <li><code>docs/stages/stage-15-task-T015-handoff-documentation-cleanup.html</code> - דוח שלב זה.</li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>TODO.md</code> - עודכן כ-ledger נוכחי של מצב הפרויקט והמשימה הבאה.</li>
+    <li><code>docker-compose.yml</code> - נוספה הערה שמבהירה ששירות <code>app</code> הוא retained Flask starter ולא חלק מ-runtime Oracle lab.</li>
+  </ul>
+
+  <h2>החלטות שתועדו</h2>
+  <ul>
+    <li>ה-Infrastructure MVP הושלם, והשלב הבא הוא הכנה לפיתוח Oracle DB פונקציונלי ראשון.</li>
+    <li>תיקיית <code>docs/stages/</code> היא היסטורית ואינה מקור הוראות עבודה פעילות.</li>
+    <li>Flask starter מוגדר כ-<code>retained-but-frozen</code>.</li>
+    <li>CI ירוק אינו מהווה הוכחה ל-Oracle runtime validation; בדיקת DB נשארת באחריות המעבדה המקומית.</li>
+  </ul>
+
+  <h2>הערות יישום</h2>
+  <p>
+    השינוי נועד לשפר handoff למפתח או AI Agent. לכן הוא מתמקד בתיעוד, בניווט,
+    ובצמצום ambiguity בין תיעוד חי לבין תיעוד היסטורי.
+  </p>
+
+  <h2>פקודות להרצה בסוף לפני PR</h2>
+  <ul>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code></li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code></li>
+    <li><code>scripts/review-db-code.sh</code></li>
+    <li><code>git diff --check | cat</code></li>
+    <li><code>agw_review_output --run</code></li>
+  </ul>
+
+  <h2>בדיקות</h2>
+  <p>
+    הבדיקות מיועדות להרצה לאחר commit ו-push, לפני פתיחת PR, בהתאם להחלטת העבודה הידנית במשימה זו.
+  </p>
+
+  <h2>מגבלות</h2>
+  <ul>
+    <li>לא הוספו אובייקטים פונקציונליים לבסיס הנתונים.</li>
+    <li>לא שונה תהליך התקנה, בדיקה, סקירה או packaging.</li>
+    <li>לא בוצעה Oracle runtime validation כחלק מהשלב הזה.</li>
+  </ul>
+
+  <h2>השלב הבא</h2>
+  <p>
+    לאחר מיזוג משימת ה-handoff, ניתן להתחיל לתכנן את ה-functional Oracle DB iteration הראשון,
+    תוך הסתמכות על <code>docs/functional-readiness-checklist.md</code> ועל ה-spec הרלוונטי.
+  </p>
+</main>
+</body>
+</html>
