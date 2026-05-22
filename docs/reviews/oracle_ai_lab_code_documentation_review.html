@@ -1,0 +1,2302 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>סקירת תיעוד קבצי קוד - oracle-dev-ai-lab</title>
+  <style>
+    body { margin:0; background:#f5f6f8; color:#1f2328; font-family: Arial, Helvetica, sans-serif; line-height:1.65; }
+    main { max-width:1200px; margin:0 auto; background:white; padding:34px 46px 70px; box-shadow:0 0 20px rgba(0,0,0,.08); }
+    h1,h2,h3 { line-height:1.25; color:#111827; }
+    h1 { border-bottom:4px solid #111827; padding-bottom:14px; margin-bottom:18px; }
+    h2 { margin-top:44px; padding-bottom:8px; border-bottom:1px solid #cfd6df; }
+    h3 { margin-top:28px; }
+    .meta, .box { background:#f1f5f9; border:1px solid #cbd5e1; border-radius:10px; padding:14px 18px; margin:18px 0; }
+    .warn { background:#fff7ed; border-color:#fdba74; }
+    .ok { background:#ecfdf5; border-color:#86efac; }
+    .priority { display:inline-block; padding:2px 8px; border-radius:999px; background:#e5e7eb; font-size:.92em; }
+    .p0 { background:#fee2e2; } .p1 { background:#ffedd5; } .p2 { background:#e0f2fe; } .p3 { background:#f3f4f6; }
+    code.path { direction:ltr; unicode-bidi:embed; background:#eef2ff; padding:2px 6px; border-radius:6px; }
+    pre { direction:ltr; text-align:left; unicode-bidi:embed; overflow-x:auto; white-space:pre-wrap; background:#0f172a; color:#e5e7eb; padding:14px 16px; border-radius:10px; border:1px solid #111827; }
+    table { border-collapse:collapse; width:100%; margin:16px 0; }
+    th,td { border:1px solid #d1d5db; padding:8px 10px; vertical-align:top; }
+    th { background:#f3f4f6; }
+    .file-card { border:1px solid #d1d5db; border-radius:12px; padding:16px 18px; margin:18px 0; background:#fff; }
+    .file-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+    .file-head h3 { margin:0; direction:ltr; text-align:left; }
+    .small { color:#4b5563; font-size:.94em; }
+    ul { padding-right:24px; }
+    .toc a { text-decoration:none; color:#1d4ed8; }
+    .ltr { direction:ltr; text-align:left; unicode-bidi:embed; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>סקירת תיעוד קבצי קוד - oracle-dev-ai-lab</h1>
+  <section class="meta">
+    <p><strong>Repository:</strong> <span class="ltr">sagivba/oracle-dev-ai-lab</span></p>
+    <p><strong>Branch:</strong> <span class="ltr">main</span></p>
+    <p><strong>תאריך סקירה:</strong> 2026-05-22</p>
+    <p><strong>מטרת המסמך:</strong> להגדיר, קובץ-קובץ, כיצד לשנות את התיעוד החי בקבצי הקוד והתצורה כך שיסביר את מהות הקובץ ותפקידו במעבדת Oracle, ולא את ה-Goal/Stage ההיסטורי שבו הקובץ נוצר.</p>
+  </section>
+
+  <section class="box warn">
+    <h2>תחום הסקירה</h2>
+    <p>הסקירה מתמקדת בקבצי קוד, תצורה, SQL, scripts, tools, tests, קבצי שורש תפעוליים, וקבצי תיעוד חיים שאינם תחת <code>docs/</code>. בהתאם להנחיה, לא נסקרו מסמכי <code>docs/**</code>, מסמכי Goals היסטוריים, stage reports, או קבצי task היסטוריים תחת specs.</p>
+    <p>המטרה כאן אינה לשנות התנהגות. המטרה היא להכין תוכנית תיעוד מדויקת עבור Codex.</p>
+  </section>
+
+  <h2>סיכום מנהלים</h2>
+  <p>הבעיה העיקרית אינה חוסר תיעוד, אלא סוג התיעוד. רוב הקבצים שנוצרו לאורך Goals מכילים headers טובים מבחינת משמעת, אך הם מספרים באיזה שלב נוצר הקובץ במקום להסביר מה הקובץ עושה עכשיו בתוך מערכת המעבדה. עבור AI, זה מסוכן במיוחד: ניסוח כמו <span class="ltr">Goal 008</span> או <span class="ltr">Goal 011 skeleton</span> יכול לגרום ל-Codex להבין שהקובץ זמני, חסר, או קשור למסלול פיתוח שכבר הסתיים.</p>
+
+  <table>
+    <thead><tr><th>מוקד</th><th>מה לעשות מול Codex</th><th>למה זה חשוב</th></tr></thead>
+    <tbody>
+<tr><td><strong>1. להחליף תיעוד מבוסס Goals/Stages בתיעוד מבוסס אחריות קבועה</strong></td><td>Codex צריך לעבור קודם על headers/docstrings/comments ב-scripts, SQL, tools, tests, db README ו-generated outputs ולהסיר את הניסוח “Goal 00x”.</td><td>מונע בלבול בין תיעוד היסטורי לבין חוזה מערכת חי.</td></tr>
+<tr><td><strong>2. לנקות מקורות הטעיה חיים</strong></td><td>README.md, TODO.md, AGENTS.md, CONTRIBUTING.md, Makefile ו-Dockerfile משפיעים מאוד על התנהגות AI. יש לעדכן אותם לפני קבצים שוליים.</td><td>מונע בלבול בין תיעוד היסטורי לבין חוזה מערכת חי.</td></tr>
+<tr><td><strong>3. להגדיר במפורש את סטטוס Flask starter</strong></td><td>או להשאיר אותו כ-demo/health harness עם תיעוד ברור, או לפתוח משימה נפרדת להסרה. אסור שייראה כמו ליבת המערכת.</td><td>מונע בלבול בין תיעוד היסטורי לבין חוזה מערכת חי.</td></tr>
+<tr><td><strong>4. לתקן generator לפני generated output</strong></td><td>קבצי db/dist/release_001 לא צריכים תיקון ידני; יש לעדכן tools/package_release.py ואז להריץ scripts/package-release.sh.</td><td>מונע בלבול בין תיעוד היסטורי לבין חוזה מערכת חי.</td></tr>
+<tr><td><strong>5. לא לגעת ב-docs ההיסטוריים במסגרת תיקון זה</strong></td><td>המשימה הנוכחית צריכה להתמקד בקבצי הקוד והתצורה החיים בלבד, בהתאם להנחיה שלך.</td><td>מונע בלבול בין תיעוד היסטורי לבין חוזה מערכת חי.</td></tr>
+    </tbody>
+  </table>
+
+  <section class="box ok">
+    <h3>Prompt מומלץ ל-Codex</h3>
+    <pre><code># Codex Task: Clean live code documentation for oracle-dev-ai-lab
+
+## Objective
+Update documentation inside live code/config/script/SQL/tool/test files so each file explains its stable responsibility in the Oracle development lab. Do not describe files primarily by historical Goal or Stage numbers.
+
+## Scope
+Include live repository files outside `docs/` and outside historical goal/task documents. Focus on:
+- root operational files: README.md, AGENTS.md, TODO.md, .github/CONTRIBUTING.md
+- Docker/config files
+- scripts/
+- db/ README, install, src, rollback, tests, review, dist generator outputs
+- tools/
+- src/oracle_ai_lab/
+- templates/static retained demo harness files
+- tests/
+- .agents project skill/rules if kept as active AI workflow files
+
+## Exclusions
+Do not modify `docs/**` in this task.
+Do not rewrite historical stage reports.
+Do not rewrite historical Goal documents.
+Do not modify functional behavior unless a documentation test must be updated to match the new wording.
+
+## Required changes
+1. Replace primary headers such as “Goal 007/008/009/010/011...” with stable purpose headers.
+2. For every file, document:
+   - what the file does;
+   - where it fits in the lab workflow;
+   - whether it modifies DB state, validates state, reviews files, or generates package output;
+   - what it explicitly does not do.
+3. Clarify that retained Flask/Python app files are only a demo/tooling harness, not the Oracle DB runtime.
+4. Update `tools/package_release.py` first, then regenerate `db/dist/release_001/` instead of hand-editing generated package files.
+5. Keep all safety boundaries: no organizational DB access, no secrets, no ad-hoc DDL/DML.
+
+## Checks to run
+- scripts/test.sh quick
+- scripts/lint.sh
+- scripts/review-db-code.sh
+- scripts/package-release.sh if package generator/output changed
+
+## Final response
+Report files changed, commands run, tests run, assumptions, limitations, and any files intentionally not changed.</code></pre>
+  </section>
+
+  <h2>מדדי סקירה</h2>
+  <table>
+    <thead><tr><th>עדיפות</th><th>מספר קבצים/קבוצות</th><th>משמעות</th></tr></thead>
+    <tbody>
+      <tr><td><span class="priority p0">גבוהה מאוד</span></td><td>4</td><td>קבצים שמשפיעים ישירות על הבנת Codex או על generated output מרכזי.</td></tr>
+      <tr><td><span class="priority p1">גבוהה</span></td><td>45</td><td>קבצים חיים שבהם תיעוד ה-Goal עלול לגרום לפרשנות שגויה.</td></tr>
+      <tr><td><span class="priority p2">בינונית</span></td><td>45</td><td>קבצים שדורשים הבהרה, אך אינם מסיטים את התנהגות המעבדה לבדם.</td></tr>
+      <tr><td><span class="priority p3">נמוכה</span></td><td>5</td><td>שיפורי ניקיון/בהירות.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>תבנית Header אחידה מומלצת</h2>
+  <p>זו התבנית שכדאי להחיל בקבצים חיים. ב-SQL/Shell/Python יש להשתמש בסגנון comment המתאים לשפה.</p>
+  <pre><code>Purpose: &lt;what this file does now&gt;
+Role: &lt;where it fits in the oracle-dev-ai-lab workflow&gt;
+Scope: &lt;what it reads/writes/runs/generates&gt;
+Safety: &lt;what it must not do: no secrets, no organizational DB, no ad-hoc DDL/DML&gt;
+Generated: &lt;only if generated; include generator and do-not-edit-manually rule&gt;</code></pre>
+
+  <h2>אינדקס קבצים</h2>
+  <div class="toc"><ul>
+<li><a href="#file-1"><code class="path">AGENTS.md</code></a> - גבוהה מאוד</li>
+<li><a href="#file-2"><code class="path">README.md</code></a> - גבוהה מאוד</li>
+<li><a href="#file-3"><code class="path">TODO.md</code></a> - גבוהה מאוד</li>
+<li><a href="#file-4"><code class="path">tools/package_release.py</code></a> - גבוהה מאוד</li>
+<li><a href="#file-5"><code class="path">.agents/oracle-ai-lab-codex-planner/SKILL.md</code></a> - גבוהה</li>
+<li><a href="#file-6"><code class="path">.agents/oracle-ai-lab-codex-planner/references/project-rules.md</code></a> - גבוהה</li>
+<li><a href="#file-7"><code class="path">.github/CONTRIBUTING.md</code></a> - גבוהה</li>
+<li><a href="#file-8"><code class="path">Dockerfile</code></a> - גבוהה</li>
+<li><a href="#file-9"><code class="path">Makefile</code></a> - גבוהה</li>
+<li><a href="#file-10"><code class="path">db/README.md</code></a> - גבוהה</li>
+<li><a href="#file-11"><code class="path">db/dist/README.md</code></a> - גבוהה</li>
+<li><a href="#file-12"><code class="path">db/generated/README.md</code></a> - גבוהה</li>
+<li><a href="#file-13"><code class="path">db/install/00_create_lab_users.sql</code></a> - גבוהה</li>
+<li><a href="#file-14"><code class="path">db/install/01_create_schema.sql</code></a> - גבוהה</li>
+<li><a href="#file-15"><code class="path">db/install/README.md</code></a> - גבוהה</li>
+<li><a href="#file-16"><code class="path">db/install/install.sql</code></a> - גבוהה</li>
+<li><a href="#file-17"><code class="path">db/review/README.md</code></a> - גבוהה</li>
+<li><a href="#file-18"><code class="path">db/review/review-report.md</code></a> - גבוהה</li>
+<li><a href="#file-19"><code class="path">db/rollback/README.md</code></a> - גבוהה</li>
+<li><a href="#file-20"><code class="path">db/rollback/rollback.sql</code></a> - גבוהה</li>
+<li><a href="#file-21"><code class="path">db/src/README.md</code></a> - גבוהה</li>
+<li><a href="#file-22"><code class="path">db/src/constraints/README.md</code></a> - גבוהה</li>
+<li><a href="#file-23"><code class="path">db/src/indexes/README.md</code></a> - גבוהה</li>
+<li><a href="#file-24"><code class="path">db/src/packages/README.md</code></a> - גבוהה</li>
+<li><a href="#file-25"><code class="path">db/src/seed/README.md</code></a> - גבוהה</li>
+<li><a href="#file-26"><code class="path">db/src/tables/README.md</code></a> - גבוהה</li>
+<li><a href="#file-27"><code class="path">db/src/tables/lab_smoke_test.sql</code></a> - גבוהה</li>
+<li><a href="#file-28"><code class="path">db/src/triggers/README.md</code></a> - גבוהה</li>
+<li><a href="#file-29"><code class="path">db/src/views/README.md</code></a> - גבוהה</li>
+<li><a href="#file-30"><code class="path">db/tests/README.md</code></a> - גבוהה</li>
+<li><a href="#file-31"><code class="path">db/tests/sql/001_db_connectivity.sql</code></a> - גבוהה</li>
+<li><a href="#file-32"><code class="path">db/tests/sql/002_object_inventory.sql</code></a> - גבוהה</li>
+<li><a href="#file-33"><code class="path">db/tests/sql/003_no_invalid_objects.sql</code></a> - גבוהה</li>
+<li><a href="#file-34"><code class="path">db/tests/sql/README.md</code></a> - גבוהה</li>
+<li><a href="#file-35"><code class="path">db/tests/utplsql/README.md</code></a> - גבוהה</li>
+<li><a href="#file-36"><code class="path">docker-compose.yml</code></a> - גבוהה</li>
+<li><a href="#file-37"><code class="path">scripts/init_from_template.sh</code></a> - גבוהה</li>
+<li><a href="#file-38"><code class="path">scripts/install-db.sh</code></a> - גבוהה</li>
+<li><a href="#file-39"><code class="path">scripts/package-release.sh</code></a> - גבוהה</li>
+<li><a href="#file-40"><code class="path">scripts/review-db-code.sh</code></a> - גבוהה</li>
+<li><a href="#file-41"><code class="path">scripts/run-db-tests.sh</code></a> - גבוהה</li>
+<li><a href="#file-42"><code class="path">scripts/test.sh</code></a> - גבוהה</li>
+<li><a href="#file-43"><code class="path">templates/index.html</code></a> - גבוהה</li>
+<li><a href="#file-44"><code class="path">tests/test_packaging_contract.py</code></a> - גבוהה</li>
+<li><a href="#file-45"><code class="path">tests/test_repo_contract.py</code></a> - גבוהה</li>
+<li><a href="#file-46"><code class="path">tests/test_runtime_install_path_fix.py</code></a> - גבוהה</li>
+<li><a href="#file-47"><code class="path">tools/README.md</code></a> - גבוהה</li>
+<li><a href="#file-48"><code class="path">tools/extract_spec.py</code></a> - גבוהה</li>
+<li><a href="#file-49"><code class="path">tools/validate_spec.py</code></a> - גבוהה</li>
+<li><a href="#file-50"><code class="path">.env.example</code></a> - בינונית</li>
+<li><a href="#file-51"><code class="path">.github/workflows/ci.yml</code></a> - בינונית</li>
+<li><a href="#file-52"><code class="path">db/dist/release_001/deployment-notes.md</code></a> - בינונית</li>
+<li><a href="#file-53"><code class="path">db/dist/release_001/install.sql</code></a> - בינונית</li>
+<li><a href="#file-54"><code class="path">db/dist/release_001/manifest.md</code></a> - בינונית</li>
+<li><a href="#file-55"><code class="path">db/dist/release_001/review-report.md</code></a> - בינונית</li>
+<li><a href="#file-56"><code class="path">db/dist/release_001/rollback.sql</code></a> - בינונית</li>
+<li><a href="#file-57"><code class="path">db/dist/release_001/src/*/README.md markers</code></a> - בינונית</li>
+<li><a href="#file-58"><code class="path">db/dist/release_001/src/constraints/README.md</code></a> - בינונית</li>
+<li><a href="#file-59"><code class="path">db/dist/release_001/src/indexes/README.md</code></a> - בינונית</li>
+<li><a href="#file-60"><code class="path">db/dist/release_001/src/packages/README.md</code></a> - בינונית</li>
+<li><a href="#file-61"><code class="path">db/dist/release_001/src/seed/README.md</code></a> - בינונית</li>
+<li><a href="#file-62"><code class="path">db/dist/release_001/src/tables/lab_smoke_test.sql</code></a> - בינונית</li>
+<li><a href="#file-63"><code class="path">db/dist/release_001/src/triggers/README.md</code></a> - בינונית</li>
+<li><a href="#file-64"><code class="path">db/dist/release_001/src/views/README.md</code></a> - בינונית</li>
+<li><a href="#file-65"><code class="path">db/dist/release_001/test-report.md</code></a> - בינונית</li>
+<li><a href="#file-66"><code class="path">docker-compose.dev.yml</code></a> - בינונית</li>
+<li><a href="#file-67"><code class="path">docker-compose.qa.yml</code></a> - בינונית</li>
+<li><a href="#file-68"><code class="path">requirements.txt</code></a> - בינונית</li>
+<li><a href="#file-69"><code class="path">scripts/clean.sh</code></a> - בינונית</li>
+<li><a href="#file-70"><code class="path">scripts/lab-backup.sh</code></a> - בינונית</li>
+<li><a href="#file-71"><code class="path">scripts/lab-down.sh</code></a> - בינונית</li>
+<li><a href="#file-72"><code class="path">scripts/lab-reset.sh</code></a> - בינונית</li>
+<li><a href="#file-73"><code class="path">scripts/lab-restore.sh</code></a> - בינונית</li>
+<li><a href="#file-74"><code class="path">scripts/lab-up.sh</code></a> - בינונית</li>
+<li><a href="#file-75"><code class="path">scripts/lint.sh</code></a> - בינונית</li>
+<li><a href="#file-76"><code class="path">src/oracle_ai_lab/__init__.py</code></a> - בינונית</li>
+<li><a href="#file-77"><code class="path">src/oracle_ai_lab/app.py</code></a> - בינונית</li>
+<li><a href="#file-78"><code class="path">src/oracle_ai_lab/config.py</code></a> - בינונית</li>
+<li><a href="#file-79"><code class="path">src/oracle_ai_lab/model/__init__.py</code></a> - בינונית</li>
+<li><a href="#file-80"><code class="path">src/oracle_ai_lab/model/example_model.py</code></a> - בינונית</li>
+<li><a href="#file-81"><code class="path">src/oracle_ai_lab/routes/__init__.py</code></a> - בינונית</li>
+<li><a href="#file-82"><code class="path">src/oracle_ai_lab/routes/api.py</code></a> - בינונית</li>
+<li><a href="#file-83"><code class="path">src/oracle_ai_lab/routes/web.py</code></a> - בינונית</li>
+<li><a href="#file-84"><code class="path">src/oracle_ai_lab/services/__init__.py</code></a> - בינונית</li>
+<li><a href="#file-85"><code class="path">src/oracle_ai_lab/services/example_service.py</code></a> - בינונית</li>
+<li><a href="#file-86"><code class="path">src/oracle_ai_lab/utils/__init__.py</code></a> - בינונית</li>
+<li><a href="#file-87"><code class="path">src/oracle_ai_lab/utils/logging_utils.py</code></a> - בינונית</li>
+<li><a href="#file-88"><code class="path">tests/test_app.py</code></a> - בינונית</li>
+<li><a href="#file-89"><code class="path">tests/test_model.py</code></a> - בינונית</li>
+<li><a href="#file-90"><code class="path">tests/test_review_contract.py</code></a> - בינונית</li>
+<li><a href="#file-91"><code class="path">tests/test_services.py</code></a> - בינונית</li>
+<li><a href="#file-92"><code class="path">tests/test_spec_pipeline.py</code></a> - בינונית</li>
+<li><a href="#file-93"><code class="path">tools/generate_tasks.py</code></a> - בינונית</li>
+<li><a href="#file-94"><code class="path">tools/generate_todo.py</code></a> - בינונית</li>
+<li><a href="#file-95"><code class="path">.gitignore</code></a> - נמוכה</li>
+<li><a href="#file-96"><code class="path">.template-initialized</code></a> - נמוכה</li>
+<li><a href="#file-97"><code class="path">.vscode/launch.json</code></a> - נמוכה</li>
+<li><a href="#file-98"><code class="path">pyproject.toml</code></a> - נמוכה</li>
+<li><a href="#file-99"><code class="path">static/css/style.css</code></a> - נמוכה</li>
+  </ul></div>
+
+  <h2>המלצות לפי קובץ</h2>
+
+  <article class="file-card" id="file-1">
+    <div class="file-head">
+      <h3>AGENTS.md</h3>
+      <div><span class="priority p0">גבוהה מאוד</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">AGENTS.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> קובץ ההוראות המחייב ל-Codex/AI בעבודה על הריפו. צריך להגדיר כללי פעולה יציבים ולא להסתמך על קבצי Goals היסטוריים.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל כללי בטיחות טובים, אבל דורש קריאה של docs וקבצי Goals, מתייחס ל-Infrastructure MVP ולכל שלבי הפיתוח, ודורש יצירת stage report תחת docs/stages בכל משימה.</p>
+    <p><strong>בעיה/פער:</strong> כקובץ חי של סביבת פיתוח עתידית הוא צריך להגדיר חוזה עבודה קבוע. את הדרישה ל-stage reports ול-goal flow צריך להחליף בדרישת תיעוד שינוי רלוונטית או להשאיר רק במסלול historical/governance נפרד.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># AGENTS.md
+
+Instructions for AI-assisted work in `oracle-dev-ai-lab`.
+
+## Repository identity
+
+This repository is a controlled Oracle development lab. It contains Docker lifecycle scripts, managed SQL source files, local DB install/test/review workflows, deterministic packaging tooling, and supporting Python unittest checks.
+
+## Mandatory rules
+
+- Work only inside this repository.
+- Do not connect to organizational databases.
+- When DB access is required, connect only to the local container `oracle-dev-ai-lab-db`.
+- Do not execute ad-hoc DDL or DML.
+- Represent every database change as a versioned SQL file under `db/src/`, `db/install/`, or `db/rollback/` as appropriate.
+- Execute schema changes only through official repository scripts.
+- Do not add secrets or real credentials.
+- Keep changes narrow and reviewable.
+- Update file-level purpose documentation when changing behavior or responsibility.
+
+## File documentation standard
+
+Every source, script, SQL, tooling, test, or generated contract file must begin with a concise stable purpose header that explains:
+
+1. what the file does;
+2. where it fits in the lab workflow;
+3. whether it changes DB state, validates state, reviews files, or packages output;
+4. what it explicitly does not do.
+
+Do not describe the file primarily by historical Goal or Stage numbers. Historical traceability may appear in a changelog or appendix, not in the primary file purpose.
+
+## Standard checks
+
+- `scripts/test.sh quick`
+- `scripts/lint.sh`
+- `scripts/review-db-code.sh` when DB/review/package files change
+- `scripts/package-release.sh` when packaging contracts change</code></pre>
+  </article>
+
+  <article class="file-card" id="file-2">
+    <div class="file-head">
+      <h3>README.md</h3>
+      <div><span class="priority p0">גבוהה מאוד</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> שער הכניסה האנושי וה-AI לפרויקט. צריך להסביר מהי המעבדה, איך מפעילים אותה, מה קיים בפועל ומה גבולות השימוש.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל שילוב של תיאור פרויקט, מצב התקדמות, רשימת Goals, הוראות עבודה מול docs/codex-goals, תיעוד Flask starter ותיעוד Docker זמני.</p>
+    <p><strong>בעיה/פער:</strong> הקובץ עדיין מתאר מסע פיתוח ומצב היסטורי במקום לשמש מדריך יציב למערכת מעבדה קיימת. הוא גם מערבב בין שימוש במעבדה, תיעוד Goals, ושרידי template.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># DEVELOPMENT in Oracle using AI Lab
+
+`oracle-dev-ai-lab` is a repository-local Oracle development lab. It provides a disposable Oracle 26ai Free Docker runtime, managed SQL installation flow, smoke tests, static review checks, and deterministic release-package skeletons for Oracle database development.
+
+The repository is the source of truth. The database runtime is disposable and must be recreated from versioned files in Git when needed.
+
+## What this repository is for
+
+Use this repository as a controlled lab for developing and validating Oracle database objects before adapting the pattern to a broader developer environment.
+
+The current implementation focuses on infrastructure: Docker lifecycle, managed install scripts, DB source layout, smoke object validation, review workflow, packaging workflow, and Python-based repository tooling/tests.
+
+## What this repository is not
+
+This repository is not a production deployment tool, not an organizational database integration, and not a generic Flask application. A small Flask starter app remains only as optional Python tooling/demo infrastructure until a later design decision removes or repurposes it.
+
+## Main operator entry points
+
+- `scripts/lab-up.sh` starts the local Oracle lab DB container.
+- `scripts/install-db.sh` runs the managed DB install entry point.
+- `scripts/run-db-tests.sh` runs SQL smoke tests against the local lab DB.
+- `scripts/review-db-code.sh` runs repository-only review checks.
+- `scripts/package-release.sh` creates the deterministic release package skeleton.
+- `scripts/test.sh` runs Python unittest checks and, optionally, DB smoke tests.
+
+## Safety model
+
+- No organizational database access.
+- No committed secrets.
+- No ad-hoc DDL or DML.
+- DB changes must exist as versioned SQL files and run through official scripts.
+- Runtime state is disposable; Git is authoritative.
+
+## Recommended first read
+
+For code changes, read `AGENTS.md` first. For operating the lab, start with the scripts listed above and `.env.example`.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-3">
+    <div class="file-head">
+      <h3>TODO.md</h3>
+      <div><span class="priority p0">גבוהה מאוד</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">TODO.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> כרגע קובץ סטטוס היסטורי/ניהולי בשורש הריפו. אם נשאר, עליו לייצג Backlog חי ולא ארכיון Goals.</p>
+    <p><strong>תיעוד קיים:</strong> גדול מאוד, מערבב סטטוס Goals, Stage 0-8, “missing” שכבר לא מדויק, וקישורים רבים ל-docs היסטוריים.</p>
+    <p><strong>בעיה/פער:</strong> הקובץ מטעה עבור AI כי הוא כולל מידע לא עדכני וסותר מצב נוכחי. הוא עלול לגרום ל-Codex לחשוב ש-package script או db/dist חסרים למרות שהם קיימים.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># TODO - oracle-dev-ai-lab
+
+This file tracks only current open engineering work for the live Oracle lab repository.
+
+Historical Goal execution status is not maintained here. Historical planning and stage documentation live under `docs/` and should not be used as the primary source for current implementation behavior.
+
+## Current open work
+
+- [ ] Replace Goal/Stage-based purpose headers in live code, SQL, script, test, and tooling files with stable responsibility-based documentation.
+- [ ] Decide whether the retained Flask starter app remains as a local health/demo harness or should be removed.
+- [ ] Align generated release-package documentation with the current packaging contract rather than Goal 011 language.
+- [ ] Add a concise developer workflow guide for operating the lab without reading historical stage documents.
+
+## Current stable workflows
+
+- Start lab DB: `scripts/lab-up.sh`
+- Install DB objects: `scripts/install-db.sh`
+- Run SQL smoke tests: `scripts/run-db-tests.sh`
+- Run repository tests: `scripts/test.sh quick`
+- Run static review: `scripts/review-db-code.sh`
+- Build package skeleton: `scripts/package-release.sh`</code></pre>
+  </article>
+
+  <article class="file-card" id="file-4">
+    <div class="file-head">
+      <h3>tools/package_release.py</h3>
+      <div><span class="priority p0">גבוהה מאוד</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/package_release.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מייצר package skeleton תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring וה-manifest generation מדברים על Goal 011 skeleton.</p>
+    <p><strong>בעיה/פער:</strong> זה generator מרכזי; עדכון שלו יתקן גם את פלט db/dist. צריך לתאר package contract קבוע.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Build the deterministic oracle-dev-ai-lab release package output.
+
+Role: packages tracked, managed DB source files and release metadata into `db/dist/release_001/`.
+Safety: refuses secret-looking paths/content, requires tracked sources, and performs no Oracle, Docker, network, DDL, or DML operations.
+Output: manifest, install/rollback references, test/review/deployment notes, and packaged DB source folders.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-5">
+    <div class="file-head">
+      <h3>.agents/oracle-ai-lab-codex-planner/SKILL.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.agents/oracle-ai-lab-codex-planner/SKILL.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Skill פנימי לתכנון משימות Codex עבור הפרויקט.</p>
+    <p><strong>תיעוד קיים:</strong> מוגדר סביב יצירת Codex prompts ל-Goals, stage reports, docs/stages, project-rules ותיעוד שלבי.</p>
+    <p><strong>בעיה/פער:</strong> אם המטרה היא סביבת פיתוח למתכנת, ה-Skill צריך לעזור לייצר משימות שינוי קוד/SQL יציבות ולא משימות Goals היסטוריות.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>---
+name: oracle-ai-lab-codex-planner
+description: Create and review constrained Codex tasks for maintaining the oracle-dev-ai-lab repository. Use when preparing tasks for Oracle SQL source changes, local Docker lab workflow, managed install/test/review/package scripts, Python tooling, and repository contract tests.
+---
+
+# Oracle AI Lab Codex Planner
+
+Use this skill to prepare safe, narrow tasks for the live `oracle-dev-ai-lab` repository.
+
+The task must focus on current repository behavior, not historical Goal execution. Historical Goal identifiers may be referenced only as background when needed; the primary instruction must describe the file responsibility and expected end state.
+
+## Required task content
+
+- Current file paths to change.
+- Exact behavior that must remain unchanged.
+- Stable documentation headers to add or update.
+- Commands to run.
+- Forbidden actions: organizational DB access, secrets, ad-hoc DDL/DML, unrelated refactors.
+- Expected final report from Codex.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-6">
+    <div class="file-head">
+      <h3>.agents/oracle-ai-lab-codex-planner/references/project-rules.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.agents/oracle-ai-lab-codex-planner/references/project-rules.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> קובץ עזר לכללי פרויקט עבור ה-Skill.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל החלטות Core, מבנה נדרש, Stage reports ו-Goals.</p>
+    <p><strong>בעיה/פער:</strong> צריך להחליף הדגשת Stage/Goal בהגדרת חוזה ריפו חי: שמות קבועים, גבולות DB, מיקומי קבצים, בדיקות ו-packaging.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Project rules for oracle-dev-ai-lab
+
+## Fixed runtime names
+
+- Repository: `oracle-dev-ai-lab`
+- Container: `oracle-dev-ai-lab-db`
+- Volume: `oracle-dev-ai-lab-u01`
+- Network: `oracle-dev-ai-lab-net`
+- PDB: `FREEPDB1`
+
+## Live repository contract
+
+- Git is the source of truth.
+- DB runtime state is disposable.
+- All DB changes must be represented as versioned SQL files.
+- Install/test/review/package workflows must run through official scripts.
+- Local DB access is allowed only through the local Docker lab container.
+- No organizational DB access and no committed secrets.
+
+## Main paths
+
+- `db/install/` - managed installation entry points.
+- `db/src/` - versioned Oracle object source files.
+- `db/rollback/` - managed rollback references.
+- `db/tests/` - SQL and future utPLSQL tests.
+- `db/review/` - review report template/output.
+- `db/dist/` - generated package outputs.
+- `scripts/` - repeatable operator commands.
+- `tools/` - deterministic Python helpers.
+- `tests/` - unittest contract tests.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-7">
+    <div class="file-head">
+      <h3>.github/CONTRIBUTING.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.github/CONTRIBUTING.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> הנחיות תרומה כלליות לריפו. מיועד לבני אדם ול-AI לפני פתיחת PR.</p>
+    <p><strong>תיעוד קיים:</strong> עדיין כתוב במידה רבה כ-template Python/Flask עם תוספות Oracle AI Lab. מתאר docs וארכיטקטורת Flask כאילו הם מרכזיים.</p>
+    <p><strong>בעיה/פער:</strong> צריך להבדיל בין תרומה לקוד המעבדה לבין שרידי Flask starter. כרגע עלול להסיט מתכנת לכיוון app/web במקום Oracle DB lab.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Contributing
+
+This repository is an Oracle development lab. Contributions should preserve the lab contract: versioned SQL sources, controlled scripts, local-only Docker runtime, deterministic tests, static review, and packaging outputs.
+
+## Contribution principles
+
+- Make one focused change per PR.
+- Do not mix historical documentation cleanup with runtime behavior changes unless explicitly requested.
+- Do not access organizational databases.
+- Do not add secrets or real connection strings.
+- Keep Python tooling, shell scripts, SQL files, and tests documented with stable purpose headers.
+
+## Architecture boundaries
+
+Primary repository responsibilities:
+
+- `db/` contains managed Oracle source, install, rollback, test, review, generated, and package artifacts.
+- `scripts/` contains repeatable operator commands.
+- `tools/` contains deterministic repository-local Python helpers.
+- `tests/` contains unittest-based repository and workflow contract tests.
+- `src/oracle_ai_lab/` is currently a retained Python starter/demo harness, not the Oracle DB lab runtime.
+
+## Required checks
+
+Run the relevant subset before submitting:
+
+- `scripts/test.sh quick`
+- `scripts/lint.sh`
+- `scripts/review-db-code.sh`
+- `scripts/package-release.sh` when package output changes</code></pre>
+  </article>
+
+  <article class="file-card" id="file-8">
+    <div class="file-head">
+      <h3>Dockerfile</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">Dockerfile</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Docker image ל-Flask starter app, לא ל-Oracle DB.</p>
+    <p><strong>תיעוד קיים:</strong> אין header. הקובץ נראה כ-Dockerfile מרכזי של הפרויקט ולכן עלול להטעות.</p>
+    <p><strong>בעיה/פער:</strong> חייב header שמבהיר שזה image אופציונלי ל-starter/demo harness בלבד. Oracle DB מוגדר ב-docker-compose.yml דרך image חיצוני.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Build the retained Python Flask starter/demo harness image.
+# This Dockerfile is not the Oracle database runtime.
+# Oracle AI Database 26ai Free is provided by the `db` service in `docker-compose.yml`.
+# Keep this file only while the retained app is still useful for Python tooling and health-check demonstrations.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-9">
+    <div class="file-head">
+      <h3>Makefile</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">Makefile</code></p>
+    <p><strong>תפקיד הקובץ:</strong> קיצורי פקודות developer/operator.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל targets ל-install/test/lint/format/run/docker-dev/docker-qa ללא תיעוד שמבדיל בין Flask starter לבין Oracle lab.</p>
+    <p><strong>בעיה/פער:</strong> צריך להוסיף header ולהחליף/להוסיף targets ל-lab-up/install-db/run-db-tests/review/package כדי שיהיה רלוונטי למעבדה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Developer command shortcuts for oracle-dev-ai-lab.
+# The primary lab workflow is script-based. Make targets are convenience wrappers only.
+# Flask targets are retained starter/demo helpers and are not the Oracle DB runtime.
+
+.PHONY: install test test-full lint format clean lab-up lab-down install-db db-tests review package run docker-dev docker-qa</code></pre>
+  </article>
+
+  <article class="file-card" id="file-10">
+    <div class="file-head">
+      <h3>db/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> שורש workspace של DB artifacts.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains שורש workspace של DB artifacts.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-11">
+    <div class="file-head">
+      <h3>db/dist/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מסביר את תיקיית generated release packages.</p>
+    <p><strong>תיעוד קיים:</strong> מזכיר Goal 011 ו-skeleton-only packaging workflow.</p>
+    <p><strong>בעיה/פער:</strong> צריך להפוך לתיאור קבוע של generated outputs, כולל כלל “לא לערוך ידנית”.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains generated release-package outputs for oracle-dev-ai-lab.
+
+Packages under this directory are generated from tracked repository files by `scripts/package-release.sh` and `tools/package_release.py`.
+
+## Rules
+
+- Do not edit generated package files manually unless explicitly repairing the generator.
+- Do not include `.env`, secrets, tokens, keys, certificates, or unmanaged DB changes.
+- Package output documents what is included; deployment approval depends on review status and explicit validation.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-12">
+    <div class="file-head">
+      <h3>db/generated/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/generated/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית generated DB artifacts.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית generated DB artifacts.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-13">
+    <div class="file-head">
+      <h3>db/install/00_create_lab_users.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/install/00_create_lab_users.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> יוצר/מעדכן משתמשי מעבדה מקומיים והרשאות בסיסיות.</p>
+    <p><strong>תיעוד קיים:</strong> Header ו-prompt כוללים Goal 007/008.</p>
+    <p><strong>בעיה/פער:</strong> לתאר את אחריות הקובץ: local users, substitutions, idempotent-ish setup, no secrets.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: Create or update the local Oracle lab users required by oracle-dev-ai-lab.
+-- Role: Prepares `AI_APP_OWNER`, `AI_APP_RUNTIME`, `AI_APP_READONLY`, and `AI_REVIEWER` for the managed install workflow.
+-- Inputs: Password substitution variables supplied by `db/install/install.sql` from local environment values.
+-- Safety: Stores no secrets, grants only minimal local lab privileges, and is intended for the disposable local PDB only.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-14">
+    <div class="file-head">
+      <h3>db/install/01_create_schema.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/install/01_create_schema.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מקום מנוהל ל-schema-level setup.</p>
+    <p><strong>תיעוד קיים:</strong> כולל Goal 007/008, TODO(G009+) ו-TODO(functional goals).</p>
+    <p><strong>בעיה/פער:</strong> להחליף TODO לפי Goals בתיאור קבוע של מה מותר ומה לא מותר בקובץ.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: Reserved schema-level setup step for the local Oracle lab install sequence.
+-- Role: Holds schema preparation that must run before versioned DB source files are installed.
+-- Current scope: No business objects are created here. Infrastructure and functional objects must remain in `db/src/` and be invoked by `db/install/install.sql`.
+-- Safety: Keep this file deterministic, local-lab-only, and free of secrets.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-15">
+    <div class="file-head">
+      <h3>db/install/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/install/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית install scripts מנוהלים.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית install scripts מנוהלים.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-16">
+    <div class="file-head">
+      <h3>db/install/install.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/install/install.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> SQL*Plus entry point שמגדיר סדר התקנת DB מנוהל.</p>
+    <p><strong>תיעוד קיים:</strong> Header מדבר על Goal 007/008 ו-prompt מדבר על Goal 008.</p>
+    <p><strong>בעיה/פער:</strong> להפוך לקובץ התקנה קבוע שמסביר סדר הרצה, פרמטרים וגבולות. להסיר Goal מה-prompt.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: Managed database install entry point for the local oracle-dev-ai-lab database.
+-- Role: Defines the ordered SQL*Plus install sequence for lab users, schema setup, and versioned DB source files.
+-- Inputs: Password substitution variables and the copied DB source root supplied by `scripts/install-db.sh`.
+-- Safety: Local lab only; no secrets are stored here; all DB changes must be represented by versioned SQL files.
+
+prompt Oracle AI Lab controlled install entry point</code></pre>
+  </article>
+
+  <article class="file-card" id="file-17">
+    <div class="file-head">
+      <h3>db/review/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/review/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית review outputs/templates.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית review outputs/templates.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-18">
+    <div class="file-head">
+      <h3>db/review/review-report.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/review/review-report.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תבנית/פלט review ל-DB code ול-release approval.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל Goal 010, skeleton, not approved, packaging belongs to Goal 011.</p>
+    <p><strong>בעיה/פער:</strong> אם זה קובץ חי, עליו להיות template של review report ללא תלות ב-Goal. Status יכול להיות TEMPLATE או CURRENT REVIEW.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This file is the standard review report template/output for oracle-dev-ai-lab database work. It defines required review sections, severity levels, and the approval rule used before release packaging.
+
+# Review Report
+
+## Severity levels
+
+- BLOCKER - must be fixed before a release package can be approved.
+- MAJOR - should be fixed or explicitly accepted before approval.
+- MINOR - maintainability or quality improvement.
+- QUESTION - clarification required.
+
+Required approval rule: a release package is not approved if any BLOCKER exists.
+
+## Spec coverage
+## Infrastructure decisions coverage
+## Object inventory
+## Data model review
+## PL/SQL review
+## Security review
+## Deployment review
+## Risks
+## Required fixes
+## Optional improvements
+## Approval status</code></pre>
+  </article>
+
+  <article class="file-card" id="file-19">
+    <div class="file-head">
+      <h3>db/rollback/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/rollback/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית rollback scripts.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית rollback scripts.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-20">
+    <div class="file-head">
+      <h3>db/rollback/rollback.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/rollback/rollback.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Rollback skeleton לקובץ rollback מנוהל.</p>
+    <p><strong>תיעוד קיים:</strong> Header ו-comments מדברים על Goal 007 ו-TODO(G008+).</p>
+    <p><strong>בעיה/פער:</strong> צריך לתאר מדיניות rollback קבועה: שמרני, לא destructive עד שתוכנן, מנוהל Git.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: Managed rollback reference for oracle-dev-ai-lab database changes.
+-- Role: Defines the rollback entry point that future approved DB changes must extend.
+-- Current scope: Conservative no-op rollback until destructive teardown behavior is explicitly designed and tested.
+-- Safety: Rollback logic must remain versioned, local-lab-only, and tied to the matching install/source files.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-21">
+    <div class="file-head">
+      <h3>db/src/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> שורש DB source versioned.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains שורש DB source versioned.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-22">
+    <div class="file-head">
+      <h3>db/src/constraints/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/constraints/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית constraint source files.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית constraint source files.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-23">
+    <div class="file-head">
+      <h3>db/src/indexes/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/indexes/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית index source files.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית index source files.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-24">
+    <div class="file-head">
+      <h3>db/src/packages/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/packages/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית package specs/bodies.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית package specs/bodies.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-25">
+    <div class="file-head">
+      <h3>db/src/seed/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/seed/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית seed data.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית seed data.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-26">
+    <div class="file-head">
+      <h3>db/src/tables/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/tables/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית table source files.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית table source files.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-27">
+    <div class="file-head">
+      <h3>db/src/tables/lab_smoke_test.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/tables/lab_smoke_test.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> יוצר טבלת smoke מינימלית לבדיקת install/test/review/package end-to-end.</p>
+    <p><strong>תיעוד קיים:</strong> Header מדבר על Goal 008; ההסבר עצמו טוב כי מבהיר שאינו business feature.</p>
+    <p><strong>בעיה/פער:</strong> להשאיר את המסר, להסיר Goal ולהוסיף role workflow.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: Infrastructure smoke table for validating the oracle-dev-ai-lab DB workflow.
+-- Role: Provides one versioned DB object that managed install, SQL smoke tests, review checks, and packaging can all reference.
+-- Scope: Not a release-management feature and not a business data model table.
+-- Safety: Must remain small, deterministic, and safe to recreate in the disposable local lab.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-28">
+    <div class="file-head">
+      <h3>db/src/triggers/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/triggers/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית triggers כאשר יש הצדקה.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית triggers כאשר יש הצדקה.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-29">
+    <div class="file-head">
+      <h3>db/src/views/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/src/views/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית view source files.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית view source files.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-30">
+    <div class="file-head">
+      <h3>db/tests/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> שורש DB test assets.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains שורש DB test assets.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-31">
+    <div class="file-head">
+      <h3>db/tests/sql/001_db_connectivity.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/sql/001_db_connectivity.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> SQL smoke test שמוודא חיבור בסיסי ל-PDB המקומי.</p>
+    <p><strong>תיעוד קיים:</strong> Header מדבר על Goal 008 ומסביר שהקובץ read-only/metadata/diagnostics.</p>
+    <p><strong>בעיה/פער:</strong> להסיר Goal ולהשאיר תיאור קבוע של סוג הבדיקה, target ו-read-only nature.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: SQL smoke test for connectivity in the local oracle-dev-ai-lab database.
+-- Role: Managed test file executed by `scripts/run-db-tests.sh` through SQLPlus.
+-- Scope: Diagnostic/read-only validation of local lab state; does not create, alter, or delete database objects.
+-- Safety: Local lab only; exits SQLPlus explicitly with `exit success`.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-32">
+    <div class="file-head">
+      <h3>db/tests/sql/002_object_inventory.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/sql/002_object_inventory.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> SQL smoke test שמוודא שה-smoke object קיים עם העמודות הצפויות.</p>
+    <p><strong>תיעוד קיים:</strong> Header מדבר על Goal 008 ומסביר שהקובץ read-only/metadata/diagnostics.</p>
+    <p><strong>בעיה/פער:</strong> להסיר Goal ולהשאיר תיאור קבוע של סוג הבדיקה, target ו-read-only nature.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: SQL smoke test for object inventory in the local oracle-dev-ai-lab database.
+-- Role: Managed test file executed by `scripts/run-db-tests.sh` through SQLPlus.
+-- Scope: Diagnostic/read-only validation of local lab state; does not create, alter, or delete database objects.
+-- Safety: Local lab only; exits SQLPlus explicitly with `exit success`.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-33">
+    <div class="file-head">
+      <h3>db/tests/sql/003_no_invalid_objects.sql</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/sql/003_no_invalid_objects.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> SQL smoke test שמוודא שאין invalid objects בסכמת owner.</p>
+    <p><strong>תיעוד קיים:</strong> Header מדבר על Goal 008 ומסביר שהקובץ read-only/metadata/diagnostics.</p>
+    <p><strong>בעיה/פער:</strong> להסיר Goal ולהשאיר תיאור קבוע של סוג הבדיקה, target ו-read-only nature.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>-- Purpose: SQL smoke test for invalid objects in the local oracle-dev-ai-lab database.
+-- Role: Managed test file executed by `scripts/run-db-tests.sh` through SQLPlus.
+-- Scope: Diagnostic/read-only validation of local lab state; does not create, alter, or delete database objects.
+-- Safety: Local lab only; exits SQLPlus explicitly with `exit success`.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-34">
+    <div class="file-head">
+      <h3>db/tests/sql/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/sql/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית SQL smoke/integration tests.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית SQL smoke/integration tests.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-35">
+    <div class="file-head">
+      <h3>db/tests/utplsql/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/tests/utplsql/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית utPLSQL future tests.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית utPLSQL future tests.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-36">
+    <div class="file-head">
+      <h3>docker-compose.yml</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">docker-compose.yml</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Compose ראשי שמגדיר גם app וגם Oracle db.</p>
+    <p><strong>תיעוד קיים:</strong> אין comments. כולל app service ו-db service.</p>
+    <p><strong>בעיה/פער:</strong> צריך להבהיר שה-db הוא מרכז המעבדה, app הוא retained demo בלבד, ושאין להוסיף secrets לקובץ.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Compose definition for the local oracle-dev-ai-lab runtime.
+# The `db` service is the Oracle 26ai Free lab database container.
+# The `app` service is a retained Flask starter/demo harness and is not required for DB install/test/review/package workflows.
+# Secrets must come from local `.env`; do not hard-code passwords here.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-37">
+    <div class="file-head">
+      <h3>scripts/init_from_template.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/init_from_template.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> script legacy לאתחול repo מתבנית.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל usage ארוך והיסטוריית template. בריפו הנוכחי הוא מסוכן/לא רלוונטי אם לא נעול.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Legacy template-initialization helper retained from the original Python template.
+# Status: Not part of the Oracle lab workflow.
+# Scope: Should not be used for normal oracle-dev-ai-lab development. Consider archiving or removing it once the repository no longer needs template re-initialization safeguards.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-38">
+    <div class="file-head">
+      <h3>scripts/install-db.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/install-db.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מריץ install.sql בתוך container המקומי.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת מכילה Goal 007/008. שאר התיעוד טוב ומדגיש שאין inline DDL/DML.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Run the managed Oracle lab database installation workflow.
+# Role: Official shell entry point for installing Git-managed DB files into the local lab container.
+# Scope: Copies `db/` into `oracle-dev-ai-lab-db` and runs `db/install/install.sql` with local-only password values.
+# Safety: Contains no inline DDL/DML, rejects placeholder secrets, targets only the local lab container, and fails on SQLPlus error markers.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-39">
+    <div class="file-head">
+      <h3>scripts/package-release.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/package-release.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מעטפת shell להרצת packaging helper.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת מכילה Goal 011.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Build the deterministic Oracle lab release-package skeleton.
+# Role: Shell entry point that delegates package generation to `tools/package_release.py`.
+# Scope: Generates files under `db/dist/release_001/` from tracked repository sources.
+# Safety: Does not connect to Oracle, run Docker, access organizational databases, or execute DDL/DML.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-40">
+    <div class="file-head">
+      <h3>scripts/review-db-code.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/review-db-code.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מריץ static review repository-only.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת מכילה Goal 010.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Run repository-only review checks for Oracle lab DB source and workflow contracts.
+# Role: Static review entry point before packaging or functional DB work.
+# Scope: Validates expected files, review report sections, safety boundaries, and DB source file conventions.
+# Safety: Does not connect to Docker, Oracle, network, or organizational databases.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-41">
+    <div class="file-head">
+      <h3>scripts/run-db-tests.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/run-db-tests.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מריץ SQL smoke tests מקומיים.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת מכילה Goal 008.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Run managed SQL smoke tests against the local Oracle lab database.
+# Role: DB validation entry point for repository-controlled SQL test files under `db/tests/sql/`.
+# Scope: Executes read-only/diagnostic smoke tests through SQLPlus in `oracle-dev-ai-lab-db`.
+# Safety: Does not contain inline DDL/DML and does not access organizational databases.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-42">
+    <div class="file-head">
+      <h3>scripts/test.sh</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/test.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מריץ unittest ויכול להריץ DB smoke tests במצב full עם RUN_DB_TESTS=1.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת טובה אך קצרה; usage עדיין generic עם docker-dev/docker-qa של Flask.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Repository test entry point for oracle-dev-ai-lab.
+# Role: Runs Python unittest contract checks locally or in the retained Flask demo container, and can run DB smoke tests when explicitly requested.
+# Scope: Default quick mode runs repository tests only; full mode runs DB smoke tests only when `RUN_DB_TESTS=1`.
+# Note: Docker app targets are retained starter/demo targets, not Oracle DB runtime validation.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-43">
+    <div class="file-head">
+      <h3>templates/index.html</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">templates/index.html</code></p>
+    <p><strong>תפקיד הקובץ:</strong> HTML template לדף הבית של Flask demo harness.</p>
+    <p><strong>תיעוד קיים:</strong> title עדיין “Python Project Template” והדף אומר “The application is running.”</p>
+    <p><strong>בעיה/פער:</strong> זה אחד השרידים הכי ברורים של template. אם נשאר, צריך לתייג כדמו/health harness של Oracle AI Lab.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;oracle-dev-ai-lab demo harness&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main class=&quot;container&quot;&gt;
+    &lt;h1&gt;{{ message }}&lt;/h1&gt;
+    &lt;p&gt;This retained Flask demo harness is running.&lt;/p&gt;
+    &lt;p&gt;The Oracle database lab is operated through the repository scripts, not this web page.&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;/api/health&quot;&gt;Health endpoint&lt;/a&gt;&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-44">
+    <div class="file-head">
+      <h3>tests/test_packaging_contract.py</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_packaging_contract.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק package-release workflow ו-generated dist.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Repository-only tests for deterministic release-package generation and safety boundaries.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-45">
+    <div class="file-head">
+      <h3>tests/test_repo_contract.py</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_repo_contract.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק repository contract, files, scripts, DB source conventions.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Repository contract tests for the live oracle-dev-ai-lab layout and workflows.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-46">
+    <div class="file-head">
+      <h3>tests/test_runtime_install_path_fix.py</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_runtime_install_path_fix.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק fix של install path, env placeholders ו-SQLPlus exits.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Regression tests for local Oracle install-path handling and SQLPlus termination contracts.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-47">
+    <div class="file-head">
+      <h3>tools/README.md</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תיקיית Python helper tools.</p>
+    <p><strong>תיעוד קיים:</strong> תוכן קיים הוא placeholder: “Goal 004 reserves/creates this directory... Implementation content belongs to later goals.”</p>
+    <p><strong>בעיה/פער:</strong> אלו בדיוק הקבצים שצריך לנקות: הם מתארים למה התיקייה נוצרה, לא למה היא קיימת ומה שמים בה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This directory contains תיקיית Python helper tools.
+
+## Usage
+
+Use this directory as part of the live oracle-dev-ai-lab repository contract. Files placed here must be versioned, reviewable, and aligned with the official install/test/review/package workflows.
+
+## Rules
+
+- Do not store secrets or local environment files here.
+- Do not place ad-hoc database changes here unless they are part of the managed repository workflow.
+- Keep file-level purpose headers in every non-trivial file.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-48">
+    <div class="file-head">
+      <h3>tools/extract_spec.py</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/extract_spec.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מחלץ semantic HTML spec ל-JSON דטרמיניסטי.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring ו-parser descriptions מדברים על Goal 009.</p>
+    <p><strong>בעיה/פער:</strong> להפוך לכלי כללי של spec pipeline, עם default path כרגע ל-release-management spec, בלי Goal.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Extract semantic specification HTML into deterministic JSON.
+
+Role: repository-local helper for the oracle-dev-ai-lab specification pipeline.
+Input: semantic `spec.html` containing stable requirement and acceptance criteria identifiers.
+Output: deterministic `spec.json` used by validation, TODO generation, task generation, and review checks.
+Scope: standard-library only; no DB, Docker, network, or external service access.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-49">
+    <div class="file-head">
+      <h3>tools/validate_spec.py</h3>
+      <div><span class="priority p1">גבוהה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/validate_spec.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מאמת spec.html/spec.json.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring ו-argparse מתייחסים ל-Goal 009.</p>
+    <p><strong>בעיה/פער:</strong> לתאר validation קבוע של spec artifacts.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Validate semantic specification artifacts for oracle-dev-ai-lab.
+
+Role: checks required sections, stable IDs, optional PL/SQL API status, and synchronization between `spec.html` and `spec.json`.
+Scope: local files only; does not connect to Oracle, Docker, network, or external services.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-50">
+    <div class="file-head">
+      <h3>.env.example</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.env.example</code></p>
+    <p><strong>תפקיד הקובץ:</strong> תבנית משתני סביבה מקומיים ללא סודות.</p>
+    <p><strong>תיעוד קיים:</strong> כולל משתני Flask ו-PYTHONPATH לצד משתני Oracle Docker ו-password placeholders.</p>
+    <p><strong>בעיה/פער:</strong> התיעוד בתוך הקובץ טוב יחסית, אך צריך להפריד בין legacy Flask לבין Oracle lab ולהבהיר שכל הסיסמאות placeholders בלבד.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Local environment template for oracle-dev-ai-lab.
+# Copy to `.env` for local use only. Never commit `.env` or real passwords.
+
+# Optional retained Python starter app settings.
+FLASK_ENV=development
+PYTHONPATH=src
+PROJECT_NAME=&quot;DEVELOPMENT in Oracle using AI Lab&quot;
+
+# Oracle 26ai Free local lab runtime settings.
+ORACLE_IMAGE=container-registry.oracle.com/database/free:latest
+ORACLE_PWD=change_me_in_local_env
+ORACLE_HOST_PORT=1521
+ORACLE_PDB=FREEPDB1
+BACKUP_ROOT=backups/oracle-dev-ai-lab
+
+# Local-only lab user passwords consumed by `scripts/install-db.sh`.
+AI_APP_OWNER_PWD=change_me_in_local_env
+AI_APP_RUNTIME_PWD=change_me_in_local_env
+AI_APP_READONLY_PWD=change_me_in_local_env
+AI_REVIEWER_PWD=change_me_in_local_env</code></pre>
+  </article>
+
+  <article class="file-card" id="file-51">
+    <div class="file-head">
+      <h3>.github/workflows/ci.yml</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.github/workflows/ci.yml</code></p>
+    <p><strong>תפקיד הקובץ:</strong> GitHub Actions CI להרצת lint ו-unittest.</p>
+    <p><strong>תיעוד קיים:</strong> אין comments. מריץ Python setup, ruff ו-unittest.</p>
+    <p><strong>בעיה/פער:</strong> להוסיף comments שמבהירים שה-CI כרגע repository/static Python checks בלבד ולא Oracle runtime validation.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Repository CI for Python tooling and unittest contract checks.
+# This workflow does not start Docker, does not connect to Oracle, and does not validate a live DB runtime.
+# Oracle runtime validation must be performed explicitly through local lab scripts when in scope.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-52">
+    <div class="file-head">
+      <h3>db/dist/release_001/deployment-notes.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/deployment-notes.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-53">
+    <div class="file-head">
+      <h3>db/dist/release_001/install.sql</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/install.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-54">
+    <div class="file-head">
+      <h3>db/dist/release_001/manifest.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/manifest.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-55">
+    <div class="file-head">
+      <h3>db/dist/release_001/review-report.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/review-report.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-56">
+    <div class="file-head">
+      <h3>db/dist/release_001/rollback.sql</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/rollback.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-57">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/*/README.md markers</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/*/README.md markers</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Marker files לתיקיות package ריקות.</p>
+    <p><strong>תיעוד קיים:</strong> נוצרים עם טקסט “Goal 011 skeleton package”.</p>
+    <p><strong>בעיה/פער:</strong> לתקן דרך generator: marker צריך להסביר שאין SQL מנוהל עבור object type, לא להזכיר Goal.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose
+
+This marker keeps the package folder represented in Git when no managed SQL files exist for this object type.
+
+Generated by: `tools/package_release.py`
+Do not edit manually.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-58">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/constraints/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/constraints/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-59">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/indexes/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/indexes/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-60">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/packages/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/packages/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-61">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/seed/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/seed/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-62">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/tables/lab_smoke_test.sql</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/tables/lab_smoke_test.sql</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-63">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/triggers/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/triggers/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-64">
+    <div class="file-head">
+      <h3>db/dist/release_001/src/views/README.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/src/views/README.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-65">
+    <div class="file-head">
+      <h3>db/dist/release_001/test-report.md</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">db/dist/release_001/test-report.md</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Generated release package artifact תחת db/dist/release_001.</p>
+    <p><strong>תיעוד קיים:</strong> המסמכים שנבדקו מכילים Goal 011, skeleton-only, NOT APPROVED, או marker language.</p>
+    <p><strong>בעיה/פער:</strong> לא לערוך ידנית. לשנות את התיעוד דרך `tools/package_release.py` כך שהפלט ייווצר עם תיאור קבוע של package artifact.</p>
+    <p><strong>פעולה מומלצת:</strong> לתקן generator ואז להריץ package מחדש</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Generated file header should be produced by `tools/package_release.py`:
+
+Purpose: generated release-package artifact for oracle-dev-ai-lab.
+Role: records package contents or carries packaged DB source into `db/dist/release_001/`.
+Source: generated from tracked repository files by `scripts/package-release.sh`.
+Rules: do not edit manually; regenerate from the packaging helper; do not include secrets or unmanaged DB changes.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-66">
+    <div class="file-head">
+      <h3>docker-compose.dev.yml</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">docker-compose.dev.yml</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Compose override להרצת Flask starter במצב development.</p>
+    <p><strong>תיעוד קיים:</strong> אין comments; מתייחס רק ל-app.</p>
+    <p><strong>בעיה/פער:</strong> להוסיף תיעוד שמדובר ב-retained Python app בלבד, לא DB lab.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Development override for the retained Flask starter/demo harness.
+# This file does not configure the Oracle lab database. Use `docker-compose.yml` and `scripts/lab-up.sh` for the DB runtime.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-67">
+    <div class="file-head">
+      <h3>docker-compose.qa.yml</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">docker-compose.qa.yml</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Compose override להרצת Flask starter במצב QA.</p>
+    <p><strong>תיעוד קיים:</strong> אין comments; מתייחס רק ל-app.</p>
+    <p><strong>בעיה/פער:</strong> להוסיף תיעוד שמדובר בבדיקת harness בלבד.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: QA override for the retained Flask starter/demo harness.
+# This file is not an Oracle QA database configuration and must not point to organizational databases.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-68">
+    <div class="file-head">
+      <h3>requirements.txt</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">requirements.txt</code></p>
+    <p><strong>תפקיד הקובץ:</strong> רשימת תלויות Python להתקנה מקומית/CI.</p>
+    <p><strong>תיעוד קיים:</strong> אין תיעוד בקובץ; התלויות משקפות Flask, dotenv ו-ruff.</p>
+    <p><strong>בעיה/פער:</strong> להוסיף header קצר שמסביר למה Flask עדיין קיים, כדי למנוע הסקה שהמעבדה היא web app.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Python dependencies for repository tooling, tests, linting, and the retained Flask starter/demo harness.
+# Oracle database runtime is provided by Docker and is not installed through this file.
+Flask&gt;=3.0,&lt;4.0
+python-dotenv&gt;=1.0,&lt;2.0
+ruff&gt;=0.5,&lt;1.0</code></pre>
+  </article>
+
+  <article class="file-card" id="file-69">
+    <div class="file-head">
+      <h3>scripts/clean.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/clean.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מנקה cache וקבצים זמניים מקומיים.</p>
+    <p><strong>תיעוד קיים:</strong> אין purpose header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Remove local generated Python/cache/test artifacts from the working tree.
+# Scope: Deletes caches and transient local files only; does not remove DB backups, package outputs, source SQL files, or committed artifacts.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-70">
+    <div class="file-head">
+      <h3>scripts/lab-backup.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lab-backup.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מגבה metadata ו-volume data מקומיים.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת סבירה אך לא מסבירה שזו לא חבילת release ולא תחליף ל-Git.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Create a local operator backup of the Oracle lab Docker volume and runtime metadata.
+# Role: Convenience backup for disposable local runtime state.
+# Scope: Stores backup under local `backups/`; does not create a release package and does not replace Git as source of truth.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-71">
+    <div class="file-head">
+      <h3>scripts/lab-down.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lab-down.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> עוצר container בלי למחוק volume.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת טובה אך קצרה מדי.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Stop the local Oracle lab DB container without deleting persisted volume data.
+# Role: Safe operator command for pausing the disposable lab runtime.
+# Scope: Stops only `oracle-dev-ai-lab-db`; does not remove Docker volume/network and does not change Git or DB source files.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-72">
+    <div class="file-head">
+      <h3>scripts/lab-reset.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lab-reset.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מוחק container/volume/network של המעבדה.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת סבירה אך לא מדגישה שזה destructive local runtime only.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Destructively reset the local Oracle lab Docker runtime.
+# Role: Remove the disposable container, volume, and network so the lab can be recreated from Git-managed files.
+# Scope: Requires explicit `--yes`; affects only local Docker resources named for oracle-dev-ai-lab; never deletes repository files.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-73">
+    <div class="file-head">
+      <h3>scripts/lab-restore.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lab-restore.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> משחזר volume מגיבוי מקומי.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת סבירה, אך חשוב להדגיש replace/destructive behavior.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Restore the local Oracle lab DB volume from a backup created by `scripts/lab-backup.sh`.
+# Role: Operator-only recovery helper for local disposable runtime state.
+# Scope: Can replace local container/volume when `--replace` is supplied; does not validate DB schema or modify versioned SQL source files.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-74">
+    <div class="file-head">
+      <h3>scripts/lab-up.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lab-up.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מפעיל את Oracle DB local lab container.</p>
+    <p><strong>תיעוד קיים:</strong> כותרת טובה יחסית, אבל קשורה ל-Oracle 26ai Free בלבד ולא מסבירה מה לא קורה אחרי startup.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Start the local Oracle 26ai Free database container for oracle-dev-ai-lab.
+# Role: Operator entry point for bringing up the disposable DB runtime.
+# Scope: Validates local `.env`, starts only the `db` Compose service, and prints readiness instructions.
+# Does not install schema objects, run tests, perform review, or package release output.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-75">
+    <div class="file-head">
+      <h3>scripts/lint.sh</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">scripts/lint.sh</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מריץ Ruff על src/tests.</p>
+    <p><strong>תיעוד קיים:</strong> אין purpose header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף אזכורי Goal/Stage בכותרת אחריות יציבה. לא לשנות התנהגות בסבב זה.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Purpose: Run Python lint and format checks for repository tooling, tests, and retained starter harness.
+# Scope: Checks only `src` and `tests`; does not validate SQL, shell scripts, Docker, or Oracle runtime behavior.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-76">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/__init__.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/__init__.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Package API for retained Python harness.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring says starter package for repository tooling checks.</p>
+    <p><strong>בעיה/פער:</strong> Good, but can be more explicit that it exports Flask demo harness only.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Retained Python starter/demo harness for oracle-dev-ai-lab.
+
+This package supports local Python tooling, unittest checks, and optional Flask health/demo routes. It is not the Oracle database runtime.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-77">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/app.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/app.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Flask application factory for retained harness.</p>
+    <p><strong>תיעוד קיים:</strong> No module docstring.</p>
+    <p><strong>בעיה/פער:</strong> Add docstring explaining optional/demo role.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Flask application factory for the retained oracle-dev-ai-lab demo harness.
+
+The app exposes a minimal page and health endpoint used for Python tooling checks. It is not the Oracle DB lab runtime and does not connect to Oracle.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-78">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/config.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/config.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Loads PROJECT_NAME for retained harness.</p>
+    <p><strong>תיעוד קיים:</strong> Class docstring says retained Python starter app.</p>
+    <p><strong>בעיה/פער:</strong> Good but add module-level purpose and no secrets boundary.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Configuration for the retained Python demo harness.
+
+Only non-secret display/runtime values for the optional Flask harness are loaded here. Oracle lab secrets are consumed by shell scripts from local `.env`, not by this module.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-79">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/model/__init__.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/model/__init__.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Package marker for model objects.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring says Domain models.</p>
+    <p><strong>בעיה/פער:</strong> Too generic; mention retained harness.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Model objects for the retained Python demo harness.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-80">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/model/example_model.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/model/example_model.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> HealthStatus dataclass for /api/health.</p>
+    <p><strong>תיעוד קיים:</strong> No docstring.</p>
+    <p><strong>בעיה/פער:</strong> Add purpose; maybe rename later from example_model if retained.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Small data structures for the retained Flask health/demo harness.
+
+These models support Python tests and the `/api/health` endpoint only; they do not model Oracle database objects.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-81">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/routes/__init__.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/routes/__init__.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Package marker for Flask routes.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring says Application routes.</p>
+    <p><strong>בעיה/פער:</strong> Clarify retained harness.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Flask routes for the retained Python demo harness.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-82">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/routes/api.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/routes/api.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Defines /api/health route.</p>
+    <p><strong>תיעוד קיים:</strong> No docstring.</p>
+    <p><strong>בעיה/פער:</strong> Add no-Oracle/no-DB purpose.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;API routes for the retained Flask demo harness.
+
+Currently exposes `/api/health` for local Python/app checks. It does not validate the Oracle DB runtime.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-83">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/routes/web.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/routes/web.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Defines root HTML route.</p>
+    <p><strong>תיעוד קיים:</strong> No docstring.</p>
+    <p><strong>בעיה/פער:</strong> Clarify demo role.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Web route for the retained Flask demo harness.
+
+Renders a minimal local page used only to verify the optional Python app scaffolding.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-84">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/services/__init__.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/services/__init__.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Package marker for services.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring says Business services.</p>
+    <p><strong>בעיה/פער:</strong> Incorrect/too broad because no business services exist.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Service functions for the retained Python demo harness.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-85">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/services/example_service.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/services/example_service.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Builds welcome message and health status.</p>
+    <p><strong>תיעוד קיים:</strong> No docstring.</p>
+    <p><strong>בעיה/פער:</strong> Add purpose and consider rename.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Service helpers for the retained Flask health/demo harness.
+
+These functions support local Python tests and simple demo responses. They are not release-management business logic.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-86">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/utils/__init__.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/utils/__init__.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Package marker for utilities.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring says Utility helpers.</p>
+    <p><strong>בעיה/פער:</strong> Acceptable but can be specific.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Utility helpers for repository-local Python tooling and the retained demo harness.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-87">
+    <div class="file-head">
+      <h3>src/oracle_ai_lab/utils/logging_utils.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">src/oracle_ai_lab/utils/logging_utils.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Logging helper.</p>
+    <p><strong>תיעוד קיים:</strong> No docstring.</p>
+    <p><strong>בעיה/פער:</strong> Add concise role.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Logging setup helper for repository-local Python tooling and the retained demo harness.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-88">
+    <div class="file-head">
+      <h3>tests/test_app.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_app.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק Flask app retained harness.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Tests for the retained Flask demo harness; not Oracle DB runtime tests.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-89">
+    <div class="file-head">
+      <h3>tests/test_model.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_model.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק HealthStatus dataclass.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Tests for small retained demo-harness model objects.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-90">
+    <div class="file-head">
+      <h3>tests/test_review_contract.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_review_contract.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק review workflow skeleton/static contract.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Repository-only tests for the oracle-dev-ai-lab review workflow contract.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-91">
+    <div class="file-head">
+      <h3>tests/test_services.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_services.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק service helpers של retained harness.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Tests for retained demo-harness service helpers.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-92">
+    <div class="file-head">
+      <h3>tests/test_spec_pipeline.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tests/test_spec_pipeline.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> בודק spec pipeline local tools.</p>
+    <p><strong>תיעוד קיים:</strong> חלק מהקבצים כוללים Purpose אך מזכירים Goal 005/010/011 או pre-Goal-011; חלק מקבצי app tests ללא header.</p>
+    <p><strong>בעיה/פער:</strong> להחליף Goal/pre-Goal בשמות חוזה התנהגות יציבים. הבדיקות צריכות לתעד מה הן מגנות עליו עכשיו, לא באיזה שלב נוצרו.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Local unittest coverage for the oracle-dev-ai-lab specification pipeline artifacts and tools.&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-93">
+    <div class="file-head">
+      <h3>tools/generate_tasks.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/generate_tasks.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מייצר placeholder task ו-traceability matrix.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring ו-output template מדברים על Goal 012/placeholder.</p>
+    <p><strong>בעיה/פער:</strong> אם משתמשים בזה בהמשך, להפוך לכלי task skeleton כללי או להעביר לארכיון אם הוא רק היסטורי.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Generate specification task skeletons and traceability matrices.
+
+Role: creates deterministic planning artifacts from `spec.json` for AI/human review.
+Scope: local artifact generation only; does not implement functional database objects and does not access Oracle, Docker, or network resources.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-94">
+    <div class="file-head">
+      <h3>tools/generate_todo.py</h3>
+      <div><span class="priority p2">בינונית</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">tools/generate_todo.py</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מייצר TODO מתוך spec.json.</p>
+    <p><strong>תיעוד קיים:</strong> Docstring טוב חלקית, אבל output מדבר על goal_id ו-not authorize functional implementation.</p>
+    <p><strong>בעיה/פער:</strong> לנסח ככלי traceability קבוע. אם עדיין מייצר placeholder, לקרוא לזה artifact boundary ולא Goal.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>&quot;&quot;&quot;Generate a specification TODO artifact from extracted spec JSON.
+
+Role: renders requirement and acceptance-criteria tracking from `spec.json` for later review and implementation planning.
+Scope: generates traceability documentation only; it does not create DB objects, PL/SQL, or runtime behavior.
+&quot;&quot;&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-95">
+    <div class="file-head">
+      <h3>.gitignore</h3>
+      <div><span class="priority p3">נמוכה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.gitignore</code></p>
+    <p><strong>תפקיד הקובץ:</strong> מגדיר מה לא נכנס ל-Git: caches, env files, build artifacts, logs, backups, IDE.</p>
+    <p><strong>תיעוד קיים:</strong> התיעוד סביר ומחולק לפי קטגוריות.</p>
+    <p><strong>בעיה/פער:</strong> נדרש רק חידוד שה-backups הם runtime artifacts של Oracle lab ולא תוצרי package.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code># Local Oracle lab runtime artifacts
+# These are disposable/operator-local outputs and must not be committed.
+backups/
+
+# Generated Python/cache artifacts
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local secrets and environment overrides
+.env
+.env.local
+.env.*</code></pre>
+  </article>
+
+  <article class="file-card" id="file-96">
+    <div class="file-head">
+      <h3>.template-initialized</h3>
+      <div><span class="priority p3">נמוכה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.template-initialized</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Marker טכני שמונע הרצת initialization חוזרת מה-template.</p>
+    <p><strong>תיעוד קיים:</strong> מתאר את ה-template המקורי, שם פרויקט, package ושעת initialization.</p>
+    <p><strong>בעיה/פער:</strong> אם הקובץ נשאר, עליו להיות ברור שהוא artifact טכני לא תיעוד תפעולי. אפשר לשקול למחוק/להעביר רק אם אין יותר צורך ב-template script.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Template initialized: yes
+Project name: DEVELOPMENT in Oracle using AI Lab
+Package name: oracle_ai_lab
+Original package: my_python_project_template
+
+Purpose: technical marker used only by `scripts/init_from_template.sh` to prevent accidental repeated template initialization.
+
+This file is not part of the Oracle lab runtime and should not be used as project documentation.</code></pre>
+  </article>
+
+  <article class="file-card" id="file-97">
+    <div class="file-head">
+      <h3>.vscode/launch.json</h3>
+      <div><span class="priority p3">נמוכה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">.vscode/launch.json</code></p>
+    <p><strong>תפקיד הקובץ:</strong> VS Code launch configuration ל-Flask app ול-unittest.</p>
+    <p><strong>תיעוד קיים:</strong> מכיל “Run Flask app” ו-“Run unittest”.</p>
+    <p><strong>בעיה/פער:</strong> צריך לשנות שמות/תיאורים כדי להבהיר שה-Flask הוא demo harness, ולהוסיף tasks בעתיד ל-scripts/test.sh.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>Recommended configuration names:
+
+- &quot;Run retained Flask demo harness&quot;
+- &quot;Run oracle-dev-ai-lab unittest checks&quot;
+
+Optional future additions:
+
+- &quot;Run scripts/test.sh quick&quot;
+- &quot;Run scripts/review-db-code.sh&quot;
+- &quot;Run scripts/package-release.sh&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-98">
+    <div class="file-head">
+      <h3>pyproject.toml</h3>
+      <div><span class="priority p3">נמוכה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">pyproject.toml</code></p>
+    <p><strong>תפקיד הקובץ:</strong> Metadata ו-Ruff configuration לפרויקט Python המקומי.</p>
+    <p><strong>תיעוד קיים:</strong> description מבהיר שזה Oracle AI Lab עם retained Python starter tooling.</p>
+    <p><strong>בעיה/פער:</strong> אין מקום להמון תיעוד ב-TOML, אבל description צריך להדגיש שה-Python הוא tooling/test harness ולא runtime עסקי.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>description = &quot;Oracle AI Lab repository: local Oracle DB lab workflows, repository tooling, and retained Python test/demo harness&quot;</code></pre>
+  </article>
+
+  <article class="file-card" id="file-99">
+    <div class="file-head">
+      <h3>static/css/style.css</h3>
+      <div><span class="priority p3">נמוכה</span></div>
+    </div>
+    <p><strong>מיקום:</strong> <code class="path">static/css/style.css</code></p>
+    <p><strong>תפקיד הקובץ:</strong> CSS בסיסי לדף Flask demo harness.</p>
+    <p><strong>תיעוד קיים:</strong> אין comments.</p>
+    <p><strong>בעיה/פער:</strong> לא קריטי, אבל אפשר להוסיף comment שמסביר שזה לדמו בלבד.</p>
+    <p><strong>פעולה מומלצת:</strong> עדכון תיעוד בלבד</p>
+    <p><strong>תיעוד חדש מומלץ:</strong></p>
+    <pre><code>/* Purpose: Basic styling for the retained Flask demo harness page.
+   This stylesheet is not part of the Oracle DB lab runtime. */</code></pre>
+  </article>
+
+  <h2>סדר עבודה מומלץ מול Codex</h2>
+  <ol>
+    <li><strong>PR 1 - קבצי הכוונה חיים:</strong> README.md, AGENTS.md, TODO.md, .github/CONTRIBUTING.md, .agents/*, Makefile, Dockerfile, docker-compose*.yml.</li>
+    <li><strong>PR 2 - scripts ו-SQL:</strong> כל קבצי scripts/ וקבצי db/install, db/src, db/tests, db/rollback, db/review.</li>
+    <li><strong>PR 3 - tools ו-generated package:</strong> לתקן קודם את tools/package_release.py, אחר כך להריץ scripts/package-release.sh ולסקור את db/dist/release_001.</li>
+    <li><strong>PR 4 - Python starter harness:</strong> להחליט אם Flask starter נשאר. אם כן, לתעד אותו כ-demo harness בלבד; אם לא, לפתוח משימת הסרה נפרדת.</li>
+    <li><strong>PR 5 - tests:</strong> לעדכן Purpose headers ותוכן בדיקות שנשען על Goal wording, תוך שמירה על כיסוי ההתנהגות הקיים.</li>
+  </ol>
+
+  <h2>כללי ביקורת לאחר התיקון</h2>
+  <ul>
+    <li>לא נשארים headers חיים שמתחילים ב-Goal 00x או Stage 00x בקבצי קוד/SQL/scripts/tools/tests.</li>
+    <li>כל קובץ חי מסביר מה הוא עושה עכשיו ולא באיזה שלב נוצר.</li>
+    <li>קבצי generated output מציינים את ה-generator ואת כלל “לא לערוך ידנית”.</li>
+    <li>Flask starter מתועד כ-retained demo harness בלבד, או מוסר במשימה נפרדת.</li>
+    <li>לא בוצע שינוי התנהגותי סמוי. השינוי הוא תיעודי/הסברתי בלבד.</li>
+  </ul>
+
+  <section class="box warn">
+    <h2>הערת סיכון</h2>
+    <p>הקובץ המסוכן ביותר כרגע עבור Codex הוא <code>TODO.md</code>, משום שהוא מערבב מצב היסטורי ומצב נוכחי ואף כולל פריטים שנראים חסרים למרות שהם כבר קיימים. אחריו נמצאים <code>README.md</code>, <code>AGENTS.md</code>, ו-<code>tools/package_release.py</code>, משום שהם משפיעים ישירות על הבנת העבודה ועל generated output.</p>
+  </section>
+
+</main>
+</body>
+</html>
