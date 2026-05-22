@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 012 - Functional Spec Placeholder</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code,
+    pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background: #f0f0f0;
+    }
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 012 - מציין מקום לאפיון פונקציונלי</h1>
+
+  <h2>פרטי המשימה</h2>
+  <ul>
+    <li><strong>מזהה:</strong> Goal 012</li>
+    <li><strong>שם:</strong> Add Release Management Functional Spec Placeholder</li>
+    <li><strong>תאריך:</strong> 2026-05-22</li>
+    <li><strong>Baseline:</strong> <code>76093a3a4057b9165eaeedf7516f9a3d014d576d</code></li>
+  </ul>
+
+  <h2>מה השתנה</h2>
+  <ul>
+    <li><code>specs/001-release-management/spec.html</code> עודכן למציין מקום פונקציונלי ברור.</li>
+    <li><code>specs/001-release-management/README.md</code> עודכן להסביר את תפקיד תיקיית האפיון לאחר סגירת Infrastructure MVP.</li>
+    <li><code>docs/functional-iterations-plan.md</code> נוצר כמסמך תכנון לאיטרציות עתידיות.</li>
+    <li>תוצרי traceability שנגזרים מה-spec עודכנו כדי לשמור על עקביות.</li>
+  </ul>
+
+  <h2>למה Goal 012 הוא תיעוד ואפיון בלבד</h2>
+  <p>
+    Goal 012 מתחיל את מסלול התכנון הפונקציונלי אחרי סגירת שלד
+    Infrastructure MVP, אך אינו מממש מערכת עסקית. המטרה היא להגדיר מקור
+    סמנטי ויציב לדרישות עתידיות לפני יצירת SQL או PL/SQL.
+  </p>
+
+  <h2>מועמדים עתידיים בלבד</h2>
+  <p>
+    השמות <code>RELEASE_REQUESTS</code>, <code>RELEASE_ITEMS</code>,
+    <code>RELEASE_ENVIRONMENTS</code>, <code>RELEASE_STATUSES</code>,
+    <code>RELEASE_APPROVALS</code> ו-<code>RELEASE_EXECUTION_LOG</code>
+    תועדו כמועמדים עתידיים בלבד. הם לא נוצרו כאובייקטי DB.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/functional-iterations-plan.md</code></li>
+    <li><code>docs/stages/stage-012-functional-spec-placeholder.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>specs/001-release-management/spec.html</code></li>
+    <li><code>specs/001-release-management/README.md</code></li>
+    <li><code>specs/001-release-management/spec.json</code></li>
+    <li><code>specs/001-release-management/TODO.md</code></li>
+    <li><code>specs/001-release-management/traceability-matrix.md</code></li>
+    <li><code>specs/001-release-management/tasks/T001-spec-pipeline-placeholder.md</code></li>
+    <li><code>tests/test_spec_pipeline.py</code></li>
+    <li><code>TODO.md</code></li>
+  </ul>
+
+  <h2>מחוץ לתכולה</h2>
+  <ul>
+    <li>לא נוספו טבלאות release-management.</li>
+    <li>לא נוסף PL/SQL פונקציונלי.</li>
+    <li>לא נוספו views, triggers, constraints, indexes או seed data עסקי.</li>
+    <li>לא נוספה לוגיקת deployment.</li>
+    <li>לא נוספו REST, ORDS, APEX או UI.</li>
+    <li>לא הייתה גישה לבסיסי נתונים ארגוניים.</li>
+    <li>לא נוספו secrets ולא הורץ DDL או DML אד-הוק.</li>
+    <li>לא נטענה ולידציית Oracle runtime חדשה.</li>
+  </ul>
+
+  <h2>ולידציה</h2>
+  <pre><code>git status --short | cat
+python -m unittest discover
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+git diff --check | cat
+source tools/ai-git-workflow-tools/scripts/load-agw.sh &amp;&amp; agw_review_output --run</code></pre>
+  <ul>
+    <li><code>git status --short | cat</code> רץ והציג רק שינויי Goal 012 לפני commit.</li>
+    <li><code>python -m unittest discover</code> לא רץ כי אין פקודת <code>python</code> ב-PATH של הסביבה.</li>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> עבר: 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> עבר: 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> עבר.</li>
+    <li><code>git diff --check | cat</code> עבר ללא פלט.</li>
+    <li><code>agw_review_output --run</code> עבר לאחר טעינת AGW.</li>
+  </ul>
+
+  <h2>הצעד הבא</h2>
+  <p>
+    לתכנן goal פונקציונלי ראשון ונפרד, עם scope, traceability, בדיקות ו-review
+    לפני יצירת אובייקטי DB אמיתיים.
+  </p>
+</main>
+</body>
+</html>

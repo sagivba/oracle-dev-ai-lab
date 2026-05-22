@@ -1,55 +1,72 @@
-<!-- Purpose: Goal 009 semantic specification skeleton for the future release-management use case. -->
+<!-- Purpose: Goal 012 functional specification placeholder for the future fictional release-management use case. -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Release Management Specification Skeleton</title>
+  <title>Release Management Functional Specification Placeholder</title>
 </head>
 <body>
 <article
   id="spec"
   data-spec-id="001-release-management"
-  data-version="0.1.0"
-  data-goal-id="G009"
+  data-version="0.2.0"
+  data-goal-id="G012"
 >
   <header>
-    <h1>Release Management Specification Skeleton</h1>
+    <h1>Release Management Functional Specification Placeholder</h1>
     <p>
-      This document is a semantic skeleton for the future fictional
-      release-to-production management use case. Goal 009 creates traceable
-      structure only and does not define real business database objects.
+      This document is a planning placeholder for a future fictional,
+      non-sensitive release-management use case. Goal 012 defines functional
+      direction only; it does not create database objects, deployment logic, or
+      runtime behavior.
     </p>
   </header>
 
   <section id="business-goal" data-required="true" data-title="Business Goal">
     <h2>Business Goal</h2>
     <p>
-      Establish a traceable specification source for future release-management
-      work after the Infrastructure MVP is complete.
+      Prepare a clear functional specification placeholder for future
+      release-management iterations after the Infrastructure MVP skeleton has
+      been closed.
     </p>
     <ul>
       <li data-requirement-id="REQ-001">
-        Provide a stable semantic HTML source that later tooling can transform
-        into repository TODOs, task placeholders, review inputs, and package
-        metadata.
+        Define the fictional release-management use case at a planning level so
+        later functional goals can refine requirements before any DB
+        implementation is created.
       </li>
     </ul>
   </section>
 
   <section id="scope" data-required="true" data-title="Scope">
     <h2>Scope</h2>
+    <h3>Infrastructure MVP scope</h3>
     <p>
-      Goal 009 scope is limited to skeleton specification pipeline artifacts.
-      It is intentionally local-only and repository-only.
+      The Infrastructure MVP has already established the local Oracle lab
+      structure, controlled install workflow, smoke tests, review workflow, and
+      release packaging skeleton. Those infrastructure capabilities remain the
+      foundation for later functional work.
+    </p>
+    <h3>Goal 012 placeholder scope</h3>
+    <p>
+      Goal 012 updates this semantic specification and supporting planning
+      documentation only. It does not change DB source, scripts, tests,
+      packaging output, Docker behavior, or Oracle runtime state.
+    </p>
+    <h3>Future functional iteration scope</h3>
+    <p>
+      Later goals may turn approved requirements into versioned SQL files,
+      tests, review evidence, and release package content. Those later goals
+      must remain separate from Goal 012.
     </p>
     <ul>
       <li data-requirement-id="REQ-002">
-        Create deterministic skeleton tooling for extracting, validating, and
-        generating placeholder outputs from this specification.
+        Separate Infrastructure MVP evidence, Goal 012 planning scope, and
+        later functional implementation scope in the specification.
       </li>
       <li data-requirement-id="REQ-003">
-        Keep generated outputs traceable to stable requirement and acceptance
-        criteria identifiers.
+        Preserve stable requirement and acceptance criteria identifiers for
+        later traceability work.
       </li>
     </ul>
   </section>
@@ -57,22 +74,32 @@
   <section id="out-of-scope" data-required="true" data-title="Out of Scope">
     <h2>Out of Scope</h2>
     <p>
-      Goal 009 does not implement functional release-management behavior,
-      database objects, Oracle runtime validation, review workflow, packaging
-      workflow, REST, ORDS, APEX, or UI work.
-    </p>
-  </section>
-
-  <section id="entities" data-required="true" data-title="Entities">
-    <h2>Entities</h2>
-    <p>
-      Entity modeling is reserved for later functional goals. This skeleton does
-      not create tables such as release requests or release items.
+      Goal 012 does not create tables, packages, views, triggers, deployment
+      logic, runtime validation, REST, ORDS, APEX, or UI. It also does not add
+      secrets, connect to organizational databases, or perform ad-hoc DDL or
+      DML.
     </p>
     <ul>
       <li data-requirement-id="REQ-004">
-        Preserve the entity section as a placeholder without generating real
-        functional SQL or PL/SQL implementation.
+        Keep all release-management database implementation work out of Goal
+        012, including SQL tables, PL/SQL, views, triggers, business seed data,
+        and deployment logic.
+      </li>
+    </ul>
+  </section>
+
+  <section id="entities" data-required="true" data-title="Entities">
+    <h2>Candidate Future Entities</h2>
+    <p>
+      The following names are planning candidates only. They are not authorized
+      DB objects in Goal 012 and must not be created until a later functional
+      goal explicitly approves versioned SQL implementation.
+    </p>
+    <ul>
+      <li data-requirement-id="REQ-005">
+        Treat RELEASE_REQUESTS, RELEASE_ITEMS, RELEASE_ENVIRONMENTS,
+        RELEASE_STATUSES, RELEASE_APPROVALS, and RELEASE_EXECUTION_LOG as future
+        planning candidates only.
       </li>
     </ul>
   </section>
@@ -81,12 +108,12 @@
     id="plsql-api"
     data-required="false"
     data-title="PL/SQL API"
-    data-optional-for="Infrastructure MVP"
+    data-optional-for="Goal 012 placeholder"
   >
     <h2>PL/SQL API</h2>
     <p>
-      This section is optional for the Infrastructure MVP. PL/SQL API contracts
-      become relevant only after functional iteration readiness is approved.
+      PL/SQL API contracts are future functional scope. Goal 012 does not create
+      packages, package bodies, procedures, functions, grants, or runtime tests.
     </p>
   </section>
 
@@ -98,19 +125,24 @@
     <h2>Acceptance Criteria</h2>
     <ul>
       <li data-acceptance-id="AC-001" data-requirement-id="REQ-001">
-        The semantic specification exposes required sections and stable IDs.
+        The specification describes the fictional release-management use case as
+        a planning placeholder only.
       </li>
       <li data-acceptance-id="AC-002" data-requirement-id="REQ-002">
-        The pipeline tools support --help and run with only the Python standard
-        library.
+        The specification clearly separates Infrastructure MVP scope, Goal 012
+        placeholder scope, and future functional iteration scope.
       </li>
       <li data-acceptance-id="AC-003" data-requirement-id="REQ-003">
-        Derived JSON, TODO, task placeholder, and traceability outputs are
-        deterministic and trace back to requirement IDs.
+        Stable requirement and acceptance criteria identifiers remain available
+        for traceability.
       </li>
       <li data-acceptance-id="AC-004" data-requirement-id="REQ-004">
-        No functional release-management database objects are generated by Goal
-        009.
+        Goal 012 creates no functional release-management database objects,
+        runtime behavior, deployment logic, REST, ORDS, APEX, or UI.
+      </li>
+      <li data-acceptance-id="AC-005" data-requirement-id="REQ-005">
+        Candidate future entity names are documented only as future planning
+        candidates and are not implemented by Goal 012.
       </li>
     </ul>
   </section>
