@@ -1,6 +1,7 @@
 # Purpose
 
-Goal 004 reserves this directory for future rollback scripts.
+This directory stores managed rollback references and future rollback SQL for
+the Oracle lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Rollback files may change local disposable lab database state only when explicit
+teardown behavior is designed, reviewed, and run through official scripts.

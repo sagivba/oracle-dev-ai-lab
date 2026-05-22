@@ -1,4 +1,4 @@
--- Purpose: Official Goal 007/008 database install entry point for the Oracle AI Lab.
+-- Purpose: Official database install entry point for the Oracle AI Lab.
 -- This SQL*Plus/sqlcl-compatible file defines the managed install order for the
 -- local lab only. It installs infrastructure objects only and stores no secrets.
 
@@ -9,7 +9,7 @@ set verify off
 whenever sqlerror exit sql.sqlcode
 
 prompt Oracle AI Lab controlled install entry point
-prompt Goal 008: controlled install workflow with infrastructure smoke object
+prompt Controlled install workflow with infrastructure smoke object
 
 -- Password values are supplied by scripts/install-db.sh from local environment
 -- variables. The values must never be committed to Git.

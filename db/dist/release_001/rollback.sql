@@ -1,4 +1,4 @@
--- Purpose: Goal 011 generated release package rollback reference skeleton.
+-- Purpose: Generated release package rollback reference.
 -- It documents rollback scope only and intentionally does not execute DDL
 -- or DML. Functional rollback logic belongs to later approved goals.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Purpose: Official Goal 008 shell entry point for local Oracle SQL smoke tests.
+# Purpose: Official shell entry point for local Oracle SQL smoke tests.
 # It runs only managed SQL files under db/tests/sql against the local
 # oracle-dev-ai-lab-db container and does not contain inline DDL or DML.
 

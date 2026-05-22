@@ -1,4 +1,4 @@
-"""Purpose: Validate Goal 009 semantic spec skeleton files without DB access."""
+"""Purpose: Validate semantic spec skeleton files without DB access."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from extract_spec import DEFAULT_OUTPUT, DEFAULT_SPEC, extract_spec, validate_sp
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Validate required sections and stable IDs in the Goal 009 spec."
+        description="Validate required sections and stable IDs in the semantic spec."
     )
     parser.add_argument("--spec", type=Path, default=DEFAULT_SPEC, help="Path to spec.html.")
     parser.add_argument(

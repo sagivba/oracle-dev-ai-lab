@@ -1,6 +1,6 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle index definitions.
+This directory stores versioned Oracle index source files for the lab database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Index files are source artifacts for managed install, review, and package
+workflows. They must not be applied through ad-hoc DDL.

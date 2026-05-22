@@ -1,4 +1,4 @@
-"""Purpose: Extract Goal 009 semantic HTML specs into deterministic JSON."""
+"""Purpose: Extract semantic HTML specs into deterministic JSON."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ def _clean_text(parts: list[str]) -> str:
 
 
 class SpecHTMLParser(HTMLParser):
-    """Collect the intentionally small semantic subset used by Goal 009."""
+    """Collect the intentionally small semantic subset used by the spec pipeline."""
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -188,7 +188,7 @@ def write_json(payload: dict[str, Any], output_path: Path) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Extract the Goal 009 semantic HTML spec into deterministic JSON."
+        description="Extract the semantic HTML spec into deterministic JSON."
     )
     parser.add_argument("--spec", type=Path, default=DEFAULT_SPEC, help="Path to spec.html.")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Path for spec.json.")

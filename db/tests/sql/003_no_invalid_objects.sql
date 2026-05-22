@@ -1,4 +1,4 @@
--- Purpose: Goal 008 SQL smoke test for invalid objects in the lab owner schema.
+-- Purpose: SQL smoke test for invalid objects in the lab owner schema.
 -- This file is a diagnostics-only check and does not modify database state.
 
 set echo off

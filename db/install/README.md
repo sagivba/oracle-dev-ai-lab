@@ -1,6 +1,8 @@
 # Purpose
 
-Goal 004 reserves this directory for future Oracle lab install scripts.
+This directory stores the managed Oracle lab install entry point and supporting
+SQL files.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Files here may change local disposable lab database state only when executed by
+the official install workflow. They must not contain secrets or connect to
+organizational databases.

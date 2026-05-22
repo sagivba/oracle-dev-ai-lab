@@ -1,7 +1,8 @@
 # Purpose
 
-Goal 004 reserves this directory for future seed data files used by later
-Oracle lab goals.
+This directory stores versioned seed or reference-data SQL files for the lab
+database.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+Seed files may change local disposable lab database data only through the
+managed install workflow. They must not contain secrets or real organizational
+data.

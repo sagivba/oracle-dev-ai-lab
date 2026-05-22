@@ -1,4 +1,4 @@
--- Purpose: Goal 008 SQL smoke test for LAB_SMOKE_TEST inventory and columns.
+-- Purpose: SQL smoke test for LAB_SMOKE_TEST inventory and columns.
 -- This file performs metadata-only checks against the local lab catalog.
 
 set echo off

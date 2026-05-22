@@ -1,6 +1,6 @@
 # Purpose
 
-Goal 004 reserves this directory for future SQL-based database tests.
+This directory stores SQL-based database tests for the local Oracle lab.
 
-Implementation content belongs to later goals.
-Traceability: Goal 004 - Create Oracle Lab Repository Structure.
+These tests are executed by `scripts/run-db-tests.sh` against the disposable
+local lab container. They should validate state and avoid ad-hoc schema changes.

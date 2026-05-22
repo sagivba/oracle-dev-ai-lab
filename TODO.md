@@ -2,9 +2,10 @@
 
 ## Purpose
 
-This file is the Stage 0 intake baseline for `oracle-dev-ai-lab`. It records what the
-project is supposed to contain according to `docs/01_Setting-AI-oracle-lab.html`, what
-currently exists in the repository, what is missing, and what should happen next.
+This file is the live repository status ledger for `oracle-dev-ai-lab`. It records
+what the project is supposed to contain according to
+`docs/01_Setting-AI-oracle-lab.html`, what currently exists in the repository,
+what is missing, and what should happen next.
 
 This baseline is documentation only. It does not implement Docker, Oracle schemas,
 install scripts, review scripts, package scripts, or functional database objects.

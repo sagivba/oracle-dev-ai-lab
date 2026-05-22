@@ -1,4 +1,4 @@
-# Purpose: unittest contract coverage for the Goal 011 packaging workflow skeleton.
+# Purpose: unittest contract coverage for the repository packaging workflow.
 
 from __future__ import annotations
 
@@ -162,20 +162,21 @@ class TestPackagingWorkflowContract(unittest.TestCase):
         doc = DOC.read_text(encoding="utf-8")
 
         self.assertIn("review_report_has_blocker_finding", helper)
-        self.assertIn("NOT APPROVED - skeleton package only", manifest)
+        self.assertIn("NOT APPROVED - review approval not recorded", manifest)
         self.assertIn("A release package is not approved if any BLOCKER exists", deployment_notes)
         self.assertIn("A release package is not approved if any BLOCKER exists", doc)
 
-    def test_docs_and_dist_readme_describe_skeleton_boundaries(self) -> None:
+    def test_docs_and_dist_readme_describe_package_boundaries(self) -> None:
         doc = DOC.read_text(encoding="utf-8")
         readme = DIST_README.read_text(encoding="utf-8")
 
         for content in [doc, readme]:
+            normalized = " ".join(content.split())
             with self.subTest():
-                self.assertIn("skeleton", content.lower())
-                self.assertIn("does not connect to Oracle", content)
-                self.assertIn("does not run Docker", content)
-                self.assertIn("does not execute ad-hoc DDL or DML", content)
+                self.assertIn("package", normalized.lower())
+                self.assertIn("does not connect to Oracle", normalized)
+                self.assertIn("does not run Docker", normalized)
+                self.assertIn("does not execute ad-hoc DDL or DML", normalized)
 
     def test_packaging_tests_are_unittest_based(self) -> None:
         test_file = Path(__file__).read_text(encoding="utf-8")
