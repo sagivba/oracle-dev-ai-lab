@@ -1,4 +1,4 @@
-# Purpose: unittest coverage for the Goal 009 specification pipeline skeleton.
+# Purpose: unittest coverage for the release-management specification pipeline placeholder.
 
 from __future__ import annotations
 
@@ -19,7 +19,10 @@ TASK_PLACEHOLDER = SPEC_DIR / "tasks" / "T001-spec-pipeline-placeholder.md"
 
 
 class TestSpecPipeline(unittest.TestCase):
-    """Validate Goal 009 without network, Docker, Oracle, or external services."""
+    """Validate the release-management specification pipeline placeholder.
+
+    The checks stay local and avoid external services.
+    """
 
     def run_tool(self, *args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
