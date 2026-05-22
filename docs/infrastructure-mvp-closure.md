@@ -83,7 +83,61 @@ This decision closes the Infrastructure MVP skeleton only. It does not approve
 functional release-management development inside this task, and it does not
 change any runtime behavior.
 
+## Local Dev Runtime Validation After v0.1.0
+
+Goal 014 records manual local Oracle Lab runtime validation performed in the Dev
+repository after tag `v0.1.0` at commit
+`1c6b46797766656e5db537047d8e91b61853e71d`.
+
+The validation was performed only in:
+
+```text
+/home/sagivba-adm/src/oracle-dev-ai-lab
+```
+
+The QA worktree was not touched.
+
+Successful validation covered:
+
+- AGW status on `main` at `1c6b467` with a clean working tree;
+- local `.env` created from `.env.example` with `ORACLE_PWD` set locally;
+- `scripts/lab-up.sh` starting `oracle-dev-ai-lab-db`;
+- `scripts/lab-reset.sh --yes` removing the disposable container, volume, and
+  network before the successful install validation;
+- Oracle readiness marker `DATABASE IS READY TO USE!`;
+- `scripts/install-db.sh` completing the controlled install on the clean local
+  lab runtime;
+- `scripts/run-db-tests.sh smoke` passing connectivity, object inventory, and
+  invalid-object checks;
+- `scripts/review-db-code.sh` passing the review skeleton checks;
+- `scripts/package-release.sh` writing `db/dist/release_001`;
+- `agw_review_output --run` passing with no repository changes.
+
+The successful install validation was a clean install after `lab-reset`. Repeated
+idempotent install on an already-installed lab was not validated and must not be
+claimed.
+
+The smoke connectivity check observed `CURRENT_SCHEMA=SYS`; this is recorded as
+an observation, not as a failure.
+
+No organizational database access was used. No secrets were committed. The local
+`.env` file and password remain local and are not repository evidence.
+
+## v0.1.1 Intended Meaning
+
+After Goal 014 is merged, the project can create tag `v0.1.1` with this intended
+meaning:
+
+```text
+Infrastructure MVP + local Oracle runtime validation baseline.
+Ready to start Codex Oracle development capability study.
+```
+
+This tag meaning does not claim QA worktree validation, repeated idempotent
+install behavior, portability for other developers, Oracle 19c compatibility, or
+functional release-management implementation.
+
 ## Recommended Next Step
 
-Plan Goal 012 as the next separate task. Do not implement Goal 012 as part of
-T012.
+Merge Goal 014, then create tag `v0.1.1` as the local Oracle runtime validation
+baseline before starting the Codex Oracle development capability study.

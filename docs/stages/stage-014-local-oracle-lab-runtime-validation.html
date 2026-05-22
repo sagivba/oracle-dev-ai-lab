@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 014 - Local Oracle Lab Runtime Validation</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      background: #f7f7f7;
+      color: #222;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px;
+      background: #fff;
+    }
+    h1,
+    h2 {
+      color: #111;
+    }
+    code,
+    pre {
+      direction: ltr;
+      text-align: left;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      background: #f0f0f0;
+    }
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Stage 014 - תיעוד ולידציית runtime מקומית של Oracle Lab</h1>
+
+  <h2>פרטי המשימה</h2>
+  <ul>
+    <li><strong>מזהה:</strong> Goal 014</li>
+    <li><strong>שם:</strong> Record Local Oracle Lab Runtime Validation</li>
+    <li><strong>תאריך:</strong> 2026-05-22</li>
+    <li><strong>Baseline:</strong> <code>1c6b46797766656e5db537047d8e91b61853e71d</code></li>
+    <li><strong>תג baseline:</strong> <code>v0.1.0</code></li>
+  </ul>
+
+  <h2>סיכום</h2>
+  <p>
+    Goal 014 מתעד ולידציית runtime מקומית שבוצעה ידנית ב-Dev לאחר
+    <code>v0.1.0</code>. זהו שינוי תיעוד וממשל בלבד: הוא אינו משנה scripts,
+    אינו מוסיף אובייקטי DB פונקציונליים ואינו טוען ולידציית QA.
+  </p>
+
+  <h2>קבצים שנוצרו</h2>
+  <ul>
+    <li><code>docs/codex-goals/goal-014-record-local-oracle-lab-runtime-validation.md</code></li>
+    <li><code>docs/stages/stage-014-local-oracle-lab-runtime-validation.html</code></li>
+  </ul>
+
+  <h2>קבצים שעודכנו</h2>
+  <ul>
+    <li><code>docs/codex-goals/GOALS_INDEX.md</code></li>
+    <li><code>docs/infrastructure-mvp-closure.md</code></li>
+    <li><code>docs/functional-readiness-checklist.md</code></li>
+    <li><code>docs/goals-plan.md</code></li>
+    <li><code>TODO.md</code></li>
+  </ul>
+
+  <h2>פקודות שתועדו כראיית runtime</h2>
+  <pre><code>source tools/ai-git-workflow-tools/scripts/load-agw.sh
+agw_status
+scripts/lab-up.sh
+scripts/lab-reset.sh --yes
+docker logs oracle-dev-ai-lab-db | grep 'DATABASE IS READY TO USE!'
+scripts/install-db.sh
+scripts/run-db-tests.sh smoke
+scripts/review-db-code.sh
+scripts/package-release.sh
+source tools/ai-git-workflow-tools/scripts/load-agw.sh
+agw_review_output --run</code></pre>
+
+  <h2>תוצאות ולידציה שתועדו</h2>
+  <ul>
+    <li>AGW נטען בהצלחה בגרסה <code>v0.6.0-dev</code> עם <code>tool_git_ref: v0.6.0</code>.</li>
+    <li>ה-repository היה <code>/home/sagivba-adm/src/oracle-dev-ai-lab</code>, branch <code>main</code>, HEAD <code>1c6b467</code>, וללא שינויים.</li>
+    <li>נוצר קובץ <code>.env</code> מקומי מתוך <code>.env.example</code> והוגדר <code>ORACLE_PWD</code> מקומית בלבד.</li>
+    <li><code>scripts/lab-up.sh</code> התחיל את <code>oracle-dev-ai-lab-db</code> עם <code>localhost:1521/FREEPDB1</code>.</li>
+    <li><code>scripts/lab-reset.sh --yes</code> מחק container, volume ו-network לפני הולידציה המוצלחת.</li>
+    <li>Oracle readiness הציג <code>DATABASE IS READY TO USE!</code>.</li>
+    <li><code>scripts/install-db.sh</code> עבר והתקין את <code>AI_APP_OWNER.LAB_SMOKE_TEST</code>.</li>
+    <li><code>scripts/run-db-tests.sh smoke</code> עבר עבור connectivity, object inventory ו-no invalid objects.</li>
+    <li><code>CURRENT_SCHEMA=SYS</code> נצפה בבדיקת connectivity ונרשם כתצפית בלבד, לא ככשל.</li>
+    <li><code>scripts/review-db-code.sh</code> עבר.</li>
+    <li><code>scripts/package-release.sh</code> יצר את <code>db/dist/release_001</code>.</li>
+    <li><code>agw_review_output --run</code> עבר ללא diff לא צפוי.</li>
+  </ul>
+
+  <h2>מה עבר</h2>
+  <ul>
+    <li>Clean install על runtime מקומי וזמני לאחר reset.</li>
+    <li>SQL smoke tests מול המעבדה המקומית.</li>
+    <li>Review skeleton.</li>
+    <li>Package skeleton.</li>
+    <li>AGW review output על repository נקי.</li>
+  </ul>
+
+  <h2>מה לא אומת</h2>
+  <ul>
+    <li>לא אומת install idempotent חוזר על lab שכבר הותקן.</li>
+    <li>לא אומת QA worktree.</li>
+    <li>לא אומתו portability או onboarding למפתחים אחרים.</li>
+    <li>לא אומתה תאימות Oracle 19c.</li>
+    <li>לא אומתה פונקציונליות release-management עסקית.</li>
+  </ul>
+
+  <h2>הנחות</h2>
+  <ul>
+    <li>הולידציה שתועדה בוצעה ידנית ב-Dev בלבד.</li>
+    <li>קובץ <code>.env</code> והסיסמה נשארים מקומיים ואינם חלק מה-repository.</li>
+    <li>ה-install המוצלח מייצג clean install לאחר reset, לא התקנה חוזרת על DB קיים.</li>
+  </ul>
+
+  <h2>מחוץ לתכולה</h2>
+  <ul>
+    <li>לא נוספו טבלאות עסקיות, constraints, indexes או seed data.</li>
+    <li>לא נוספו PL/SQL packages, views או triggers.</li>
+    <li>לא נוספו REST, ORDS, APEX או UI.</li>
+    <li>לא שונו runtime scripts.</li>
+    <li>לא הייתה גישה לבסיסי נתונים ארגוניים.</li>
+    <li>לא נוספו secrets ולא בוצע commit ל-<code>.env</code>.</li>
+    <li>לא הורץ DDL או DML אד-הוק במסגרת Goal 014.</li>
+  </ul>
+
+  <h2>בדיקות repository שהורצו</h2>
+  <pre><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+git diff --check | cat
+source tools/ai-git-workflow-tools/scripts/load-agw.sh
+agw_review_output --run</code></pre>
+
+  <h2>תוצאות בדיקות repository</h2>
+  <ul>
+    <li><code>PATH=.venv/bin:$PATH PYTHONPATH=src python -m unittest discover</code> - עבר, 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/test.sh quick</code> - עבר, 52 בדיקות.</li>
+    <li><code>PATH=.venv/bin:$PATH scripts/lint.sh</code> - עבר.</li>
+    <li><code>git diff --check | cat</code> - עבר ללא פלט.</li>
+    <li><code>agw_review_output --run</code> - עבר לאחר טעינת AGW.</li>
+  </ul>
+
+  <h2>התג הבא המומלץ</h2>
+  <p>
+    לאחר merge מומלץ ליצור את <code>v0.1.1</code> במשמעות:
+    <span dir="ltr">Infrastructure MVP + local Oracle runtime validation baseline.</span>
+  </p>
+
+  <h2>השלב הבא</h2>
+  <p>
+    להתחיל Codex Oracle development capability study רק לאחר merge ו-tag
+    <code>v0.1.1</code>.
+  </p>
+</main>
+</body>
+</html>

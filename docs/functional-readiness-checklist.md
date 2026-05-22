@@ -24,6 +24,23 @@ explicit validation record.
 | Unit testing strategy approved | `docs/testing-strategy.md` is approved and keeps Python tests on `unittest`. |
 | Future PL/SQL test structure exists | `db/tests/utplsql/` exists for future business PL/SQL tests. |
 
+## Current Validation Evidence
+
+Goal 014 records local Dev runtime validation after `v0.1.0`. That evidence shows
+the readiness gates for local clean lab install, SQL smoke tests, review, and
+package workflow passed in the Dev repository only.
+
+The validation scope is intentionally narrow:
+
+- validated: clean install on a disposable local lab runtime after
+  `scripts/lab-reset.sh --yes`;
+- not validated: repeated idempotent install on an already-installed lab;
+- not validated: QA worktree behavior;
+- not validated: portability or onboarding for other developers.
+
+Functional work remains blocked unless the current branch also has fresh task
+scope, traceability, and validation requirements for the first functional goal.
+
 ## Blocking Rule
 
 If any readiness item is missing, failing, stale, or not evidenced, functional
