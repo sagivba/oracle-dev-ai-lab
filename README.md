@@ -11,29 +11,38 @@ project instructions govern all project work.
 
 ## Current Status
 
-This repository is in early identity and planning alignment.
+The Infrastructure MVP is implemented and merged to `main`. The first functional
+release-management database iteration has **not started**.
 
-Implemented so far:
+| Area | Implemented baseline | Evidence and limits |
+| --- | --- | --- |
+| Oracle Docker lab | `docker-compose.yml` (`db` service), `.env.example`, `scripts/lab-{up,down,reset,backup,restore}.sh` | Local disposable lab infrastructure; file presence alone does not prove startup or backup/restore success. |
+| Managed install and DB smoke tests | `db/install/`, `scripts/install-db.sh`, `AI_APP_OWNER.LAB_SMOKE_TEST`, `db/tests/sql/`, `scripts/run-db-tests.sh` | Infrastructure-only users/schema and smoke object; no business objects. |
+| Static review and packaging | `scripts/review-db-code.sh`, `scripts/package-release.sh`, `tools/package_release.py`, `db/dist/release_001/` | Review/package skeletons exist. Generated package entry points do not perform deployment and the package is not approved for deployment. |
+| Specification and readiness | `tools/` spec pipeline, placeholder `specs/001-release-management/`, `docs/functional-readiness-checklist.md` | Planning and traceability exist; functional implementation requires a separate approved goal. |
+| Handoff documentation (T015) | `docs/README.md`, `docs/stages/README.md`, Flask/CI scope documentation and Compose service comment | Completed in [PR #24](https://github.com/sagivba/oracle-dev-ai-lab/pull/24), merged on 2026-05-22. |
 
-- Oracle AI Lab operating rules in `AGENTS.md`
-- project planning source in `docs/01_Setting-AI-oracle-lab.html`
-- staged Codex goal files in `docs/codex-goals/`
-- a root `TODO.md` baseline
-- retained Python starter package named `oracle_ai_lab`
-- retained `unittest`, lint, CI, and optional Flask/Docker starter tooling
+**Historical validation:** [PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22)
+records manual local Dev validation on 2026-05-22 at the `v0.1.0` baseline:
+Oracle readiness, clean install after reset, SQL smoke tests, static review, and
+package generation. See [the closure record](docs/infrastructure-mvp-closure.md)
+and [the Goal 014 report](docs/stages/stage-014-local-oracle-lab-runtime-validation.html).
+This is recorded prior evidence, not a fresh execution against today's environment.
+Repeated install on an already-installed lab, portability to other developers,
+backup/restore, and Oracle 19c compatibility are not established by that record.
 
-Not implemented yet:
+**Current documentation reconciliation:** no Oracle container startup, install,
+SQL smoke tests, or backup/restore was run. No fresh Oracle runtime or deployment
+compatibility is claimed. Repository-only checks do not replace those checks.
 
-- Oracle Docker lab runtime
-- database schemas or SQL install files
-- DB smoke tests
-- review workflow
-- packaging workflow
-- release-management functional database objects
+The Flask starter is retained-but-frozen: it supports Python/test/CI tooling and
+must not be extended during functional Oracle DB iterations without an explicit
+new decision. CI runs Python tests and lint; it does not validate live Oracle.
 
-Do not treat the retained Flask app or generic Docker files as the final Oracle lab
-implementation. They are starter infrastructure kept until later goals decide how
-they should fit into the lab.
+Use [TODO.md](TODO.md) for current status and the next action, and
+[docs/README.md](docs/README.md) for documentation navigation. The next step is to
+define the first functional goal and satisfy the readiness gate, including fresh
+validation wherever the existing evidence is stale or insufficient.
 
 ## Fixed Project Names
 
@@ -179,43 +188,31 @@ Expected response:
 
 ## Docker Status
 
-Docker files are currently retained starter app infrastructure. They do not yet
-define the Oracle AI Database 26ai Free lab container.
+`docker-compose.yml` contains the Oracle `db` service and a separate retained
+Flask `app` service. The Oracle lifecycle scripts operate on the `db` service;
+use [the Docker lab guide](docs/docker-lab-design.md) and
+[the managed install guide](docs/install-workflow.md) for local setup.
 
-Do not claim Oracle Docker compatibility until the relevant Docker lab goal is
-implemented and tested.
-
-Starter app Docker commands, if needed:
+After creating an untracked `.env` and replacing all required password
+placeholders locally, the lab workflow is:
 
 ```bash
-docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
-docker compose -p oracle_ai_lab_dev -f docker-compose.yml -f docker-compose.dev.yml down
+scripts/lab-up.sh
+docker logs oracle-dev-ai-lab-db | grep 'DATABASE IS READY TO USE!'
+# Continue only after the readiness marker appears.
+scripts/install-db.sh
+scripts/run-db-tests.sh smoke
 ```
+
+These are runtime instructions, not commands executed during this documentation
+change. Startup requests alone do not prove readiness. The default image tag is
+`latest`, so prior validation does not guarantee the same image on a later pull.
 
 ## Repository Structure
 
-Current important paths:
-
-```text
-AGENTS.md
-TODO.md
-docs/
-  01_Setting-AI-oracle-lab.html
-  codex-goals/
-  stages/
-scripts/
-src/oracle_ai_lab/
-tests/
-```
-
-Target Oracle lab structure is defined in:
-
-```text
-docs/01_Setting-AI-oracle-lab.html
-.agents/oracle-ai-lab-codex-planner/references/project-rules.md
-```
-
-Do not create the full target structure outside the goal that explicitly asks for it.
+See [the repository structure guide](docs/repository-structure.md) for current
+paths and responsibilities. The original planning document describes the target;
+not every planned business feature has been implemented.
 
 ## AI / Codex Workflow
 

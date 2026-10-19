@@ -2,181 +2,60 @@
 
 ## Purpose
 
-This document describes the retained Python starter structure, the governance
-documentation, the Oracle Docker skeleton from Goal 006, and the repository
-folders created by Goal 004 for `oracle-dev-ai-lab`.
+This document describes the current layout and file responsibilities in
+`oracle-dev-ai-lab`. It reflects the merged Infrastructure MVP and T015 handoff
+baseline, rather than the earlier Goal 004 folder-only snapshot.
 
-This document is descriptive. Goal 004 creates folder structure only. It does
-not add Oracle SQL, schemas/users, install workflow, smoke objects, DB tests,
-review workflow, packaging workflow, or functional release-management
-implementation.
+## Current Oracle Lab Files
 
-## 1. Retained Python Starter Structure
+| Area | Paths | Responsibility |
+| --- | --- | --- |
+| Docker lab | `docker-compose.yml`, `.env.example`, `scripts/lab-up.sh`, `scripts/lab-down.sh`, `scripts/lab-reset.sh`, `scripts/lab-backup.sh`, `scripts/lab-restore.sh` | Isolated disposable Oracle service and lifecycle entry points. |
+| Managed install | `db/install/install.sql`, `db/install/00_create_lab_users.sql`, `db/install/01_create_schema.sql`, `scripts/install-db.sh` | Versioned lab user/schema setup and smoke-object installation through official scripts. |
+| DB source | `db/src/` | SQL grouped by tables, constraints, indexes, views, packages, triggers, and seed. Currently only `tables/lab_smoke_test.sql` is implemented SQL. |
+| Rollback | `db/rollback/rollback.sql` | Conservative rollback skeleton; not a full functional rollback implementation. |
+| SQL tests | `db/tests/sql/`, `scripts/run-db-tests.sh` | Connectivity, object inventory, and invalid-object smoke checks. |
+| Future PL/SQL tests | `db/tests/utplsql/` | Placeholder for future business unit tests; no business utPLSQL tests implemented. |
+| Static review | `db/review/review-report.md`, `scripts/review-db-code.sh` | Repository-only checks and review template; no live Oracle diagnostics or deployment approval. |
+| Packaging | `tools/package_release.py`, `scripts/package-release.sh`, `db/dist/release_001/` | Deterministic package skeleton from tracked sources; generated entry points do not deploy objects. |
+| Generated DB area | `db/generated/` | Reserved area; no functional SQL generation implementation. |
+| Spec pipeline | `tools/extract_spec.py`, `tools/validate_spec.py`, `tools/generate_todo.py`, `tools/generate_tasks.py` | Semantic specification extraction, validation, and generated planning artifacts. |
+| Functional specification | `specs/001-release-management/` | Placeholder `spec.html`, generated `spec.json`, TODO, tasks, and traceability matrix; no business DB implementation. |
 
-The repository still preserves the useful starter tooling from the original
-Python template:
+## Documentation and Governance
 
-```text
-README.md
-AGENTS.md
-TODO.md
-.env.example
-.gitignore
-.github/
-Dockerfile
-docker-compose.yml
-docker-compose.dev.yml
-docker-compose.qa.yml
-docs/
-scripts/
-src/oracle_ai_lab/
-static/
-templates/
-tests/
-pyproject.toml
-requirements.in
-requirements.txt
-```
+- `AGENTS.md` and `.agents/oracle-ai-lab-codex-planner/` define mandatory AI work rules.
+- Root `TODO.md` is the current status and next-action ledger.
+- `docs/README.md` is the documentation navigation index.
+- Governance and workflow references live under `docs/`.
+- `docs/01_Setting-AI-oracle-lab.html` is the original planning source, not an implementation inventory.
+- `docs/codex-goals/` contains staged task sources; completed goals are not automatically the next action.
+- `docs/stages/` contains historical Hebrew stage reports; read `docs/stages/README.md` before using them.
 
-The retained Flask app, templates, static files, generic Docker files, and
-Python tests are starter tooling only. They are not the Oracle database lab
-runtime.
+## Retained Python Starter
 
-## 2. Governance Documentation
+`src/oracle_ai_lab/`, `templates/`, `static/`, `Dockerfile`, and the Compose `app`
+service are retained-but-frozen starter tooling, separate from the Oracle `db`
+service. `tests/`, `scripts/test.sh`, `scripts/lint.sh`, and
+`.github/workflows/ci.yml` provide Python tests/contracts and lint. CI does not
+start Oracle or execute SQL smoke tests.
 
-The governance documentation area is:
+## Validation Boundary and Remaining Work
 
-```text
-docs/
-  01_Setting-AI-oracle-lab.html
-  project-charter.md
-  safety-rules.md
-  decision-log.md
-  repository-structure.md
-  codex-workflow.md
-  codex-goals/
-  stages/
-```
+File presence proves implementation exists, not that a fresh environment works.
+Historical local clean-install and smoke-test evidence is recorded in
+[infrastructure-mvp-closure.md](infrastructure-mvp-closure.md) and the Goal 014
+stage report. This documentation reconciliation did not run Oracle runtime checks.
 
-The governance documents define the project rules, stage order, safety policy,
-and stage-report requirements.
+Functional release-management tables, constraints, indexes, seed data, views,
+packages, triggers, business SQL/utPLSQL tests, and deployment logic remain future
+work. Some object-type directories contain only README placeholders. Follow
+[the readiness checklist](functional-readiness-checklist.md) and an explicitly
+approved functional goal before adding objects.
 
-## 3. Oracle Docker Skeleton From Goal 006
+## Structure Rules
 
-Goal 006 already added the local Oracle Docker lab skeleton. That skeleton is
-still retained and is separate from the Goal 004 folder-structure work:
-
-```text
-docker-compose.yml
-.env.example
-scripts/
-  lab-up.sh
-  lab-down.sh
-  lab-reset.sh
-  lab-backup.sh
-  lab-restore.sh
-docs/
-  docker-lab-design.md
-```
-
-This skeleton defines the Docker naming and runtime conventions only. It does
-not prove Oracle runtime compatibility until Docker is actually started and
-validated.
-
-## 4. Goal 004 Oracle Lab Repository Structure
-
-Goal 004 adds the missing Oracle lab folder structure while keeping the retained
-Python starter layout intact. The newly created folders are:
-
-```text
-specs/
-  001-release-management/
-    README.md
-    tasks/
-      README.md
-
-db/
-  README.md
-  install/
-    README.md
-  src/
-    README.md
-    tables/
-      README.md
-    constraints/
-      README.md
-    indexes/
-      README.md
-    views/
-      README.md
-    packages/
-      README.md
-    triggers/
-      README.md
-    seed/
-      README.md
-  rollback/
-    README.md
-  tests/
-    README.md
-    sql/
-      README.md
-    utplsql/
-      README.md
-  review/
-    README.md
-  generated/
-    README.md
-  dist/
-    README.md
-
-tools/
-  README.md
-```
-
-The placeholder READMEs exist only to keep otherwise-empty directories tracked
-in Git and to explain where future implementation files belong.
-
-## 5. Future Implementation Files Still Intentionally Missing
-
-The following files and workflows are still intentionally missing after Goal 004:
-
-```text
-db/install/install.sql
-db/install/00_create_lab_users.sql
-db/install/01_create_schema.sql
-db/rollback/rollback.sql
-db/src/tables/*.sql
-db/src/constraints/*.sql
-db/src/indexes/*.sql
-db/src/views/*.sql
-db/src/packages/*.sql
-db/src/triggers/*.sql
-db/src/seed/*.sql
-db/tests/sql/*.sql
-db/tests/utplsql/*
-db/review/review-report.md
-db/generated/*
-db/dist/*
-scripts/install-db.sh
-scripts/run-db-tests.sh
-scripts/review-db-code.sh
-scripts/package-release.sh
-tools/extract_spec.py
-tools/validate_spec.py
-tools/generate_todo.py
-tools/generate_tasks.py
-```
-
-Goal 004 does not create the functional release-management entities or any
-smoke-test object such as `LAB_SMOKE_TEST`.
-
-## 6. Structure Rules
-
-- Preserve retained Python starter infrastructure until a later goal explicitly
-  changes it.
-- Do not add DB SQL implementation files in Goal 004.
-- Do not add install, review, package, or spec pipeline implementation artifacts
-  in Goal 004.
-- Every new implementation file must be traceable to a goal, task, requirement,
-  or decision.
+- Preserve the current layout and retained starter unless an explicit task changes it.
+- Keep every DB change in versioned SQL and execute it only through official scripts.
+- Trace every change to a goal, task, requirement, or decision.
+- Do not infer release approval or runtime compatibility from generated package files.

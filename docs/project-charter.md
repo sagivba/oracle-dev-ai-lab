@@ -23,11 +23,17 @@ versioned repository files.
 
 ## Current Phase
 
-The current phase is Infrastructure MVP preparation.
+The Infrastructure MVP is complete and merged; the first functional Oracle DB
+iteration has not started. Docker lab infrastructure, managed install, SQL smoke
+tests, static review, packaging skeleton, and specification tooling exist.
+T015 handoff documentation was merged in PR #24 on 2026-05-22.
 
-This means the repository is establishing the governance, structure, safety rules,
-and repeatable workflow needed before implementing Oracle Docker runtime, schemas,
-install scripts, review scripts, package scripts, or functional database objects.
+Local Oracle runtime validation was recorded by Goal 014 / PR #22 at the
+`v0.1.0` baseline. That historical evidence does not guarantee a fresh runtime
+succeeds. See [the closure record](infrastructure-mvp-closure.md) and
+[the current ledger](../TODO.md). A separate functional goal must satisfy
+[the readiness gate](functional-readiness-checklist.md), including revalidation
+of missing or stale evidence, before business objects are implemented.
 
 ## Source of Truth
 
@@ -69,7 +75,7 @@ reviewed, packaged, and approved.
 
 Candidate future entities may include release requests, release items, release
 environments, release statuses, release approvals, and release execution logs, but
-they are not part of the current governance phase.
+they have not been implemented.
 
 ## Out of Scope for the Current Phase
 

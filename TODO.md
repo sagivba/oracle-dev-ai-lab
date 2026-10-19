@@ -25,9 +25,9 @@ Current baseline includes:
 - functional iteration readiness checklist
 - local Oracle runtime validation record
 - normalized live-file documentation
-- cleaned Git branch state after merged work
+- completed T015 handoff documentation and explicit Flask/CI boundaries
 
-The repository is mostly ready for the first functional Oracle DB iteration, but a small handoff documentation cleanup should be completed first.
+T015 handoff documentation is complete and merged in [PR #24](https://github.com/sagivba/oracle-dev-ai-lab/pull/24) on 2026-05-22. The first functional Oracle DB iteration has not started and remains subject to the readiness gate.
 
 ## Status legend
 
@@ -88,62 +88,32 @@ The repository is mostly ready for the first functional Oracle DB iteration, but
 - [DONE] Live-file documentation normalized.
   - Live source, script, SQL, tool, and generated package documentation now describe stable file purpose rather than historical Goal/Stage creation context.
 
-- [DONE] Git branches cleaned after merged work.
-  - Merged task branches were removed locally and remotely.
-  - `main` is clean and synchronized.
+- [DONE] T015 - Improve Repository Handoff Documentation Before First Functional Iteration.
+  - Merged in [PR #24](https://github.com/sagivba/oracle-dev-ai-lab/pull/24) on 2026-05-22.
+  - `docs/README.md` is the documentation navigation entry point.
+  - `docs/stages/README.md` identifies stage reports as historical records.
+  - Flask is retained-but-frozen; the Compose `app` service is explicitly outside Oracle DB iteration scope.
+  - CI validates Python tests/contracts and lint, not live Oracle runtime.
 
-## Active readiness gaps before first functional DB iteration
+## Validation evidence and remaining readiness work
 
-- [TODO] Add a documentation index under `docs/README.md`.
-  - Purpose: explain which documents are live governance, live workflow/reference, historical stage records, planning sources, goal/task sources, and generated/spec artifacts.
-  - Reason: reduce confusion for future AI agents and human reviewers.
+- [DONE] Historical local Dev validation was recorded by Goal 014 in [PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22), merged on 2026-05-22.
+  - The recorded baseline is `v0.1.0` (`1c6b46797766656e5db537047d8e91b61853e71d`).
+  - It covers Oracle readiness, clean install after reset, SQL smoke tests, static review, and package generation.
+  - See `docs/infrastructure-mvp-closure.md` and `docs/stages/stage-014-local-oracle-lab-runtime-validation.html` for scope and limitations.
+  - Goal 014 did not validate repeated install on an installed lab, QA worktree behavior, or portability to other developers. Earlier QA results are a separate historical record in the closure document.
 
-- [TODO] Add `docs/stages/README.md`.
-  - Purpose: mark `docs/stages/` as historical stage reports, not active implementation instructions.
-  - Reason: prevent AI agents from treating completed stage reports as current task instructions.
-
-- [TODO] Confirm and document Flask starter status.
-  - Recommended decision: retained-but-frozen.
-  - Meaning: the Flask starter app remains only as retained Python/test/CI starter surface and must not be extended during Oracle DB functional iterations.
-  - Files likely affected: `README.md`, `docs/README.md`, and possibly `.github/CONTRIBUTING.md`.
-
-- [TODO] Clarify `docker-compose.yml` service boundaries.
-  - Add a short comment above the `app` service.
-  - The comment should state that the `app` service is retained Flask starter infrastructure and is not part of the Oracle database lab runtime or functional DB iteration scope.
-
-- [TODO] Clarify CI validation scope.
-  - Document that CI validates Python contracts and lint only.
-  - Local Oracle runtime validation remains a local lab responsibility unless a later decision adds DB integration CI.
-  - This can be documented in `docs/README.md` or a dedicated `docs/ci-scope.md`.
+- [TODO] Satisfy `docs/functional-readiness-checklist.md` for the separate first functional goal.
+  - Revalidate missing or stale evidence in the local disposable lab before functional work.
+  - This documentation reconciliation did not start Docker, connect to Oracle, run install/SQL smoke tests, or exercise backup/restore.
+  - Existing scripts, old PASS records, and green Python CI do not guarantee a fresh runtime succeeds.
+  - Package generation is a skeleton workflow; generated entry points do not deploy objects and do not grant release approval.
 
 ## Recommended next task
 
-- [TODO] Run a focused handoff documentation cleanup before functional DB work.
-
-Suggested task title:
-
-```text
-T015 - Improve Repository Handoff Documentation Before First Functional Iteration
-```
-
-Suggested scope:
-
-1. Update this `TODO.md` if needed.
-2. Add `docs/README.md`.
-3. Add `docs/stages/README.md`.
-4. Document the Flask starter as retained-but-frozen.
-5. Add a comment in `docker-compose.yml` above the `app` service.
-6. Clarify CI scope in documentation.
-7. Add a Hebrew standalone HTML stage report under `docs/stages/`.
-
-Constraints:
-
-- Do not add functional Oracle DB objects.
-- Do not change SQL behavior.
-- Do not change Docker behavior.
-- Do not change CI behavior unless explicitly required.
-- Do not remove Flask starter files in this task.
-- Do not modify historical stage reports except adding `docs/stages/README.md`.
+Define a separate first functional Oracle DB goal with approved requirements,
+acceptance criteria, traceability, and current readiness evidence. Do not rerun
+T015 or create business objects as part of this documentation correction.
 
 ## First functional Oracle DB iteration - not started yet
 
@@ -191,12 +161,6 @@ Constraints:
 
 ## Open decisions
 
-- [TODO] Confirm final status of the retained Flask starter.
-  - Recommended: retained-but-frozen.
-
-- [TODO] Confirm whether `docs/README.md` should become the primary human/AI navigation entry point for documentation.
-  - Recommended: yes.
-
 - [TODO] Confirm whether the next functional iteration should start with table-only implementation or a complete narrow vertical slice.
   - Recommended: narrow vertical slice if the requirements are stable enough; otherwise table-only plus tests.
 
@@ -227,4 +191,4 @@ PATH=.venv/bin:$PATH scripts/package-release.sh
 
 ## Current next action
 
-Complete the handoff documentation cleanup task, then start the first functional Oracle DB iteration.
+Define the separate first functional goal, resolve its scope, and satisfy the readiness checklist before implementing any business DB objects. T015 is already complete.
