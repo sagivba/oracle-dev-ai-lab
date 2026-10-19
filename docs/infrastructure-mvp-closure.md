@@ -18,9 +18,9 @@ Goal 012 or adding functional release-management implementation.
 - PR #17 added the Goal 011 source-of-truth file.
 - PR #18 implemented the Goal 011 release packaging workflow skeleton.
 
-## What the Infrastructure MVP Now Proves
+## Capabilities and Historical Evidence
 
-The Infrastructure MVP skeleton now proves the repository can support:
+The implemented Infrastructure MVP skeleton and recorded prior QA cover:
 
 - an isolated Docker Oracle lab using the fixed project resource names;
 - a controlled install workflow through managed repository scripts;
@@ -123,10 +123,9 @@ an observation, not as a failure.
 No organizational database access was used. No secrets were committed. The local
 `.env` file and password remain local and are not repository evidence.
 
-## v0.1.1 Intended Meaning
+## v0.1.1 Baseline Meaning
 
-After Goal 014 is merged, the project can create tag `v0.1.1` with this intended
-meaning:
+Tag `v0.1.1` points to the Goal 014 merge commit (`8508e9636e38488d5e7f21c4fae2a4247d206bcc`) with this recorded meaning:
 
 ```text
 Infrastructure MVP + local Oracle runtime validation baseline.
@@ -137,7 +136,16 @@ This tag meaning does not claim QA worktree validation, repeated idempotent
 install behavior, portability for other developers, Oracle 19c compatibility, or
 functional release-management implementation.
 
-## Recommended Next Step
+## Current Status and Next Step
 
-Merge Goal 014, then create tag `v0.1.1` as the local Oracle runtime validation
-baseline before starting the Codex Oracle development capability study.
+Goal 014 was merged in [PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22)
+on 2026-05-22. T015 handoff documentation was subsequently merged in
+[PR #24](https://github.com/sagivba/oracle-dev-ai-lab/pull/24) on the same date.
+The earlier baseline and QA summaries above are historical evidence, not a
+fresh execution of current `main`. No Oracle runtime checks were performed in
+the current documentation reconciliation.
+
+Use [the current ledger](../TODO.md) for next actions. Define the first functional
+goal separately and satisfy [the readiness gate](functional-readiness-checklist.md),
+revalidating missing or stale evidence. Functional objects have not been
+implemented, and the package skeleton does not grant deployment approval.

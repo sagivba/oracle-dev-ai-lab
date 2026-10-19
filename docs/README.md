@@ -8,6 +8,24 @@ Use this file as the first navigation point for understanding which documents ar
 
 The repository is an isolated Oracle AI Lab. Git is the source of truth, and the local Oracle Docker database is disposable runtime state.
 
+## Current baseline and validation
+
+The Infrastructure MVP and T015 handoff documentation are merged to `main`.
+T015 was completed in [PR #24](https://github.com/sagivba/oracle-dev-ai-lab/pull/24)
+on 2026-05-22; it is not the next task. Functional release-management DB work has
+not started. See [the current ledger](../TODO.md) and
+[the repository overview](../README.md).
+
+[PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22) records prior local
+Dev Oracle validation at `v0.1.0`; the
+[closure record](infrastructure-mvp-closure.md) gives its scope and limitations.
+Historical PASS records and implemented scripts do not prove a fresh runtime
+succeeds. This documentation reconciliation performed no Oracle runtime checks.
+The [readiness checklist](functional-readiness-checklist.md) still governs the
+separate first functional goal. See the
+[current reconciliation report](stages/stage-16-task-T015-status-reconciliation.html)
+for repository checks run and runtime checks not run.
+
 ## Documentation categories
 
 ### Live governance documents

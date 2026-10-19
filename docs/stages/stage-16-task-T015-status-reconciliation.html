@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שלב 16 - התאמת מצב הפרויקט לתיעוד</title>
+<style>
+body{font-family:Arial,sans-serif;line-height:1.7;margin:0;background:#f4f6f8;color:#17212b}
+main{max-width:960px;margin:24px auto;padding:28px;background:white}
+h1,h2{color:#173c55}code,pre{direction:ltr;unicode-bidi:isolate;text-align:left;font-family:Consolas,monospace}
+pre{background:#eef2f5;padding:14px;white-space:pre-wrap}li{margin:6px 0}
+a{color:#135e96}
+</style>
+</head>
+<body><main>
+<h1>שלב 16 - התאמת מצב הפרויקט לתיעוד</h1>
+<p>תאריך: <time datetime="2026-10-19">19.10.2026</time>.</p>
+<p>מזהה: המשך תיעודי למשימת <code>T015</code>, לפי בקשת בעל המאגר. עקיבות להחלטות <code>DEC-003</code> ו־<code>DEC-019</code>.</p>
+<p>נקודת המוצא: ענף <code>main</code>, תג <code>v0.1.2</code>, commit:</p>
+<pre>5e72ca1c1071b20c5262a214e9ed05dd84bd8663</pre>
+<h2>מה נמצא ומה תוקן</h2>
+<p>התיעוד הפעיל הציג תמונות מצב מתקופות שונות. קובץ הפתיחה ומסמכי הממשל הציגו חלק מהתשתית כחסרה, אף שקובצי המימוש כבר נמצאים במאגר. משימת המסירה הופיעה עדיין כמשימת המשך, אף שכבר מוזגה.</p>
+<ul>
+<li>התשתית הקיימת כוללת שירות Oracle מקומי, סקריפטים לניהול המעבדה, התקנה מנוהלת, בדיקות SQL בסיסיות, סקירה סטטית, שלד אריזה וכלי אפיון.</li>
+<li>משימת <code>T015</code> הושלמה ומוזגה בתאריך 22.05.2026 באמצעות <a href="https://github.com/sagivba/oracle-dev-ai-lab/pull/24">PR #24</a>. תאריך המיזוג אומת דרך GitHub.</li>
+<li><a href="https://github.com/sagivba/oracle-dev-ai-lab/pull/22">PR #22</a> מתעד בדיקה מקומית קודמת של Oracle בתאריך 22.05.2026. הוא מוזג באותו יום. התיעוד מתייחס להתקנה נקייה לאחר איפוס בסביבת Dev ולבדיקות smoke, סקירה ואריזה.</li>
+<li>ממצאי העבר אינם תוצאת הרצה חדשה. התקנה חוזרת על מעבדה מותקנת, ניידות למפתח אחר ובדיקות גיבוי ושחזור אינם מוכחים מרשומת Goal 014.</li>
+<li>העבודה הפונקציונלית טרם התחילה. שלד חבילת ההפצה אינו מבצע deployment ואינו מעניק אישור לפריסה.</li>
+</ul>
+<h2>קבצים שנוצרו</h2>
+<ul><li><code>docs/stages/stage-16-task-T015-status-reconciliation.html</code>, דוח זה.</li></ul>
+<h2>קבצים שעודכנו</h2>
+<ul>
+<li><code>README.md</code>, מצב נוכחי, גבולות ההרצה והפניות לתיעוד.</li>
+<li><code>TODO.md</code>, סגירת משימת המסירה, ראיות עבר והמשימה הבאה.</li>
+<li><code>docs/README.md</code>, מצב התיעוד וקישור לדוח הנוכחי.</li>
+<li><code>docs/project-charter.md</code>, השלב הנוכחי בפרויקט.</li>
+<li><code>docs/repository-structure.md</code>, מיפוי קבצים ותפקידים לפי המצב בפועל.</li>
+<li><code>docs/docker-lab-design.md</code>, הפרדה בין בדיקה סטטית ראשונית, בדיקת עבר והרצה נוכחית.</li>
+<li><code>docs/install-workflow.md</code>, מצב המימוש וגבולות ראיות ההתקנה.</li>
+<li><code>docs/infrastructure-mvp-closure.md</code>, הקשר היסטורי והשלב הבא.</li>
+</ul>
+<h2>החלטות והנחות</h2>
+<p>נשמרו כללי המאגר. לא שונו קובצי SQL, Docker, CI, סקריפטים או כללי עבודה. דוחות השלבים ההיסטוריים נשארו ללא שינוי. תוצאות הבדיקה המקומית הקודמת מיוחסות למקורות המתעדים אותן; הן לא שוחזרו במשימה זו. הסטטוס של Flask ושל CI נלקח מהתיעוד שמוזג במשימת המסירה ומהמימוש הקיים.</p>
+<h2>פקודות שבוצעו</h2>
+<pre>git fetch
+git switch -c codex-cli/reconcile-documentation-status
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+PATH=.venv/bin:$PATH scripts/test.sh quick
+PATH=.venv/bin:$PATH scripts/lint.sh
+scripts/review-db-code.sh
+git diff --check
+git status --short</pre>
+<p>בוצעה גם קריאה של הוראות המאגר, מסמכי התכנון והממשל, מסמכי התהליכים, קובצי המימוש ודוחות השלבים. נבדקו היסטוריית Git, תגים, נתוני המיזוג של בקשות השינוי, קישורים מקומיים בתיעוד וגבולות השינוי.</p>
+<h2>תוצאות הבדיקות</h2>
+<ul>
+<li><code>scripts/test.sh quick</code> עבר: 52 בדיקות באמצעות unittest. הבדיקות כוללות חוזי סקירה ואריזה, ללא חיבור למסד נתונים.</li>
+<li><code>scripts/lint.sh</code> עבר: בדיקת lint ובדיקת עיצוב של 21 קבצים.</li>
+<li><code>scripts/review-db-code.sh</code> עבר: בדיקות שלד הסקירה הסטטית. אין בכך אישור לפריסה.</li>
+<li><code>git diff --check</code> עבר.</li>
+<li>בדיקת קישורים מקומיים, מבנה HTML וגבולות השינוי עברה.</li>
+</ul>
+<h2>בדיקות שלא בוצעו והסיבות</h2>
+<ul>
+<li>לא הופעל Docker ולא בוצעו התקנה, בדיקות SQL, איפוס, גיבוי או שחזור. המשימה תיעודית, וכללי הבטיחות אוסרים חיבור למסד נתונים במשימת תיעוד. גם הפקודה <code>docker</code> אינה זמינה בסביבה.</li>
+<li>לא הורץ <code>scripts/package-release.sh</code> ולא חודשו תוצרים במאגר, משום שמימוש האריזה לא השתנה. בדיקות החוזים שלו נכללו בבדיקות שעברו.</li>
+<li>לא הורץ <code>agw_review_output --run</code>. הכלי אינו זמין בנתיב ההפעלה, ומודול המשנה שלו לא אותחל בעותק העבודה. בדיקות המאגר והסקירה הסטטית הורצו ישירות.</li>
+<li>לא בוצעה בדיקת תאימות Oracle חדשה. הרצה נוכחית של Oracle, יכולות עסקיות ופריסה בפועל נשארו מחוץ לתכולה.</li>
+</ul>
+<h2>מגבלות והשלב הבא</h2>
+<p>השינוי מיישב את התיעוד עם ראיות המאגר. הוא אינו מוכיח שסביבת Oracle חדשה תעלה בהצלחה. השלב הבא הוא הגדרת משימה פונקציונלית נפרדת, עם דרישות וקריטריוני קבלה, והשלמת תנאי המוכנות. יש לחדש בדיקות שחסרות או שהראיות עבורן כבר אינן עדכניות, לפני יצירת אובייקטים עסקיים.</p>
+</main></body>
+</html>

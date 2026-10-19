@@ -146,9 +146,15 @@ Do not commit real connection strings.
 
 ## Validation Status
 
-This design and skeleton can be statically reviewed without starting Docker.
+The initial Goal 006 skeleton was checked statically without starting Docker.
+Later Goal 014 / [PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22)
+recorded local Dev runtime validation on 2026-05-22 at `v0.1.0`, including startup,
+readiness, clean install after reset, and SQL smoke tests. See
+[the closure record](infrastructure-mvp-closure.md) for the evidence boundaries.
 
-For this documentation/skeleton alignment, Docker was not started. Validation was
-limited to repository checks, shell-script syntax checks, and static inspection.
-Do not claim Oracle Docker runtime compatibility until Docker is actually started
-and the readiness marker is observed in logs.
+This documentation reconciliation did not start Docker or validate Oracle.
+Backup/restore, repeated install on an installed lab, and portability to another
+developer are not established by the Goal 014 record. A new environment must
+verify readiness and run the managed install and smoke tests. The default image
+tag is `latest`; a later pull may select a different image from the historical
+validation baseline.

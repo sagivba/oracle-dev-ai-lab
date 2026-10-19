@@ -117,18 +117,21 @@ Goal 008 adds the `LAB_SMOKE_TEST` infrastructure object and SQL smoke tests.
 `LAB_SMOKE_TEST` is not a business feature and does not represent
 release-management functionality.
 
-## Still Intentionally Not Implemented by the Install Workflow
+## Related Workflows and Remaining Scope
 
-- release-management business tables;
-- utPLSQL tests;
-- review workflow;
-- packaging workflow;
-- spec pipeline tools;
-- functional release-management logic.
+Static review, packaging, and specification tooling exist as separate workflows;
+they are not executed by the install script. See [the documentation index](README.md).
+Release-management business objects, business utPLSQL tests, and functional
+logic have not been implemented. `LAB_SMOKE_TEST` remains infrastructure-only.
 
 ## Validation Status
 
-Current validation is repository-only and shell syntax only unless explicitly
-reported otherwise. Docker runtime validation must be reported separately when
-`scripts/lab-up.sh`, `scripts/install-db.sh`, and `scripts/run-db-tests.sh` are
-actually run against the disposable local lab.
+Goal 014 / [PR #22](https://github.com/sagivba/oracle-dev-ai-lab/pull/22) records a
+successful local Dev clean install after reset and SQL smoke tests at `v0.1.0`
+on 2026-05-22. See [the closure record](infrastructure-mvp-closure.md).
+Repeated idempotent install on an already-installed lab was not validated.
+
+No install or SQL smoke tests were run during this documentation reconciliation.
+A new environment must validate its own clean install and smoke tests; existing
+files, historical PASS results, and Python CI do not prove current Oracle runtime
+compatibility.
